@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@core/components/*": [
+        "core/components/*"
+      ],
+      "@core/contexts/*": [
+        "core/contexts/*"
+      ],
+      "@core/pages/*": [
+        "core/pages/*"
+      ],
+      "@core/services/*": [
+        "core/services/*"
+      ],
+      "@features/*": [
+        "features/*"
+      ],
+      "@mocks/*": [
+        "mocks/*"
+      ]
+    },
+    "incremental": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

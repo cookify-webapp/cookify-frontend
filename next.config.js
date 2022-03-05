@@ -1,6 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
+const moduleExports = {
+  publicRuntimeConfig: {
+    API_MOCKING: process.env.API_MOCKING
+  }
 }
 
-module.exports = nextConfig
+module.exports = moduleExports
