@@ -3,12 +3,18 @@ import { Observer } from "mobx-react-lite";
 import { HomePageContext } from "core/context/home_page_context";
 import { useFormik } from "formik";
 import { onValidation } from "core/forms/home_page_form";
+import { useRouter } from "next/router";
 
 export default function HomePage() {
   //---------------------
   //  CONTEXT
   //---------------------
   const context = useContext(HomePageContext);
+
+  //---------------------
+  //  ROUTER
+  //---------------------
+  const router = useRouter()
 
   //---------------------
   //  EFFECT
@@ -53,8 +59,11 @@ export default function HomePage() {
               formik.setFieldValue("name", event?.target?.value);
             }}
             className="border"
+            value={formik.values?.name}
           />
           <button type="submit" onClick={() => formik.submitForm()} className="border">submit</button>
+          <br/>
+          <button onClick={() => router.push('/profile')} className="border">Go to profile</button>
         </div>
       )}
     </Observer>
