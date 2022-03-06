@@ -1,3 +1,4 @@
 export type ProfileType = {
-  name: string
+  name: string,
+  email: string
 }
