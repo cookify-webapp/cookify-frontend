@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { HomePageContext } from "core/context/home_page_context";
 import { useFormik } from "formik";
@@ -14,7 +14,7 @@ export default function HomePage() {
   //---------------------
   //  ROUTER
   //---------------------
-  const router = useRouter()
+  const router = useRouter();
 
   //---------------------
   //  EFFECT
@@ -33,11 +33,11 @@ export default function HomePage() {
     validateOnMount: false,
     validationSchema: onValidation,
     initialValues: {
-      name: ''
+      name: "",
     },
     onSubmit: (value) => {
       alert(value.name);
-      formik.resetForm()
+      formik.resetForm();
     },
   });
 
@@ -61,9 +61,25 @@ export default function HomePage() {
             className="border"
             value={formik.values?.name}
           />
-          <button type="submit" onClick={() => formik.submitForm()} className="border">submit</button>
-          <br/>
-          <button onClick={() => router.push('/profile')} className="border">Go to profile</button>
+          <button
+            type="submit"
+            onClick={() => formik.submitForm()}
+            className="border"
+          >
+            submit
+          </button>
+
+          {formik.errors?.name && (
+            <p className="text-red-500">this field is required</p>
+          )}
+
+          <br />
+          <button onClick={() => router.push("/profile")} className="border">
+            Go to profile
+          </button>
+          <button onClick={() => router.push("/recipes")} className="border">
+            Go to recipes
+          </button>
         </div>
       )}
     </Observer>

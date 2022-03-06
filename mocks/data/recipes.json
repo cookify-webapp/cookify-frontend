@@ -1,0 +1,16 @@
+{
+  "recipes": [
+    {
+      "name": "Pizza",
+      "type": "Italian"
+    },
+    {
+      "name": "Marinated Salmon",
+      "type": "Korean"
+    },
+    {
+      "name": "Noodle",
+      "type": "Thai"
+    }
+  ]
+}
