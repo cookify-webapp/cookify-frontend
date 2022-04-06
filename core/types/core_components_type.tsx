@@ -16,7 +16,10 @@ export type secondaryMiniButtonType = {
 
 export type tertiaryButtonType = {
   title: string
-  color: string
+  textColor: string
+  borderColor: string
+  hoverBgColor: string
+  textHoverColor: string
   icon?: string
   onClick: void
 }
