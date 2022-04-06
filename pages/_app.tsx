@@ -1,16 +1,10 @@
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import App from "next/app";
 import Head from "next/head";
 import Script from "next/script";
-import getConfig from "next/config";
-
-const { publicRuntimeConfig } = getConfig()
-if (publicRuntimeConfig?.API_MOCKING === 'enabled') {
-  require('./../tests/setup/msw/index')
-}
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -24,7 +18,7 @@ function MyApp({ Component, pageProps }) {
               content="initial-scale=1.0, width=device-width"
             />
             <Script
-              src="https://kit.fontawesome.com/a7ef51f3aa.js"
+              src="https://kit.fontawesome.com/9c44f5505c.js"
               crossOrigin="anonymous"
             ></Script>
           </>
