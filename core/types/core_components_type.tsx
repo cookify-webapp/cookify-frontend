@@ -23,3 +23,12 @@ export type tertiaryButtonType = {
   icon?: string
   onClick: void
 }
+
+export type tertiaryMiniButtonType = {
+  icon: string
+  onClick: void
+  iconColor: string
+  borderColor: string
+  hoverBgColor: string
+  iconHoverColor: string
+}
