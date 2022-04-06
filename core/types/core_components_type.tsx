@@ -3,3 +3,8 @@ export type primaryButtonType = {
   onClick: void
   disabled?: boolean
 }
+
+export type secondaryButtonType = {
+  title: string
+  onClick: void
+}
