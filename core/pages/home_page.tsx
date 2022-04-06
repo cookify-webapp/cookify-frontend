@@ -24,7 +24,7 @@ export default function HomePage() {
   //---------------------
   return (
     <Observer>
-      {() => <div className="text-[20px] text-red text-center">This is Home</div>}
+      {() => <div className="text-[20px] text-center">This is Home</div>}
     </Observer>
   );
 }

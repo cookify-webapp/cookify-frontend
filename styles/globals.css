@@ -7,3 +7,54 @@
 *, html, body {
   font-family: 'Kanit', sans-serif;
 }
+
+@layer utilities {
+  .headlineXL {
+    font-size: 36px;
+    font-weight: 500;
+  }
+
+  .headlineL {
+    font-size: 28px;
+    font-weight: 500;
+  }
+
+  .headlineM {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .titleM {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .titleS {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .bodyL {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .bodyM {
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .bodyS {
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .bodyXS {
+    font-size: 10px;
+    font-weight: 400;
+  }
+
+  .card-shadow {
+    filter: drop-shadow(0px 4px 10px rgba(192, 192, 192, 0.25));
+}
+}
