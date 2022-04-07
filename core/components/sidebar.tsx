@@ -3,8 +3,9 @@ import { Observer } from "mobx-react-lite";
 import _ from "lodash";
 import classNames from "classnames";
 import { useRouter } from "next/router";
+import { sidebarType } from "core/types/core_components_type";
 
-export const SideBar = ({ role, notiCOunt }) => {
+export const SideBar = ({ role, notiCount } : sidebarType) => {
   //---------------------
   // ROUTER
   //---------------------
@@ -159,7 +160,7 @@ export const SideBar = ({ role, notiCOunt }) => {
                       {menu.title === "การแจ้งเตือน" &&
                         !_.includes(menu.link, router.pathname) && (
                           <div className="py-1 px-2 w-8 h-8 titleS text-center rounded-full bg-beige-20">
-                            <p>{notiCOunt}</p>
+                            <p>{notiCount}</p>
                           </div>
                         )}
                     </div>

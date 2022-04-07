@@ -32,3 +32,8 @@ export type tertiaryMiniButtonType = {
   hoverBgColor: string
   iconHoverColor: string
 }
+
+export type sidebarType = {
+  role: "" | "client" | "admin",
+  notiCount: number
+}
