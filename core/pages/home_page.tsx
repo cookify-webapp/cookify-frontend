@@ -8,6 +8,7 @@ import { SecondaryMiniButton } from "@core/components/button/secondary_mini_butt
 import { TertiaryButton } from "@core/components/button/tertiary_button";
 import { TertiaryMiniButton } from "@core/components/button/tertiary_mini_button";
 import { SideBar } from "@core/components/sidebar";
+import { UserAccount } from "@core/components/user_account";
 
 export default function HomePage() {
   //---------------------
@@ -31,8 +32,8 @@ export default function HomePage() {
   return (
     <Observer>
       {() => (
-        <div>
-          <SideBar role="admin" notiCOunt={10} />
+        <div className="bg-beige-10 p-10">
+          <UserAccount role="client" src="" userName="ชื่อยาวมากกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกก" />
         </div>
       )}
     </Observer>

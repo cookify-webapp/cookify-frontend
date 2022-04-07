@@ -29,7 +29,7 @@ export const ImageWithFallback = ({
   // RENDER
   //---------------------
   return (
-    <div style={{ position: 'relative' }} className={classStyle}>
+    <div style={{ position: 'relative' }}>
       <Image
         src={imageError || !src ? fallBackSrc : src}
         alt={alt}
@@ -37,7 +37,7 @@ export const ImageWithFallback = ({
         width={500 || width}
         height={500 || height}
         placeholder={placeholder}
-        className={`transition-all duration-150 ${imageIsLoaded ? 'animate-pulse' : ''}`}
+        className={`transition-all duration-150 ${classStyle} ${imageIsLoaded ? 'animate-pulse' : ''}`}
         onLoad={() => setImageIsLoaded(true)}
         onLoadingComplete={() => setImageIsLoaded(false)}
         blurDataURL="/images/core/default.png"
