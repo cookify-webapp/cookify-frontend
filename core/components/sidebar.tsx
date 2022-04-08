@@ -42,7 +42,7 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
     },
   ];
 
-  const clientMenu = [
+  const userMenu = [
     {
       title: "ข้อมูลบัญชีผู้ใช้",
       icon: "fas fa-user",
@@ -135,12 +135,12 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
                   ))}
                 </div>
               )}
-              {(role === "client" || role === "admin") && (
+              {(role === "user" || role === "admin") && (
                 <div className="mt-8">
                   <p className="bodyS font-medium text-gray-50 pl-4 pb-5">
                     อื่น ๆ
                   </p>
-                  {_.map(clientMenu, (menu) => (
+                  {_.map(userMenu, (menu) => (
                     <div
                       className={classNames(
                         "pl-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",

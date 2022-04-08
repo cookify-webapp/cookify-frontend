@@ -34,6 +34,13 @@ export type tertiaryMiniButtonType = {
 }
 
 export type sidebarType = {
-  role: "" | "client" | "admin",
+  role: "" | "user" | "admin"
   notiCount: number
+}
+
+export type userAccountType = {
+  src: string
+  userName: string
+  role: "user" | "admin"
+
 }

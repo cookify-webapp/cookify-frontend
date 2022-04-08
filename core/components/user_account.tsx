@@ -3,8 +3,9 @@ import { Observer } from "mobx-react-lite";
 import { ImageWithFallback } from "./image_with_fallback";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import router from "next/router";
+import { userAccountType } from "core/types/core_components_type";
 
-export const UserAccount = ({ src, userName, role }) => {
+export const UserAccount = ({ src, userName, role } : userAccountType) => {
   //---------------------
   // HOOKS
   //---------------------
