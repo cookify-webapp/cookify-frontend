@@ -69,20 +69,20 @@ export const UserAccount = ({ src, userName, role }) => {
           </div>
           {isShowDropdown && (
             <>
-              <div className="bg-white mt-3 w-[201px] h-[52px] sm:w-[250px] sm:h-[64px] rounded-[12px] card-shadow cursor-pointer bodyM absolute z-10">
+              <div className="bg-white mt-2 sm:mt-3 w-[201px] h-[52px] sm:w-[250px] sm:h-[64px] rounded-[12px] card-shadow cursor-pointer bodyM absolute z-10">
                 <div
-                  className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-t-[12px] flex items-center p-4"
+                  className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-t-[12px] flex items-center p-3 sm:p-4"
                   onClick={() => router.push("/profile")}
                 >
-                  <i className="fas fa-user w-4 h-4"></i>
-                  <p className="ml-4">ข้อมูลบัญชีผู้ใช้</p>
+                  <i className="fas fa-user w-3 h-3 sm:w-4 sm:h-4"></i>
+                  <p className="ml-4 bodyS sm:bodyM">ข้อมูลบัญชีผู้ใช้</p>
                 </div>
                 <div
-                  className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-b-[12px] flex items-center p-4"
+                  className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-b-[12px] flex items-center p-3 sm:p-4"
                   onClick={() => onHandleLogOut()}
                 >
-                  <i className="fas fa-sign-out-alt w-4 h-4"></i>
-                  <p className="ml-4">ออกจากระบบ</p>
+                  <i className="fas fa-sign-out-alt w-3 h-3 sm:w-4 sm:h-4"></i>
+                  <p className="ml-4 bodyS sm:bodyM">ออกจากระบบ</p>
                 </div>
               </div>
             </>
