@@ -49,11 +49,11 @@ export const UserAccount = ({ src, userName, role }) => {
             onClick={() => setIsShowDropdown(!isShowDropdown)}
           >
             <div className="flex items-center">
-              <div className="border border-gray-10 w-[36px] sm:w-[48px] h-[36px] sm:h-[48px] shrink-0">
+              <div className="w-[36px] sm:w-[48px] h-[36px] sm:h-[48px] shrink-0">
                 <ImageWithFallback
                   src={src}
                   alt="user profile image"
-                  classStyle="rounded-full"
+                  classStyle="rounded-full border border-gray-10"
                 />
               </div>
               <div className="ml-3 shrink-0 w-[85px] sm:w-[123px]">
