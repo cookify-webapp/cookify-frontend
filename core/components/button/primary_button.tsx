@@ -16,7 +16,7 @@ export const PrimaryButton = ({ disabled, title, onClick }: primaryButtonType) =
             { "bg-gray-50 cursor-not-allowed": disabled },
             { "bg-brown-10 hover:bg-brown-20": !disabled }
           )}
-          onClick={() => onClick}
+          onClick={() => onClick()}
         >
           {title}
         </button>

@@ -1,17 +1,17 @@
 export type primaryButtonType = {
   title: string
-  onClick: void
+  onClick: Function
   disabled?: boolean
 }
 
 export type secondaryButtonType = {
   title: string
-  onClick: void
+  onClick: Function
 }
 
 export type secondaryMiniButtonType = {
   icon: string
-  onClick: void
+  onClick: Function
 }
 
 export type tertiaryButtonType = {
@@ -21,12 +21,12 @@ export type tertiaryButtonType = {
   hoverBgColor: string
   textHoverColor: string
   icon?: string
-  onClick: void
+  onClick: Function
 }
 
 export type tertiaryMiniButtonType = {
   icon: string
-  onClick: void
+  onClick: Function
   iconColor: string
   borderColor: string
   hoverBgColor: string
@@ -42,5 +42,14 @@ export type userAccountType = {
   src: string
   userName: string
   role: "user" | "admin"
+}
 
+export type searchBoxType = {
+  isBorder?: boolean
+  onChange: Function
+  placeholder: string
+  value: string
+  isButton?: boolean
+  buttonOnClick?: Function
+  isShowClearValue?: boolean
 }
