@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Observer } from "mobx-react-lite";
-import { HomePageContext } from "core/context/home_page_context";
 import { useRouter } from "next/router";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { SecondaryButton } from "@core/components/button/secondary_button";
@@ -15,7 +14,7 @@ export default function HomePage() {
   //---------------------
   //  CONTEXT
   //---------------------
-  const context = useContext(HomePageContext);
+
 
   const [value, setValue] = useState("");
   const [isShowClearValue, setIsShowClearValue] = useState(false);
