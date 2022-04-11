@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Observer } from "mobx-react-lite";
 import _ from "lodash";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import { sidebarType } from "core/types/core_components_type";
+import { HomeLayoutContext } from "core/context/home_layout_context";
 
 export const SideBar = ({ role, notiCount } : sidebarType) => {
   //---------------------
   // ROUTER
   //---------------------
   const router = useRouter();
+
+  //---------------------
+  // CONTEXT
+  //---------------------
+  const homeLayoutContext = useContext(HomeLayoutContext)
 
   //---------------------
   // VARIABLE
@@ -105,7 +111,10 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
                       ),
                     }
                   )}
-                  onClick={() => router.push(menu.link[0])}
+                  onClick={() => {
+                    homeLayoutContext.setValue('isShowSidebar', false)
+                    router.push(menu.link[0])
+                  }}
                 >
                   <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
                   <p>{menu.title}</p>

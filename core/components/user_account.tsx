@@ -43,10 +43,10 @@ export const UserAccount = ({ src, userName, role } : userAccountType) => {
   return (
     <Observer>
       {() => (
-        <>
+        <div className="w-[201px] sm:w-[250px]">
           <div
             ref={ref}
-            className="bg-white w-[201px] h-[52px] sm:w-[250px] sm:h-[64px] flex items-center px-4 rounded-[12px] card-shadow cursor-pointer"
+            className="w-[201px] sm:w-[250px] relative bg-white h-[52px] sm:h-[64px] flex items-center px-4 rounded-[12px] card-shadow cursor-pointer"
             onClick={() => setIsShowDropdown(!isShowDropdown)}
           >
             <div className="flex items-center">
@@ -88,7 +88,7 @@ export const UserAccount = ({ src, userName, role } : userAccountType) => {
               </div>
             </>
           )}
-        </>
+        </div>
       )}
     </Observer>
   );
