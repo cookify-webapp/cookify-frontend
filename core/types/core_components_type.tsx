@@ -53,3 +53,18 @@ export type searchBoxType = {
   buttonOnClick?: Function
   isShowClearValue?: boolean
 }
+
+export type recipePropType = {
+  recipe: {
+    src: string
+    rating: number
+    rating_count: number
+    title: string
+    description: string
+    created_by: string
+    created_at: string
+    tags: []
+  } | null
+  role: "" | "user" | "admin"
+  isBookmark: boolean
+}

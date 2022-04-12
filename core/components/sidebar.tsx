@@ -91,7 +91,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
   return (
     <Observer>
       {() => (
-        <div className="h-screen max-h-screen w-[254px] top-0 left-0 bg-gray-10 border-r border-beige-10 pt-6 fixed flex flex-col justify-between">
+        <div className="fixed h-screen max-h-screen w-[254px] top-0 left-0 bg-gray-10 border-r border-beige-10 pt-6 flex flex-col justify-between">
           <div>
             <div className="px-6 mb-[32.24px]">
               <img

@@ -74,9 +74,9 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="flex space-x-[24px] overflow-x-auto mt-6">
+            <div className="grid grid-cols-12 gap-6 mt-6">
               {_.map(context.recipes, (recipe) => (
-                <div className="w-[275px]" key={recipe.title}>
+                <div className="col-span-3" key={recipe.title}>
                   <Recipe
                     recipe={recipe}
                     role={authContext.user.role}

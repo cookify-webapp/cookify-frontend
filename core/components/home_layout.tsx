@@ -43,19 +43,22 @@ export const HomeLayout = ({ children }) => {
   return (
     <Observer>
       {() => (
-        <div className="relative lg:flex w-screen h-screen overflow-x-hidden overflow-y-auto">
-          <div className={classNames('w-[254px]', {'hidden': !context.isShowSidebar && !isDesktop}, {'block': context.isShowSidebar})}>
+        <div className="flex h-screen overflow-y-auto scrollbar-hide">
+          <div className={classNames('', {'hidden': !context.isShowSidebar && !isDesktop}, {'block': context.isShowSidebar})}>
             <div
               className={classNames(
-                "w-0 lg:w-[254px] lg:block",
+                "",
                 {
-                  "block absolute w-[254px] top-0 left-0 z-50":
+                  "block absolute top-0 left-0 z-50":
                     context.isShowSidebar,
                 },
                 { 'hidden': !context.isShowSidebar && !isDesktop }
               )}
             >
-              <SideBar notiCount={10} role={authContext.user?.role} />
+              <div className="">
+                <SideBar notiCount={10} role={authContext.user?.role} />
+              </div>
+              
             </div>
             {context.isShowSidebar && (
               <div
@@ -66,7 +69,7 @@ export const HomeLayout = ({ children }) => {
           </div>
           <div className="">
             <Navbar />
-            <div className="w-full bg-gray-10 overflow-y-scroll">{children}</div>
+            <div className="w-full lg:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">{children}</div>
           </div>
         </div>
       )}
