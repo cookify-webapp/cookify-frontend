@@ -61,7 +61,7 @@ export const SearchBox = ({
           )}
           </div>
           {isButton && (
-            <div className="ml-4 shrink-0 w-[109px]">
+            <div className="ml-4 shrink-0 w-[80px] sm:w-[109px]">
               <PrimaryButton onClick={buttonOnClick} title="ค้นหา" />
             </div>
           )}

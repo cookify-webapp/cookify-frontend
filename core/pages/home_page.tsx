@@ -49,8 +49,8 @@ export default function HomePage() {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="px-5 lg:px-14">
-            <div className="w-full block lg:hidden mt-2">
+          <div className="xl:px-14">
+            <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
                   homeLayoutContext.setValue("searchWord", value);
@@ -66,7 +66,7 @@ export default function HomePage() {
                 }}
               />
             </div>
-            <h2 className="headlineL mt-8 lg:mt-4">
+            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4">
               สูตรอาหารใหม่ล่าสุด
               <Link href="/recipes" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -74,9 +74,9 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="grid grid-cols-12 gap-6 mt-6">
+            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
               {_.map(context.recipes, (recipe) => (
-                <div className="col-span-3" key={recipe.title}>
+                <div className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3" key={recipe.title}>
                   <Recipe
                     recipe={recipe}
                     role={authContext.user.role}

@@ -22,7 +22,7 @@ export const HomeLayout = ({ children }) => {
   // FUNCTION
   //---------------------
   const updateDimensions = () => {
-    if (window.innerWidth > 1024) {
+    if (window.innerWidth >= 1280) {
       setIsDesktop(true);
     } else {
       setIsDesktop(false);
@@ -69,7 +69,7 @@ export const HomeLayout = ({ children }) => {
           </div>
           <div className="">
             <Navbar />
-            <div className="w-full lg:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">{children}</div>
+            <div className="w-full xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">{children}</div>
           </div>
         </div>
       )}
