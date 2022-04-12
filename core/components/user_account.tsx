@@ -4,8 +4,9 @@ import { ImageWithFallback } from "./image_with_fallback";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import router from "next/router";
 import { userAccountType } from "core/types/core_components_type";
+import Link from "next/link";
 
-export const UserAccount = ({ src, userName, role } : userAccountType) => {
+export const UserAccount = ({ src, userName, role }: userAccountType) => {
   //---------------------
   // HOOKS
   //---------------------
@@ -23,8 +24,8 @@ export const UserAccount = ({ src, userName, role } : userAccountType) => {
   });
 
   const onHandleLogOut = () => {
-    alert('logout')
-  }
+    alert("logout");
+  };
 
   //---------------------
   // VARIABLE
@@ -50,14 +51,14 @@ export const UserAccount = ({ src, userName, role } : userAccountType) => {
             onClick={() => setIsShowDropdown(!isShowDropdown)}
           >
             <div className="flex items-center">
-              <div className="w-[36px] sm:w-[48px] h-[36px] sm:h-[48px] shrink-0">
+              <div className="w-[36px] sm:w-[48px] h-[36px] sm:h-[48px]">
                 <ImageWithFallback
                   src={src}
                   alt="user profile image"
-                  classStyle="rounded-full border border-gray-10"
+                  classStyle="rounded-full border border-gray-10 w-[36px] sm:w-[48px] h-[36px] sm:h-[48px]"
                 />
               </div>
-              <div className="ml-3 shrink-0 w-[85px] sm:w-[123px]">
+              <div className="shrink-0 w-[85px] sm:w-[123px] ml-3">
                 <p className="text-[14px] font-medium sm:titleS line-clamp-1 truncate">
                   {userName}
                 </p>
@@ -71,13 +72,12 @@ export const UserAccount = ({ src, userName, role } : userAccountType) => {
           {isShowDropdown && (
             <>
               <div className="bg-white mt-2 sm:mt-3 w-[201px] h-[52px] sm:w-[250px] sm:h-[64px] rounded-[12px] card-shadow cursor-pointer bodyM absolute z-10">
-                <div
-                  className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-t-[12px] flex items-center p-3 sm:p-4"
-                  onClick={() => router.push("/profile")}
-                >
-                  <i className="fas fa-user w-3 h-3 sm:w-4 sm:h-4"></i>
-                  <p className="ml-4 bodyS sm:bodyM">ข้อมูลบัญชีผู้ใช้</p>
-                </div>
+                <Link href={"/profile"}>
+                  <a className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-t-[12px] flex items-center p-3 sm:p-4">
+                    <i className="fas fa-user w-3 h-3 sm:w-4 sm:h-4"></i>
+                    <p className="ml-4 bodyS sm:bodyM">ข้อมูลบัญชีผู้ใช้</p>
+                  </a>
+                </Link>
                 <div
                   className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-b-[12px] flex items-center p-3 sm:p-4"
                   onClick={() => onHandleLogOut()}

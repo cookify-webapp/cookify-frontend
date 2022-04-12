@@ -31,7 +31,7 @@ export const Navbar = () => {
   return (
     <Observer>
       {() => (
-        <div className="bg-gray-10 px-5 h-[84px] md:h-24 lg:h-[104px] lg:px-14 flex items-center justify-between w-full sticky top-0">
+        <div className="bg-gray-10 px-5 h-[84px] md:h-24 lg:h-[104px] lg:px-14 flex items-center justify-between w-full sticky top-0 z-30">
           <div>
             <div
               className={classNames("w-[798px] hidden", {

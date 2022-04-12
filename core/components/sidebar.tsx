@@ -5,8 +5,9 @@ import classNames from "classnames";
 import { useRouter } from "next/router";
 import { sidebarType } from "core/types/core_components_type";
 import { HomeLayoutContext } from "core/context/home_layout_context";
+import Link from "next/link";
 
-export const SideBar = ({ role, notiCount } : sidebarType) => {
+export const SideBar = ({ role, notiCount }: sidebarType) => {
   //---------------------
   // ROUTER
   //---------------------
@@ -15,7 +16,7 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
   //---------------------
   // CONTEXT
   //---------------------
-  const homeLayoutContext = useContext(HomeLayoutContext)
+  const homeLayoutContext = useContext(HomeLayoutContext);
 
   //---------------------
   // VARIABLE
@@ -29,7 +30,7 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
     {
       title: "สูตรอาหาร",
       icon: "fas fa-book",
-      link: ["/recipe"],
+      link: ["/recipes"],
     },
     {
       title: "Snapshot",
@@ -90,7 +91,7 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
   return (
     <Observer>
       {() => (
-        <div className="h-screen max-h-screen w-[254px] top-0 left-0 bg-gray-10 border-r border-beige-10 pt-6 sticky flex flex-col justify-between">
+        <div className="h-screen max-h-screen w-[254px] top-0 left-0 bg-gray-10 border-r border-beige-10 pt-6 fixed flex flex-col justify-between">
           <div>
             <div className="px-6 mb-[32.24px]">
               <img
@@ -101,24 +102,25 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
             </div>
             <div className="h-[calc(100vh-163px)] overflow-y-auto scrollbar-hide px-6">
               {_.map(guestMenu, (menu) => (
-                <div
-                  className={classNames(
-                    "px-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",
-                    {
-                      "bg-beige-20 rounded-[12px]": _.includes(
-                        menu.link,
-                        router.pathname
-                      ),
-                    }
-                  )}
-                  onClick={() => {
-                    homeLayoutContext.setValue('isShowSidebar', false)
-                    router.push(menu.link[0])
-                  }}
-                >
-                  <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
-                  <p>{menu.title}</p>
-                </div>
+                <Link href={menu.link[0]} passHref key={menu.title}>
+                  <a
+                    className={classNames(
+                      "px-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",
+                      {
+                        "bg-beige-20 rounded-[12px]": _.includes(
+                          menu.link,
+                          router.pathname
+                        ),
+                      }
+                    )}
+                    onClick={() => {
+                      homeLayoutContext.setValue("isShowSidebar", false);
+                    }}
+                  >
+                    <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
+                    <p>{menu.title}</p>
+                  </a>
+                </Link>
               ))}
               {role === "admin" && (
                 <div className="mt-8">
@@ -126,21 +128,22 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
                     การจัดการ
                   </p>
                   {_.map(adminMenu, (menu) => (
-                    <div
-                      className={classNames(
-                        "px-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",
-                        {
-                          "bg-beige-20 rounded-[12px]": _.includes(
-                            menu.link,
-                            router.pathname
-                          ),
-                        }
-                      )}
-                      onClick={() => router.push(menu.link[0])}
-                    >
-                      <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
-                      <p>{menu.title}</p>
-                    </div>
+                    <Link href={menu.link[0]} passHref key={menu.title}>
+                      <a
+                        className={classNames(
+                          "px-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",
+                          {
+                            "bg-beige-20 rounded-[12px]": _.includes(
+                              menu.link,
+                              router.pathname
+                            ),
+                          }
+                        )}
+                      >
+                        <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
+                        <p>{menu.title}</p>
+                      </a>
+                    </Link>
                   ))}
                 </div>
               )}
@@ -150,29 +153,30 @@ export const SideBar = ({ role, notiCount } : sidebarType) => {
                     อื่น ๆ
                   </p>
                   {_.map(userMenu, (menu) => (
-                    <div
-                      className={classNames(
-                        "pl-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",
-                        {
-                          "bg-beige-20 rounded-[12px]": _.includes(
-                            menu.link,
-                            router.pathname
-                          ),
-                        }
-                      )}
-                      onClick={() => router.push(menu.link[0])}
-                    >
-                      <div className="flex items-center">
-                        <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
-                        <p>{menu.title}</p>
-                      </div>
-                      {menu.title === "การแจ้งเตือน" &&
-                        !_.includes(menu.link, router.pathname) && (
-                          <div className="py-1 px-2 w-8 h-8 titleS text-center rounded-full bg-beige-20">
-                            <p>{notiCount}</p>
-                          </div>
+                    <Link href={menu.link[0]} key={menu.title}>
+                      <a
+                        className={classNames(
+                          "pl-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",
+                          {
+                            "bg-beige-20 rounded-[12px]": _.includes(
+                              menu.link,
+                              router.pathname
+                            ),
+                          }
                         )}
-                    </div>
+                      >
+                        <div className="flex items-center">
+                          <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
+                          <p>{menu.title}</p>
+                        </div>
+                        {menu.title === "การแจ้งเตือน" &&
+                          !_.includes(menu.link, router.pathname) && (
+                            <div className="py-1 px-2 w-8 h-8 titleS text-center rounded-full bg-beige-20">
+                              <p>{notiCount}</p>
+                            </div>
+                          )}
+                      </a>
+                    </Link>
                   ))}
                 </div>
               )}

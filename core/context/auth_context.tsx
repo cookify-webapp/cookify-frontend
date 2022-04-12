@@ -10,7 +10,8 @@ class Auth {
     this.user = {
       role: 'admin',
       src: '/images/core/paimon.jpg',
-      userName: 'paimon'
+      userName: 'Paimon',
+      bookmark: ['1','3']
     }
     makeAutoObservable(this);
   }

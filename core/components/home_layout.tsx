@@ -49,7 +49,7 @@ export const HomeLayout = ({ children }) => {
               className={classNames(
                 "w-0 lg:w-[254px] lg:block",
                 {
-                  "block absolute w-[254px] top-0 left-0 ease-in duration-75 z-50":
+                  "block absolute w-[254px] top-0 left-0 z-50":
                     context.isShowSidebar,
                 },
                 { 'hidden': !context.isShowSidebar && !isDesktop }
@@ -66,7 +66,7 @@ export const HomeLayout = ({ children }) => {
           </div>
           <div className="">
             <Navbar />
-            <div className="w-full overflow-y-scroll">{children}</div>
+            <div className="w-full bg-gray-10 overflow-y-scroll">{children}</div>
           </div>
         </div>
       )}
