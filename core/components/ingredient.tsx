@@ -40,7 +40,7 @@ export const Ingredient = ({
             </div>
           </div>
           {!hasCheckbox && (
-            <i className="fas fa-angle-right text-[24px] h-6 w-6"></i>
+            <i className="fas fa-chevron-right text-[16px] h-4 w-4"></i>
           )}
           {hasCheckbox && (
             <CheckboxInput
