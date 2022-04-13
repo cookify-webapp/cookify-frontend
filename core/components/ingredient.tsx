@@ -32,7 +32,7 @@ export const Ingredient = ({
               classStyle="w-[52px] h-[52px] border border-gray-30 rounded-[12px]"
               src={ingredient.src}
             />
-            <div className="w-auto ml-4">
+            <div className="w-auto mx-4 ">
               <p className="titleM line-clamp-1">{ingredient.name}</p>
               <p className="bodyS text-gray-50 line-clamp-1">
                 {ingredient.type}

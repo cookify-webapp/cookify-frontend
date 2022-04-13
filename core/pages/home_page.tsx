@@ -1,10 +1,9 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { Observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { HomeLayout } from "@core/components/home_layout";
 import { HomePageContext } from "core/context/home_page_context";
 import { AuthContext } from "core/context/auth_context";
-import classNames from "classnames";
 import { SearchBox } from "@core/components/input/search_box";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import Link from "next/link";
