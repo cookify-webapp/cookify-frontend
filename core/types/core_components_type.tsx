@@ -56,6 +56,7 @@ export type searchBoxType = {
 
 export type recipePropType = {
   recipe: {
+    id: string
     src: string
     rating: number
     rating_count: number
