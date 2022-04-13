@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Observer } from "mobx-react-lite";
 import { ImageWithFallback } from "./image_with_fallback";
 import { Rating } from "./rating";
@@ -8,22 +8,14 @@ import "dayjs/locale/th";
 import _ from "lodash";
 import Link from "next/link";
 
-export const Recipe = ({ recipe, role, isBookmark }: recipePropType) => {
-  //---------------------
-  // CONTEXT
-  //---------------------
-
-  //---------------------
-  // EFFECT
-  //---------------------
-  useEffect(() => {}, []);
-
+export const Recipe = ({ recipe, role, isBookmark, onClick }: recipePropType) => {
   //---------------------
   // RENDER
   //---------------------
   return (
     <Observer>
       {() => (
+        <>
         <Link href={`/recipes/${recipe.id}`} passHref>
           <a>
             <div className="rounded-[12px] card-shadow bg-white w-full">
@@ -34,7 +26,12 @@ export const Recipe = ({ recipe, role, isBookmark }: recipePropType) => {
                   classStyle="rounded-t-[12px] h-[180px]"
                 />
                 {role && (
-                  <div className="absolute top-0 right-0 mt-2 mr-2 w-9 h-9 p-[6px] bg-black rounded-full text-center">
+                  <div 
+                    className="absolute top-0 right-0 mt-2 mr-2 w-9 h-9 p-[6px] bg-black rounded-full text-center" 
+                    onClick={(e) => {
+                      e.preventDefault()
+                      onClick()
+                    }}>
                     {!isBookmark && (
                       <i className="far fa-bookmark w-6 h-6 text-white"></i>
                     )}
@@ -77,7 +74,9 @@ export const Recipe = ({ recipe, role, isBookmark }: recipePropType) => {
               </div>
             </div>
           </a>
-        </Link>
+        </Link>        
+        </>
+
       )}
     </Observer>
   );

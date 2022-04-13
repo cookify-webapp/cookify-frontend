@@ -68,4 +68,5 @@ export type recipePropType = {
   } | null
   role: "" | "user" | "admin"
   isBookmark: boolean
+  onClick: Function
 }

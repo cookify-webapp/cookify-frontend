@@ -10,6 +10,7 @@ import { HomeLayoutContext } from "core/context/home_layout_context";
 import Link from "next/link";
 import _ from "lodash";
 import { Recipe } from "@core/components/recipe";
+import { Snapshot } from "@core/components/snapshot";
 
 export default function HomePage() {
   //---------------------
@@ -76,12 +77,34 @@ export default function HomePage() {
             </h2>
             <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
               {_.map(context.recipes, (recipe) => (
-                <div className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3" key={recipe.title}>
+                <div
+                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                  key={recipe.title}
+                >
                   <Recipe
                     recipe={recipe}
                     role={authContext.user.role}
                     isBookmark={checkIsBookmark(recipe.id)}
+                    onClick={() => console.log('bookmark click')}
                   />
+                </div>
+              ))}
+            </div>
+            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
+              Snapshot ล่าสุด
+              <Link href="/snapshot" passHref>
+                <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
+                  ดูทั้งหมด
+                </a>
+              </Link>
+            </h2>
+            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+              {_.map(context.snapshots, (snapshot) => (
+                <div
+                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                  key={`snapshot_${snapshot.id}`}
+                >
+                  <Snapshot snapshot={snapshot} />
                 </div>
               ))}
             </div>
