@@ -2,8 +2,9 @@ import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 
 class HomePage {
-  recipes;
+  recipes
   snapshots
+  ingredients
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -102,6 +103,32 @@ class HomePage {
           id: '1',
           title: 'สเต็กริบอายซอสพริกไทยดำ 1'
         }
+      },
+    ]
+    this.ingredients = [
+      {
+        id: '1',
+        name: 'ผักกาดขาว',
+        src: '/images/core/Item_Cabbage.png',
+        type: 'ผักและผลไม้'
+      },
+      {
+        id: '2',
+        name: 'ผักกาดขาว',
+        src: '/images/core/Item_Cabbage.png',
+        type: 'ผักและผลไม้'
+      },
+      {
+        id: '3',
+        name: 'ผักกาดขาว',
+        src: '/images/core/Item_Cabbage.png',
+        type: 'ผักและผลไม้'
+      },
+      {
+        id: '4',
+        name: 'ผักกาดขาว',
+        src: '/images/core/Item_Cabbage.png',
+        type: 'ผักและผลไม้'
       },
     ]
     makeAutoObservable(this);

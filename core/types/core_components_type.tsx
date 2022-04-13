@@ -70,3 +70,16 @@ export type recipePropType = {
   isBookmark: boolean
   onClick: Function
 }
+
+export type ingredientPropType = {
+  ingredient: {
+    id: string
+    name: string
+    src: string
+    type: string
+  } | null
+  isBorder?: boolean
+  hasCheckbox?: boolean
+  onChange?: Function
+  isChecked?: boolean
+}

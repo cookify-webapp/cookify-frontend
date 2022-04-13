@@ -111,6 +111,9 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                           menu.link,
                           router.pathname
                         ),
+                      },
+                      {
+                        "bg-transparent hover:bg-beige-10 rounded-[12px]": !(_.includes(menu.link, router.pathname))
                       }
                     )}
                     onClick={() => {
@@ -137,6 +140,9 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                               menu.link,
                               router.pathname
                             ),
+                          },
+                          {
+                            "bg-transparent hover:bg-beige-10 rounded-[12px]": !(_.includes(menu.link, router.pathname))
                           }
                         )}
                       >
@@ -162,6 +168,9 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                               menu.link,
                               router.pathname
                             ),
+                          },
+                          {
+                            "bg-transparent hover:bg-beige-10 rounded-[12px]": !(_.includes(menu.link, router.pathname))
                           }
                         )}
                       >

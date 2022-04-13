@@ -16,15 +16,13 @@ export const ImageWithFallback = ({
   alt,
   fallBackSrc = '/images/core/default.png',
   classStyle,
-  width,
-  height,
   placeholder = 'blur',
 }: ImageWithFallbackProps) => {
   //---------------------
   // STATE
   //---------------------
   const [imageError, setImageError] = useState(false)
-  const [imageIsLoaded, setImageIsLoaded] = useState(false)
+
   //---------------------
   // RENDER
   //---------------------
@@ -35,9 +33,7 @@ export const ImageWithFallback = ({
         alt={alt}
         objectFit="cover"
         placeholder={placeholder}
-        className={`transition-all duration-150 ${classStyle} ${imageIsLoaded ? 'animate-pulse' : ''}`}
-        onLoad={() => setImageIsLoaded(true)}
-        onLoadingComplete={() => setImageIsLoaded(false)}
+        className={classStyle}
         blurDataURL="/images/core/default.png"
         onError={() => setImageError(true)}
         layout='fill'

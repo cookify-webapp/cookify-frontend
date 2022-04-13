@@ -11,6 +11,7 @@ import Link from "next/link";
 import _ from "lodash";
 import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
+import { Ingredient } from "@core/components/ingredient";
 
 export default function HomePage() {
   //---------------------
@@ -50,7 +51,7 @@ export default function HomePage() {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="xl:px-14">
+          <div className="xl:px-14 pb-8">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -91,8 +92,8 @@ export default function HomePage() {
               ))}
             </div>
             <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
-              Snapshot ล่าสุด
-              <Link href="/snapshot" passHref>
+              Snapshot ใหม่ล่าสุด
+              <Link href="/snapshots" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
                   ดูทั้งหมด
                 </a>
@@ -105,6 +106,28 @@ export default function HomePage() {
                   key={`snapshot_${snapshot.id}`}
                 >
                   <Snapshot snapshot={snapshot} />
+                </div>
+              ))}
+            </div>
+            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
+              วัตถุดิบใหม่ล่าสุด
+              <Link href="/ingredients" passHref>
+                <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
+                  ดูทั้งหมด
+                </a>
+              </Link>
+            </h2>
+            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+              {_.map(context.ingredients, (ingredient) => (
+                <div
+                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                  key={ingredient.name}
+                >
+                  <Link href={`/ingredients/${ingredient.id}`} passHref>
+                    <a>
+                      <Ingredient ingredient={ingredient} />
+                    </a>
+                  </Link>
                 </div>
               ))}
             </div>
