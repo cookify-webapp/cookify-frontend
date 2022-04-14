@@ -4,7 +4,7 @@ import "tailwindcss/tailwind.css";
 import React from "react";
 import App from "next/app";
 import Head from "next/head";
-import Script from "next/script";
+import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
 
 
 function MyApp({ Component, pageProps }) {
@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps }) {
         <title>Cookify</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <IngredientsSelectionModal />
       <Component {...pageProps} />
     </>
   );

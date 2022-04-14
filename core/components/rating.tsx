@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import _ from "lodash";
 
@@ -43,26 +43,23 @@ export const Rating = ({ rating, spaceX, width, height }) => {
       {() => (
         <div className={`${spaceX} flex`}>
           {_.map(ratingToStar, (rate, index) => (
-            <>
+            <Fragment key={`${rate}_${index}`}>
               {rate === "full" && (
                 <i
-                  key={`${rate}_${index}`}
                   className="text-yellow fas fa-star"
                 ></i>
               )}
               {rate === "half" && (
                 <i
-                  key={`${rate}_${index}`}
                   className="text-yellow fas fa-star-half-alt"
                 ></i>
               )}
               {rate === "empty" && (
                 <i
-                  key={`${rate}_${index}`}
                   className="text-yellow far fa-star"
                 ></i>
               )}
-            </>
+            </Fragment>
           ))}
         </div>
       )}

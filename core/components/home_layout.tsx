@@ -16,7 +16,7 @@ export const HomeLayout = ({ children }) => {
   //---------------------
   // HOOKS
   //---------------------
-  const [isDesktop, setIsDesktop] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false);
 
   //---------------------
   // FUNCTION
@@ -27,14 +27,14 @@ export const HomeLayout = ({ children }) => {
     } else {
       setIsDesktop(false);
     }
-  }
+  };
 
   //---------------------
   // EFFECT
   //---------------------
   useEffect(() => {
-    window.addEventListener('resize', updateDimensions)
-    updateDimensions()
+    window.addEventListener("resize", updateDimensions);
+    updateDimensions();
   }, []);
 
   //---------------------
@@ -44,32 +44,31 @@ export const HomeLayout = ({ children }) => {
     <Observer>
       {() => (
         <div className="flex h-screen overflow-y-auto scrollbar-hide">
-          <div className={classNames('', {'hidden': !context.isShowSidebar && !isDesktop}, {'block': context.isShowSidebar})}>
-            <div
-              className={classNames(
-                "",
-                {
-                  "block absolute top-0 left-0 z-50":
-                    context.isShowSidebar,
-                },
-                { 'hidden': !context.isShowSidebar && !isDesktop }
-              )}
-            >
-              <div className="">
-                <SideBar notiCount={10} role={authContext.user?.role} />
-              </div>
-              
-            </div>
-            {context.isShowSidebar && (
-              <div
-                className="absolute w-screen h-screen bg-black opacity-25 z-40"
-                onClick={() => context.setValue("isShowSidebar", false)}
-              ></div>
+          <div
+            className={classNames(
+              "",
+              {
+                "block absolute top-0 left-0 z-50": context.isShowSidebar,
+              },
+              { "hidden": !context.isShowSidebar && !isDesktop }
             )}
+          >
+            <div className="">
+              <SideBar notiCount={10} role={authContext.user?.role} />
+            </div>
           </div>
+          {context.isShowSidebar && (
+            <div
+              className="absolute w-screen h-screen bg-black opacity-25 z-40"
+              onClick={() => context.setValue("isShowSidebar", false)}
+            ></div>
+          )}
+
           <div className="">
             <Navbar />
-            <div className="w-full xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">{children}</div>
+            <div className="w-full xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">
+              {children}
+            </div>
           </div>
         </div>
       )}

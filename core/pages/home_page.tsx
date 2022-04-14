@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { HomeLayout } from "@core/components/home_layout";
@@ -11,6 +11,7 @@ import _ from "lodash";
 import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
 import { Ingredient } from "@core/components/ingredient";
+import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
 
 export default function HomePage() {
   //---------------------
@@ -19,6 +20,9 @@ export default function HomePage() {
   const context = useContext(HomePageContext);
   const authContext = useContext(AuthContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
+  const ingredientSelectionModalContext = useContext(IngredientSelectionModalContext)
+
+  const [allergic, setAllergic] = useState(['เนื้อสัตว์', 'ผักและผลไม้'])
 
   //---------------------
   //  ROUTER
@@ -117,10 +121,10 @@ export default function HomePage() {
               </Link>
             </h2>
             <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
-              {_.map(context.ingredients, (ingredient) => (
+              {_.map(context.ingredients, (ingredient, index) => (
                 <div
                   className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
-                  key={ingredient.name}
+                  key={`${ingredient.name}_${index}`}
                 >
                   <Link href={`/ingredients/${ingredient.id}`} passHref>
                     <a>
@@ -129,6 +133,12 @@ export default function HomePage() {
                   </Link>
                 </div>
               ))}
+            </div>
+            <div className="mt-8">
+              <button onClick={() => {
+                ingredientSelectionModalContext.openModal(true, '')
+              }}>clickme</button>
+              {/* <IngredientsSelectionModal /> */}
             </div>
           </div>
         </HomeLayout>

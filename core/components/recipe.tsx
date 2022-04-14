@@ -27,7 +27,7 @@ export const Recipe = ({ recipe, role, isBookmark, onClick }: recipePropType) =>
                 />
                 {role && (
                   <div 
-                    className="absolute top-0 right-0 mt-2 mr-2 w-9 h-9 p-[6px] bg-black rounded-full text-center" 
+                    className="absolute top-0 right-0 mt-2 mr-2 w-9 h-9 p-[6px] bg-black bg-opacity-75 rounded-full text-center" 
                     onClick={(e) => {
                       e.preventDefault()
                       onClick()

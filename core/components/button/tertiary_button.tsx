@@ -11,7 +11,7 @@ export const TertiaryButton = ( { title, onClick, icon, borderColor, hoverBgColo
       {() => (
         <button
         className={`${textColor} ${textHoverColor} ease-in duration-75 w-full rounded-[12px] titleS h-10 text-center bg-transparent ${hoverBgColor} border ${borderColor}`}
-        onClick={() => onClick}
+        onClick={() => onClick()}
       >
         {
           icon && (

@@ -1,6 +1,5 @@
 import React from "react";
 import { Observer } from "mobx-react-lite";
-import Link from "next/link";
 import classNames from "classnames";
 import { ImageWithFallback } from "./image_with_fallback";
 import { CheckboxInput } from "./input/checkbox";

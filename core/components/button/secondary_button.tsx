@@ -11,7 +11,7 @@ export const SecondaryButton = ({ title, onClick }: secondaryButtonType) => {
       {() => (
         <button
           className="text-gray-60 w-full rounded-[12px] titleS h-10 text-center bg-gray-20 hover:bg-gray-30 border border-gray-40"
-          onClick={() => onClick}
+          onClick={() => onClick()}
         >
           <p>{title}</p>
         </button>

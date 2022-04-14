@@ -11,7 +11,7 @@ export const TertiaryMiniButton = ({borderColor, hoverBgColor, icon, iconColor, 
       {() => (
         <button
           className={`${iconColor} ${iconHoverColor} ease-in duration-75 rounded-[8px] titleS w-10 h-10 text-center bg-transparent ${hoverBgColor} border ${borderColor}`}
-          onClick={() => onClick}
+          onClick={() => onClick()}
         >
           <i className={icon}></i>
         </button>
