@@ -5,6 +5,7 @@ import React from "react";
 import App from "next/app";
 import Head from "next/head";
 import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
+import { FlashMessage } from "@core/components/flash_message";
 
 
 function MyApp({ Component, pageProps }) {
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <IngredientsSelectionModal />
+      <FlashMessage />
       <Component {...pageProps} />
     </>
   );

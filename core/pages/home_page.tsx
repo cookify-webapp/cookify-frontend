@@ -12,7 +12,7 @@ import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
 import { Ingredient } from "@core/components/ingredient";
 import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
-import { NutritionLabel } from "@core/components/nutrition_label";
+import { FlashMessageContext } from "core/context/flash_message_context";
 
 export default function HomePage() {
   //---------------------
@@ -21,9 +21,8 @@ export default function HomePage() {
   const context = useContext(HomePageContext);
   const authContext = useContext(AuthContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
-  const ingredientSelectionModalContext = useContext(IngredientSelectionModalContext)
 
-  const [allergic, setAllergic] = useState(['เนื้อสัตว์', 'ผักและผลไม้'])
+  const flashMessageContext = useContext(FlashMessageContext)
 
   //---------------------
   //  ROUTER
@@ -135,10 +134,8 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <div className="mt-8 grid grid-cols-12 gap-6 px-5 lg:px-0">
-              <div className="col-span-12 lg:col-span-8">
-                <NutritionLabel nutrition={context.nutrition} type='ingredient' ingredient={context.ingredient} />
-              </div>  
+            <div className="mt-8">
+              <button onClick={() => flashMessageContext.handleShow('ลบสำเร็จ', 'ลบวัตถุดิบสำเร็จ')}>click me</button>
             </div>
           </div>
         </HomeLayout>

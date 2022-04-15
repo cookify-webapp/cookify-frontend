@@ -48,9 +48,9 @@ export const HomeLayout = ({ children }) => {
             className={classNames(
               "",
               {
-                "block absolute top-0 left-0 z-50": context.isShowSidebar,
+                "absolute top-0 left-0 z-50 translate-x-0 transition-all duration-300": context.isShowSidebar,
               },
-              { "hidden": !context.isShowSidebar && !isDesktop }
+              { "absolute top-0 left-0 z-50 -translate-x-[254px] transition-all duration-300": !context.isShowSidebar && !isDesktop }
             )}
           >
             <div className="">
