@@ -57,7 +57,7 @@ export const NutritionLabel = ({
               <p className="ml-4 w-auto">
                 {`${nutrition.calories} กิโลแคลอรี`}
                 <br className="sm:hidden" />
-                {`(พลังงานจากไขมัน ${nutrition.totalNutrientsKCal.FAT_KCAL.quantity} กิโลแคลอรี)`}
+                {` (พลังงานจากไขมัน ${nutrition.totalNutrientsKCal.FAT_KCAL.quantity} กิโลแคลอรี)`}
               </p>
             </div>
           </div>
