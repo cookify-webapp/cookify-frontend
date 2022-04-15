@@ -12,6 +12,7 @@ import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
 import { Ingredient } from "@core/components/ingredient";
 import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
+import { NutritionLabel } from "@core/components/nutrition_label";
 
 export default function HomePage() {
   //---------------------
@@ -134,11 +135,10 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <div className="mt-8">
-              <button onClick={() => {
-                ingredientSelectionModalContext.openModal(true, '')
-              }}>clickme</button>
-              {/* <IngredientsSelectionModal /> */}
+            <div className="mt-8 grid grid-cols-12 gap-6 px-5 lg:px-0">
+              <div className="col-span-12 lg:col-span-8">
+                <NutritionLabel nutrition={context.nutrition} type='ingredient' ingredient={context.ingredient} />
+              </div>  
             </div>
           </div>
         </HomeLayout>

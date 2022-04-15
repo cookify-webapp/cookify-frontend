@@ -126,7 +126,7 @@ export const IngredientsSelectionModal = () => {
               )}
               <div
                 className={classNames(
-                  "mt-4 h-[250px]",
+                  "my-4 h-[250px]",
                   {
                     "grid grid-cols-12 gap-4 overflow-y-auto":
                       _.size(context.ingredients) !== 0,
