@@ -6,6 +6,7 @@ import App from "next/app";
 import Head from "next/head";
 import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
 import { FlashMessage } from "@core/components/flash_message";
+import { Modal } from "@core/components/modal/modal";
 
 
 function MyApp({ Component, pageProps }) {
@@ -17,6 +18,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <IngredientsSelectionModal />
       <FlashMessage />
+      <Modal />
       <Component {...pageProps} />
     </>
   );

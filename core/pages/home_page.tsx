@@ -11,8 +11,7 @@ import _ from "lodash";
 import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
 import { Ingredient } from "@core/components/ingredient";
-import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
-import { FlashMessageContext } from "core/context/flash_message_context";
+import { ModalContext } from "core/context/modal_context";
 
 export default function HomePage() {
   //---------------------
@@ -22,7 +21,7 @@ export default function HomePage() {
   const authContext = useContext(AuthContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
 
-  const flashMessageContext = useContext(FlashMessageContext)
+  const modalContext = useContext(ModalContext);
 
   //---------------------
   //  ROUTER
@@ -89,7 +88,7 @@ export default function HomePage() {
                     recipe={recipe}
                     role={authContext.user.role}
                     isBookmark={checkIsBookmark(recipe.id)}
-                    onClick={() => console.log('bookmark click')}
+                    onClick={() => console.log("bookmark click")}
                   />
                 </div>
               ))}
@@ -133,9 +132,6 @@ export default function HomePage() {
                   </Link>
                 </div>
               ))}
-            </div>
-            <div className="mt-8">
-              <button onClick={() => flashMessageContext.handleShow('ลบสำเร็จ', 'ลบวัตถุดิบสำเร็จ')}>click me</button>
             </div>
           </div>
         </HomeLayout>
