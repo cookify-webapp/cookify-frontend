@@ -38,7 +38,7 @@ class ingredientSelectionModal {
     this.hasIsCheckedAll = false
     this.searchWord = ''
     if (clearFormik) {
-      this.formik?.resetForm()
+      this.formik?.setFieldValue('allergic', '')
     }
   }
 

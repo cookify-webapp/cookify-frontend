@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { Observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { HomeLayout } from "@core/components/home_layout";
@@ -12,6 +12,7 @@ import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
 import { Ingredient } from "@core/components/ingredient";
 import { ModalContext } from "core/context/modal_context";
+import { TertiaryButton } from "@core/components/button/tertiary_button";
 
 export default function HomePage() {
   //---------------------
@@ -93,6 +94,35 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+            <div className="mt-8 px-5 xl:px-0">
+              <div
+                className="flex items-center h-[200px] rounded-[12px]"
+                style={{
+                  background:
+                    "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('https://i.pinimg.com/736x/bd/30/44/bd3044c89507f5890d5aba5a6201e704.jpg') no-repeat center",
+                  backgroundSize: "cover",
+                }}
+              >
+                <div>
+                  <p className="headlineM text-white text-center">
+                    ไม่รู้จะทำเมนูอะไรดีใช่ไหม ?
+                    <br />
+                    ไปลองสุ่มเมนูเลยตอนนี้!
+                  </p>
+                  <div className="w-[180px] mt-4 mx-auto">
+                    <TertiaryButton
+                      borderColor="border-white"
+                      hoverBgColor="hover:bg-white"
+                      textColor="text-white"
+                      textHoverColor="hover:text-black"
+                      title="ไปสุ่มสูตรอาหาร"
+                      onClick={() => router.push("/random")}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
               Snapshot ใหม่ล่าสุด
               <Link href="/snapshots" passHref>
