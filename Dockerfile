@@ -37,3 +37,11 @@ EXPOSE 3000
 ENV PORT 3000
 
 CMD ["npm","start"]
+
+#Production stage
+FROM nginx:1.21.3-alpine as production-stage
+WORKDIR /usr/share/nginx/html
+COPY  ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
