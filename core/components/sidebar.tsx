@@ -105,7 +105,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                 <Link href={menu.link[0]} passHref key={menu.title}>
                   <a
                     className={classNames(
-                      "px-4 titleS text-brown-20 h-10 flex items-center cursor-pointer",
+                      "px-4 text-brown-20 h-10 flex items-center cursor-pointer",
                       {
                         "bg-beige-20 rounded-[12px]": _.includes(
                           menu.link,
@@ -121,7 +121,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                     }}
                   >
                     <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
-                    <p>{menu.title}</p>
+                    <p className="titleS">{menu.title}</p>
                   </a>
                 </Link>
               ))}
@@ -147,7 +147,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                         )}
                       >
                         <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
-                        <p>{menu.title}</p>
+                        <p className="titleS">{menu.title}</p>
                       </a>
                     </Link>
                   ))}
@@ -176,12 +176,12 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                       >
                         <div className="flex items-center">
                           <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
-                          <p>{menu.title}</p>
+                          <p className="titleS">{menu.title}</p>
                         </div>
                         {menu.title === "การแจ้งเตือน" &&
                           !_.includes(menu.link, router.pathname) && (
                             <div className="py-1 px-2 w-8 h-8 titleS text-center rounded-full bg-beige-20">
-                              <p>{notiCount}</p>
+                              <p className="titleS">{notiCount}</p>
                             </div>
                           )}
                       </a>

@@ -1,3 +1,5 @@
+@import './font.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,52 +8,53 @@
   margin: 0;
   padding: 0;
   width: 100%;
+  font-family: "Kanit";
 }
 
 @layer utilities {
   .headlineXL {
+    font-family: "Kanit Medium";
     font-size: 36px;
-    font-weight: 500;
   }
 
   .headlineL {
+    font-family: "Kanit Medium";
     font-size: 28px;
-    font-weight: 500;
   }
 
   .headlineM {
+    font-family: "Kanit Medium";
     font-size: 24px;
-    font-weight: 500;
   }
 
   .titleM {
+    font-family: "Kanit Medium";
     font-size: 18px;
-    font-weight: 500;
   }
 
   .titleS {
+    font-family: "Kanit Medium";
     font-size: 16px;
-    font-weight: 500;
   }
 
   .bodyL {
+    font-family: "Kanit";
     font-size: 20px;
-    font-weight: 400;
   }
 
   .bodyM {
+    font-family: "Kanit";
     font-size: 16px;
-    font-weight: 400;
   }
 
   .bodyS {
+    font-family: "Kanit";
     font-size: 12px;
-    font-weight: 400;
   }
 
   .bodyXS {
+    font-family: "Kanit";
     font-size: 10px;
-    font-weight: 400;
   }
 
   .card-shadow {
