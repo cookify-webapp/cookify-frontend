@@ -37,6 +37,9 @@ module.exports = {
         }
       },
     },
+    fontFamily: {
+      sans: ['Kanit', 'sans-serif']
+    }
   },
   plugins: [require('tailwind-scrollbar-hide'), require('@tailwindcss/line-clamp')],
 }
