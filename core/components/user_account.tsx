@@ -59,7 +59,7 @@ export const UserAccount = ({ src, userName, role }: userAccountType) => {
                 />
               </div>
               <div className="shrink-0 w-[85px] sm:w-[123px] ml-3">
-                <p className="text-[14px] font-medium sm:titleS line-clamp-1 truncate">
+                <p className="titleS text-[14px] font-medium sm:titleS line-clamp-1 truncate">
                   {userName}
                 </p>
                 <p className="bodyXS sm:bodyS text-gray-50">{convertRole()}</p>
