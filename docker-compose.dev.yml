@@ -1,0 +1,10 @@
+version: "3"
+services:
+  nextjs:
+    image: ghcr.io/cookify-webapp/cookify-frontend:dev
+    restart: unless-stopped
+    container_name: "nextjs"
+    env_file:
+      - ./cookify-frontend/.env.development
+    ports:
+      - "3001:3001"
