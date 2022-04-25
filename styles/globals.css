@@ -1,9 +1,63 @@
+@import './font.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap');
-
 *, html, body {
-  font-family: 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: "Kanit";
+}
+
+@layer utilities {
+  .headlineXL {
+    font-family: "Kanit Medium";
+    font-size: 36px;
+  }
+
+  .headlineL {
+    font-family: "Kanit Medium";
+    font-size: 28px;
+  }
+
+  .headlineM {
+    font-family: "Kanit Medium";
+    font-size: 24px;
+  }
+
+  .titleM {
+    font-family: "Kanit Medium";
+    font-size: 18px;
+  }
+
+  .titleS {
+    font-family: "Kanit Medium";
+    font-size: 16px;
+  }
+
+  .bodyL {
+    font-family: "Kanit";
+    font-size: 20px;
+  }
+
+  .bodyM {
+    font-family: "Kanit";
+    font-size: 16px;
+  }
+
+  .bodyS {
+    font-family: "Kanit";
+    font-size: 12px;
+  }
+
+  .bodyXS {
+    font-family: "Kanit";
+    font-size: 10px;
+  }
+
+  .card-shadow {
+    filter: drop-shadow(0px 4px 10px rgba(192, 192, 192, 0.25));
+}
 }

@@ -4,26 +4,21 @@ import "tailwindcss/tailwind.css";
 import React from "react";
 import App from "next/app";
 import Head from "next/head";
-import Script from "next/script";
+import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
+import { FlashMessage } from "@core/components/flash_message";
+import { Modal } from "@core/components/modal/modal";
+
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <Head
-        children={
-          <>
-            <title>Cookify</title>
-            <meta
-              name="viewport"
-              content="initial-scale=1.0, width=device-width"
-            />
-            <Script
-              src="https://kit.fontawesome.com/9c44f5505c.js"
-              crossOrigin="anonymous"
-            ></Script>
-          </>
-        }
-      ></Head>
+      <Head>
+        <title>Cookify</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <IngredientsSelectionModal />
+      <FlashMessage />
+      <Modal />
       <Component {...pageProps} />
     </>
   );
