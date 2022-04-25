@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
     container_name: "nextjs-dev"
     env_file:
-      - ./cookify-frontend/.env.development
+      - ./.env.development
     ports:
       - "3001:3001"
 networks:
   default:
     external:
-      name: cookify-devops_cookify-webapp-dev
+      name: cookify-devops_cookify-webapp
