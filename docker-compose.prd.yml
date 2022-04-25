@@ -1,9 +1,9 @@
 version: "3"
 services:
-  nextjs:
+  nextjs-prd:
     image: ghcr.io/cookify-webapp/cookify-frontend:prd
     restart: unless-stopped
-    container_name: "nextjs"
+    container_name: "nextjs-prd"
     env_file:
       - ./cookify-frontend/.env
     ports:
