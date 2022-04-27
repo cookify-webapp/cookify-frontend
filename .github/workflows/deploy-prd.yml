@@ -1,26 +1,18 @@
 name: deploy-fe-prd
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches: 
-      - main
+  workflow_dispatch:
+    inputs:
+      deploy-version:
+        description: 'Version to deploy'
+        required: true
 jobs:
-  build:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - run: docker build -f Dockerfile-prd . --tag ghcr.io/cookify-webapp/cookify-frontend:prd
-      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - run: docker push ghcr.io/cookify-webapp/cookify-frontend:prd
   deploy:
-    needs: build
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: refs/tags/${{ github.event.inputs.deploy-version }}
       - name: pull images and deploy
         uses: appleboy/ssh-action@master
         with:

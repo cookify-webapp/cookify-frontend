@@ -1,0 +1,34 @@
+name: tagging-fe
+on: 
+  workflow_dispatch:
+    inputs:
+      tag-version:
+        description: 'Version to tag'
+        required: false
+jobs:
+  git-tag:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Git tagging
+        id: git-tag
+        uses: anothrNick/github-tag-action@1.35.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ github.event.inputs.tag-version }}
+          DEFAULT_BUMP: patch
+    outputs:
+      tag-version: ${{ steps.git-tag.outputs.new_tag }}
+  docker-tag:
+    needs: git-tag
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Pull and push tagged Docker Image
+        run: | 
+          docker build -f Dockerfile-prd . --tag ghcr.io/cookify-webapp/cookify-frontend:prd --tag ghcr.io/cookify-webapp/cookify-frontend:${{needs.git-tag.outputs.tag-version}}
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker push ghcr.io/cookify-webapp/cookify-frontend:prd
+          docker push ghcr.io/cookify-webapp/cookify-frontend:${{needs.git-tag.outputs.tag-version}}
