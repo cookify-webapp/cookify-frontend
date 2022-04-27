@@ -33,6 +33,7 @@ jobs:
             git checkout develop
             git pull origin develop
             docker rm -f nextjs-dev
+            dcoker rmi ghcr.io/cookify-webapp/cookify-frontend:dev
             docker-compose -f docker-compose.dev.yml up -d
   notify:
     name: Discord Notification
