@@ -10,19 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          tags: ghcr.io/cookify-webapp/cookify-frontend:dev
-          context: .
-          file: ./Dockerfile-dev
-          push: true
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: docker build -f Dockerfile-dev . --tag ghcr.io/cookify-webapp/cookify-frontend:dev
+      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - run: docker push ghcr.io/cookify-webapp/cookify-frontend:dev
   deploy:
     needs: build
     runs-on: ubuntu-20.04
