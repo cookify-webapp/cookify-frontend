@@ -54,7 +54,7 @@ export default function HomePage() {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="xl:px-14 pb-8">
+          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl pb-8 ">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -71,7 +71,7 @@ export default function HomePage() {
                 }}
               />
             </div>
-            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4">
+            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4">
               สูตรอาหารใหม่ล่าสุด
               <Link href="/recipes" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -79,7 +79,7 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
               {_.map(context.recipes, (recipe) => (
                 <div
                   className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
@@ -94,7 +94,7 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <div className="mt-8 px-5 xl:px-0">
+            <div className="mt-8 px-5 2xl:px-0">
               <div
                 className="flex items-center h-[200px] rounded-[12px]"
                 style={{
@@ -123,7 +123,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
+            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               Snapshot ใหม่ล่าสุด
               <Link href="/snapshots" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -131,7 +131,7 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
               {_.map(context.snapshots, (snapshot) => (
                 <div
                   className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
@@ -141,7 +141,7 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
+            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               วัตถุดิบใหม่ล่าสุด
               <Link href="/ingredients" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -149,7 +149,7 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
               {_.map(context.ingredients, (ingredient, index) => (
                 <div
                   className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"

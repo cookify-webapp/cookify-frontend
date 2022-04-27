@@ -34,23 +34,22 @@ jobs:
             git pull origin develop
             docker rm -f nextjs-dev
             docker-compose -f docker-compose.dev.yml up -d
-  test:
-    needs: deploy
-    runs-on: ubuntu-20.04
+  notify:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - deploy
+    if: ${{ always() }}
     steps:
-      - name: Check Home Page
-        run: |
-          echo '#!/bin/bash
-          retry_times=10
-          current_retry=0
-          while [ $current_retry -lt $retry_times ]
-          do
-            curl -s http://cookifywebapp-dev.ddns.net | grep "You need to enable JavaScript to run this app."
-            result_status=$?
-            let current_retry++
-            [ $result_status -eq 0 ] && break
-            sleep 10
-          done
-          exit $result_status' > after_deploy_test.sh
-          chmod +x after_deploy_test.sh
-          ./after_deploy_test.sh
+      - name: Notify
+        uses: nobrayner/discord-webhook@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          username: 'Cookify Webapp Bot'
+          avatar-url: 'https://i.ibb.co/9nD72C9/Mini-logo-with-bg.png'
+          title: '${{ github.workflow }}: {{STATUS}}'
+          color-success: '#63AB2A'
+          color-failure: '#E00000'
+          color-cancelled: '#FFB800'
