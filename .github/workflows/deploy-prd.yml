@@ -1,20 +1,20 @@
-name: deploy-fe-dev
+name: deploy-fe-prd
 on:
   push:
     branches:
-      - develop
+      - main
   pull_request:
     branches: 
-      - develop
+      - main
 jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: docker build -f Dockerfile-dev . --tag ghcr.io/cookify-webapp/cookify-frontend:dev
+      - run: docker build -f Dockerfile-prd . --tag ghcr.io/cookify-webapp/cookify-frontend:prd
       - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - run: docker push ghcr.io/cookify-webapp/cookify-frontend:dev
+      - run: docker push ghcr.io/cookify-webapp/cookify-frontend:prd
   deploy:
     needs: build
     runs-on: ubuntu-20.04
@@ -30,11 +30,11 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd cookify-devops/cookify-frontend
-            git checkout develop
-            git pull origin develop
-            docker rm -f nextjs-dev
-            docker rmi ghcr.io/cookify-webapp/cookify-frontend:dev
-            docker-compose -f docker-compose.dev.yml up -d
+            git checkout main
+            git pull origin main
+            docker rm -f nextjs-prd
+            docker rmi ghcr.io/cookify-webapp/cookify-frontend:prd
+            docker-compose -f docker-compose.prd.yml up -d
   notify:
     name: Discord Notification
     runs-on: ubuntu-20.04
