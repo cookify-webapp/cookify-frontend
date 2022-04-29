@@ -39,8 +39,8 @@ export default function HomePage() {
   //---------------------
   const checkIsBookmark = (recipeId) => {
     let isBookmark = false;
-    for (let i = 0; i < _.size(authContext.user.bookmark); i++) {
-      if (recipeId === authContext.user.bookmark[i]) {
+    for (let i = 0; i < _.size(authContext.user?.bookmark); i++) {
+      if (recipeId === authContext.user?.bookmark[i]) {
         isBookmark = true;
       }
     }
@@ -54,7 +54,7 @@ export default function HomePage() {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl pb-8 ">
+          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -87,7 +87,7 @@ export default function HomePage() {
                 >
                   <Recipe
                     recipe={recipe}
-                    role={authContext.user.role}
+                    role={authContext.user?.role}
                     isBookmark={checkIsBookmark(recipe.id)}
                     onClick={() => console.log("bookmark click")}
                   />

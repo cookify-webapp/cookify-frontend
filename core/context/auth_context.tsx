@@ -7,12 +7,7 @@ class Auth {
   // CONSTUCTOR
   //-------------------
   constructor() {
-    this.user = {
-      role: 'admin',
-      src: '/images/core/paimon.jpg',
-      userName: 'Paimon',
-      bookmark: ['1','3']
-    }
+    this.user = null
     makeAutoObservable(this);
   }
 

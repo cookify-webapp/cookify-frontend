@@ -43,7 +43,7 @@ export const HomeLayout = ({ children }) => {
   return (
     <Observer>
       {() => (
-        <div className="flex h-screen overflow-y-auto scrollbar-hide">
+        <div className="flex">
           <div
             className={classNames(
               "",
