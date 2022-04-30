@@ -15,7 +15,12 @@ export const RegisterPage = () => {
   //---------------------
   // EFFECT
   //---------------------
-  useEffect(() => {}, []);
+  useEffect(() => {
+    return () => {
+      context.setValue('stepForm', 1)
+      formik.resetForm()
+    }
+  }, []);
 
   //---------------------
   //  FORMIK
@@ -54,7 +59,7 @@ export const RegisterPage = () => {
             alt="background image"
             className="hidden lg:block w-screen h-3/5 absolute bottom-0"
           />
-          <div className="p-5 md:p-6">
+          <div className="px-5 pt-5 md:px-6 md:pt-6">
             <Link href="/" passHref>
               <a>
                 <img
@@ -65,7 +70,7 @@ export const RegisterPage = () => {
               </a>
             </Link>
             <div className="flex items-center justify-center z-10 h-[calc(100vh-57.84px)] md:h-[calc(100vh-80.76px)]">
-              <div className="bg-white rounded-[12px] card-shadow w-full md:w-[500px] xl:w-[1164px] px-[82px] flex items-center h-auto">
+              <div className="bg-white rounded-[12px] card-shadow w-full md:w-[500px] xl:w-[1164px] px-[82px] py-[50px] flex items-center h-auto">
                 <img src="/images/core/Cooking.gif" alt="cooking animation" className="w-[500px]" />
                 <div className="ml-12 border-l border-gray-30 pl-[80px]">
                   {

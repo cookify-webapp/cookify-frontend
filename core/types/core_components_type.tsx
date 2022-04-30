@@ -192,7 +192,6 @@ export type textBoxType = {
   placeholder?: string
   disabled?: boolean
   type: "text" | "number" | "password"
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  touched?: FormikTouched<boolean> | FormikTouched<any> | FormikTouched<any>[]
+  onChange: (e) => void
   non_negative?: boolean
 }

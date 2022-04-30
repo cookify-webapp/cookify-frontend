@@ -13,6 +13,7 @@ class Register {
       username: '',
       email: '',
       password: '',
+      confirmPassword: '',
       allergy: []
     }
     makeAutoObservable(this);

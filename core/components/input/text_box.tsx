@@ -10,10 +10,10 @@ export const TextBox = ({
   error,
   placeholder,
   disabled,
-  touched,
   non_negative,
   onChange
 }: textBoxType) => {
+  
   //---------------------
   // RENDER
   //---------------------
@@ -39,16 +39,25 @@ export const TextBox = ({
                   onChange(e)
                 }
               }}
+              onBlur={(e) => {
+                if (non_negative && type === "number") {
+                  if (Number(e.target.value) >= 0) {
+                    onChange(e)
+                  }
+                } else {
+                  onChange(e)
+                }
+              }}
               className={classNames(
                 "w-full h-10 placeholder-gray-50 py-2 px-4 border rounded-[12px]",
-                {"border-gray-40 text-black": !error || !touched},
-                {"border-error text-error": error && touched},
+                {"border-gray-40 text-black": !error},
+                {"border-error ": error},
                 {"bg-gray-20 border-gray-30 text-gray-50 cursor-not-allowed": disabled}
               )}
             />
           </div>
           {
-            error && touched && (
+            error && (
               <p className="bodyS text-error">{error}</p>
             )
           }
