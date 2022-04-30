@@ -1,3 +1,5 @@
+import { FormikErrors, FormikTouched } from "formik"
+import { ChangeEvent } from "react"
 import { string } from "yup"
 
 export type primaryButtonType = {
@@ -181,4 +183,16 @@ export type nutritionLabelType = {
     type: string
     unit: 'gram' | 'milliliter' | 'tablespoon' | 'teaspoon' | 'cup' | 'piece' | 'whole' | 'sheet'
   }
+}
+
+export type textBoxType = {
+  label: string
+  value: string
+  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[]
+  placeholder?: string
+  disabled?: boolean
+  type: "text" | "number" | "password"
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  touched?: FormikTouched<boolean> | FormikTouched<any> | FormikTouched<any>[]
+  non_negative?: boolean
 }
