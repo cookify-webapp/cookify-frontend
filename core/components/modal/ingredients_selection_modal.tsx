@@ -24,6 +24,7 @@ export const IngredientsSelectionModal = () => {
 
     return () => {
       context.setValue("searchWord", "");
+      context.setValue("activeTab", 'เนื้อสัตว์')
       context.setValue("selectedIngredients", [])
     };
   }, []);

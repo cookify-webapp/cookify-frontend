@@ -7,17 +7,20 @@ import { RegisterFormStep1 } from "../components/register_form_step_1";
 import { RegisterValidateSchema } from "../forms/register_form";
 import { RegisterLoginBgCard } from "@core/components/register_login_bg_card/register_login_bg_card";
 import { RegisterFormStep2 } from "../components/register_form_step_2";
+import { ModalContext } from "core/context/modal_context";
 
 export const RegisterPage = () => {
   //---------------------
   // CONTEXT
   //---------------------
   const context = useContext(RegisterContext);
+  const modalContext = useContext(ModalContext)
 
   //---------------------
   // EFFECT
   //---------------------
   useEffect(() => {
+    context.setValue('modalContext', modalContext)
     return () => {
       context.setValue("stepForm", 1);
       formik.resetForm();
@@ -35,7 +38,7 @@ export const RegisterPage = () => {
     validationSchema: () => RegisterValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      context.register()
+      context.register(value)
     },
   });
 

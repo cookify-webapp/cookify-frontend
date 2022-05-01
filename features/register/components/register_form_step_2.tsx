@@ -20,10 +20,16 @@ export const RegisterFormStep2 = ({formik}: FormStep2Props) => {
   const context = useContext(RegisterContext)
   const ingredientSelectionModalContext = useContext(IngredientSelectionModalContext)
 
-  //---------------------
-  // EFFECT
-  //---------------------
-  useEffect(() => {}, []);
+  useEffect(() => {
+    
+  
+    return () => {
+      ingredientSelectionModalContext.setValue('searchWord', '')
+      ingredientSelectionModalContext.setValue('activeTab', 'เนื้อสัตว์')
+      ingredientSelectionModalContext.setValue('selectedIngredients', [])
+    }
+  }, [])
+  
 
   //---------------------
   // HANDLER
