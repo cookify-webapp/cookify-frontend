@@ -5,7 +5,6 @@ import classNames from "classnames";
 import { SearchBox } from "../input/search_box";
 import _ from "lodash";
 import { TabFilter } from "../tab_filter";
-import { CheckboxInput } from "../input/checkbox";
 import { Ingredient } from "../ingredient";
 import { Tag } from "../tag";
 import { SecondaryButton } from "../button/secondary_button";
@@ -25,36 +24,48 @@ export const IngredientsSelectionModal = () => {
 
     return () => {
       context.setValue("searchWord", "");
+      context.setValue("activeTab", 'เนื้อสัตว์')
+      context.setValue("selectedIngredients", [])
     };
   }, []);
 
   const handlerSearchAuto = useCallback(
     _.debounce(() => {
-      console.log("");
+      context.prepareIngredient();
     }, 500),
     []
   );
 
-  const checkIsCheckedAll = () => {
-    let checked = false;
-    _.forEach(context.formik?.values?.allergic, (ingredient) => {
-      if (context.activeTab === ingredient) {
-        checked = true;
+  const checkIsChecked = (ingredient) => {
+    let isChecked = false;
+    _.forEach(context.selectedIngredients, (item) => {
+      if (item.name === ingredient.name) {
+        isChecked = true;
       }
     });
-    return checked;
+    return isChecked;
   };
 
-  const handleIsCheckedAll = () => {
-    console.log();
+  const handleIsCheckIngredient = (ingredient) => {
+    let ingredientIsChecked = checkIsChecked(ingredient);
+    let tempSelectedIngredients = context.selectedIngredients;
+    if (ingredientIsChecked) {
+      let filter = _.filter(tempSelectedIngredients, (item) => {
+        return item.name !== ingredient.name;
+      });
+      context.setValue("selectedIngredients", filter);
+    } else {
+      tempSelectedIngredients.push(ingredient);
+      context.setValue("selectedIngredients", tempSelectedIngredients);
+    }
   };
 
-  const handleIsCheckIngredient = () => {
-    console.log();
-  };
-
-  const handleRemoveTag = () => {
-    console.log();
+  const handleRemoveTag = (ingredient) => {
+    let tempSelectedIngredients = context.selectedIngredients;
+    let filter = _.filter(tempSelectedIngredients, (item) => {
+      return item.name !== ingredient.name;
+    });
+    context.setValue("selectedIngredients", filter);
   };
 
   //---------------------
@@ -111,19 +122,6 @@ export const IngredientsSelectionModal = () => {
                 />
               </div>
               <div className="border-t-[1px] border-gray-30 pb-4" />
-              {(context.hasIsCheckedAll && _.size(context.ingredients) !== 0) && (
-                <div className="flex items-center">
-                  <CheckboxInput
-                    checkValue={context.activeTab}
-                    checked={checkIsCheckedAll()}
-                    name={context.checkAllValue}
-                    onChange={() => handleIsCheckedAll()}
-                  />
-                  <label htmlFor={context.activeTab} className="bodyM ml-4">
-                    ทั้งหมด
-                  </label>
-                </div>
-              )}
               <div
                 className={classNames(
                   "my-4 h-[250px]",
@@ -147,12 +145,9 @@ export const IngredientsSelectionModal = () => {
                         <Ingredient
                           ingredient={ingredient}
                           isBorder
-                          isChecked={_.includes(
-                            context.formik?.values?.allergic,
-                            ingredient
-                          )}
+                          isChecked={checkIsChecked(ingredient)}
                           hasCheckbox
-                          onChange={() => handleIsCheckIngredient()}
+                          onChange={() => handleIsCheckIngredient(ingredient)}
                         />
                       </div>
                     ))}
@@ -169,33 +164,44 @@ export const IngredientsSelectionModal = () => {
             <div className="border-t-[1px] border-gray-30 pb-4" />
             <div className="px-6">
               <p className="titleS">รายการวัตถุดิบที่เลือก *</p>
-              <div className="mt-2 flex flex-wrap space-x-[8px] space-y-[8px]">
-                {context.formik?.values?.allergic && (
+              <div className="flex flex-wrap">
+                {_.size(context.selectedIngredients) > 0 && (
                   <>
-                    {_.map(
-                      context.formik?.values?.allergic,
-                      (ingredient, index) => (
+                    {_.map(context.selectedIngredients, (ingredient, index) => (
+                      <div
+                        key={`${ingredient.name}_${index}`}
+                        className="w-auto mr-2 mt-2"
+                      >
                         <Tag
                           label={ingredient.name}
-                          onDeleteTag={() => handleRemoveTag()}
-                          key={`${ingredient.name}_${index}`}
+                          onDeleteTag={() => handleRemoveTag(ingredient)}
                         />
-                      )
-                    )}
+                      </div>
+                    ))}
                   </>
                 )}
-                {
-                  !context.formik?.values?.allergic && (
-                    <p className="bodyM">ไม่มีรายการวัตถุดิบที่เลือก</p>
-                  )
-                }
+                {_.size(context.selectedIngredients) === 0 && (
+                  <p className="bodyM mt-2">ไม่มีรายการวัตถุดิบที่เลือก</p>
+                )}
               </div>
               <div className="flex xl:justify-end space-x-[16px] mt-6">
                 <div className="w-full xl:w-[142px]">
-                  <SecondaryButton title="ยกเลิก" onClick={() => context.closeModal(true)} />
+                  <SecondaryButton
+                    title="ยกเลิก"
+                    onClick={() => {
+                      context.onCancel()
+                      context.closeModal()
+                    }}
+                  />
                 </div>
                 <div className="w-full xl:w-[142px]">
-                  <PrimaryButton title="ยืนยัน" onClick={() => context.closeModal(false)} />
+                  <PrimaryButton
+                    title="ยืนยัน"
+                    onClick={() => {
+                      context.onSubmit()
+                      context.closeModal()
+                    }}
+                  />
                 </div>
               </div>
             </div>

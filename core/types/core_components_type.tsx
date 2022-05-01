@@ -1,4 +1,4 @@
-import { string } from "yup"
+import { FormikErrors } from "formik"
 
 export type primaryButtonType = {
   title: string
@@ -181,4 +181,21 @@ export type nutritionLabelType = {
     type: string
     unit: 'gram' | 'milliliter' | 'tablespoon' | 'teaspoon' | 'cup' | 'piece' | 'whole' | 'sheet'
   }
+}
+
+export type textBoxType = {
+  label: string
+  value: string
+  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[]
+  placeholder?: string
+  disabled?: boolean
+  type: "text" | "number" | "password"
+  onChange: (e) => void
+  non_negative?: boolean
+}
+
+export type radioInputType = {
+  label: string
+  checked: boolean
+  onClick: () => void
 }
