@@ -29,13 +29,13 @@ export const RegisterFormStep1 = ({ formik }: FormStep1Props) => {
     <Observer>
       {() => (
         <div>
-          <h1 className="headlineXL text-black">
-            ยินดีต้อนรับสู่ <span className="text-brown-10 headlineXL">COOKIFY</span>
+          <h1 className="headlineL md:headlineXL text-black text-center lg:text-left">
+            ยินดีต้อนรับสู่ <span className="text-brown-10 headlineL md:headlineXL">COOKIFY</span>
           </h1>
-          <p className="mt-2 text-gray-50 text-[14px]">
+          <p className="mt-2 text-gray-50 text-[14px] text-center lg:text-left">
             เว็บแอปพลิเคชันสำหรับค้นหาสูตรอาหารตามวัตถุดิบที่คุณต้องการ
           </p>
-          <div className="mt-8 w-[300px]">
+          <div className="mt-3 md:mt-8 w-full md:mx-auto lg:mx-0 md:w-[300px]">
             <TextBox
               label="ชื่อผู้ใช้งาน *"
               onChange={(e) => {
@@ -47,7 +47,7 @@ export const RegisterFormStep1 = ({ formik }: FormStep1Props) => {
               error={formik.errors?.username && formik.touched?.username ? formik.errors?.username : ''}
             />
           </div>
-          <div className="mt-6 w-[300px]">
+          <div className="mt-6 w-full md:mx-auto lg:mx-0 md:w-[300px]">
             <TextBox
               label="อีเมล *"
               onChange={(e) => {
@@ -59,7 +59,7 @@ export const RegisterFormStep1 = ({ formik }: FormStep1Props) => {
               error={formik.errors?.email && formik.touched?.email ? formik.errors?.email : ''}
             />
           </div>
-          <div className="mt-6 w-[300px]">
+          <div className="mt-6 w-full md:mx-auto lg:mx-0 md:w-[300px]">
             <TextBox
               label="รหัสผ่าน *"
               onChange={(e) => {
@@ -71,7 +71,7 @@ export const RegisterFormStep1 = ({ formik }: FormStep1Props) => {
               error={formik.errors?.password && formik.touched?.password ? formik.errors?.password : ''}
             />
           </div>
-          <div className="mt-6 w-[300px]">
+          <div className="mt-6 w-full md:mx-auto lg:mx-0 md:w-[300px]">
             <TextBox
               label="ยืนยันรหัสผ่าน *"
               onChange={(e) => {
@@ -83,7 +83,7 @@ export const RegisterFormStep1 = ({ formik }: FormStep1Props) => {
               error={formik.errors?.confirmPassword && formik.touched?.confirmPassword ? formik.errors?.confirmPassword : ''}
             />
           </div>
-          <div className="flex space-x-2 w-[300px] mt-8">
+          <div className="flex space-x-2 w-full md:mx-auto lg:mx-0 md:w-[300px] mt-8">
             <SecondaryButton 
               onClick={() => {
                 formik.resetForm()
@@ -92,7 +92,10 @@ export const RegisterFormStep1 = ({ formik }: FormStep1Props) => {
               title="ยกเลิก"
             />
             <PrimaryButton
-              onClick={() => context.setValue('stepForm', 2)}
+              onClick={() => {
+                context.setValue('stepForm', 2)
+                formik.setFieldValue('stepForm', 2)
+              }}
               title="ถัดไป"
               disabled={!formik.dirty || !formik.isValid}
             />

@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
+import router from "next/router";
 
 class Register {
   stepForm
@@ -17,7 +18,8 @@ class Register {
       password: '',
       confirmPassword: '',
       isAllergic: false,
-      ingredients: []
+      ingredients: [],
+      stepForm: 1
     }
     makeAutoObservable(this);
   }
@@ -27,6 +29,13 @@ class Register {
   //-------------------
   setValue(key: string, value: any) {
     this[key] = value;
+  }
+
+  register = () => {
+    setTimeout(() => {
+      router.push('/')
+    }, 5000)
+    router.push('/register/success')
   }
 }
 export const RegisterContext = createContext(new Register());

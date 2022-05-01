@@ -36,10 +36,10 @@ export const RegisterLoginBgCard = (props) => {
               </a>
             </Link>
             <div className="flex items-center justify-center z-10 h-[calc(100vh-57.84px)] md:h-[calc(100vh-80.76px)]">
-              <div className="bg-white rounded-[12px] card-shadow w-full md:w-[500px] xl:w-[1164px] px-[82px] py-[50px] flex items-center h-auto">
-                <img src="/images/core/Cooking.gif" alt="cooking animation" className="w-[500px]" />
-                <div className="ml-12 border-l border-gray-30 pl-[80px] h-[547px]">
-                  <div className="flex items-center h-[547px]">
+              <div className="bg-white rounded-[12px] card-shadow w-full md:w-[500px] xl:w-[1164px] p-6 md:py-[82px] md:px-[60px] lg:px-[82px] lg:py-[50px] flex md:flex-col lg:flex items-center h-[578px] md:h-auto">
+                <img src="/images/core/Cooking.gif" alt="cooking animation" className="w-[188.57px] lg:w-[500px] hidden md:block" />
+                <div className="md:mt-[24.57px] lg:mt-0 lg:ml-12 lg:border-l border-gray-30 lg:pl-[80px] lg:h-[547px] overflow-y-auto scrollbar-hide">
+                  <div className="flex items-center lg:h-[547px]">
                     {props.children}
                   </div>
                 </div>

@@ -35,7 +35,7 @@ export const RegisterPage = () => {
     validationSchema: () => RegisterValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      alert(value);
+      context.register()
     },
   });
 

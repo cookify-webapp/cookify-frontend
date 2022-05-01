@@ -54,7 +54,7 @@ export const RegisterFormStep2 = ({formik}: FormStep2Props) => {
               <div className="mt-6">
                 <p className="titleM">กรุณาระบุวัตถุดิบของอาหารที่คุณไม่สามารถรับประทานได้ *</p>
                 <p className="text-[14px] text-gray-50 mt-2">ระบบจะนำข้อมูลไปใช้กรองผลลัพธ์การค้นหาสูตรอาหาร<br/>(ข้อมูลสามารถปรับเปลี่ยนได้ในภายหลัง)</p>
-                <div className="w-[300px] mt-6">
+                <div className="w-full lg:w-[300px] mt-6">
                   <PrimaryButton 
                     title="เลือกวัตถุดิบ" 
                     onClick={() => {
@@ -95,9 +95,15 @@ export const RegisterFormStep2 = ({formik}: FormStep2Props) => {
               </div>
             )
           }
-          <div className="mt-8 flex space-x-4 w-[300px]">
-            <SecondaryButton onClick={() => context.setValue('stepForm', 1)} title="ย้อนกลับ" />
-            <PrimaryButton onClick={() => null} title="ลงทะเบียน" disabled={!formik.dirty || !formik.isValid} />
+          <div className="mt-8 flex space-x-4 w-full lg:w-[300px]">
+            <SecondaryButton
+              onClick={() => {
+                formik.setFieldValue('stepForm', 1)
+                context.setValue('stepForm', 1)
+              }} 
+              title="ย้อนกลับ" 
+            />
+            <PrimaryButton onClick={() => formik.submitForm()} title="ลงทะเบียน" disabled={!formik.dirty || !formik.isValid} />
           </div>
         </div>
       )}

@@ -73,7 +73,7 @@ export const Navbar = () => {
                 <div className="w-auto shrink-0">
                   <div className="flex items-center space-x-4">
                     <p
-                      className="titleS text-black w-auto"
+                      className="titleS text-black w-auto cursor-pointer"
                       onClick={() => router.push("/login")}
                     >
                       เข้าสู่ระบบ
