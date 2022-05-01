@@ -5,7 +5,6 @@ import classNames from "classnames";
 import { SearchBox } from "../input/search_box";
 import _ from "lodash";
 import { TabFilter } from "../tab_filter";
-import { CheckboxInput } from "../input/checkbox";
 import { Ingredient } from "../ingredient";
 import { Tag } from "../tag";
 import { SecondaryButton } from "../button/secondary_button";
@@ -25,12 +24,13 @@ export const IngredientsSelectionModal = () => {
 
     return () => {
       context.setValue("searchWord", "");
+      context.setValue("selectedIngredients", [])
     };
   }, []);
 
   const handlerSearchAuto = useCallback(
     _.debounce(() => {
-      console.log("");
+      context.prepareIngredient();
     }, 500),
     []
   );
@@ -49,7 +49,7 @@ export const IngredientsSelectionModal = () => {
     let ingredientIsChecked = checkIsChecked(ingredient);
     let tempSelectedIngredients = context.selectedIngredients;
     if (ingredientIsChecked) {
-      let filter = _.filter(tempSelectedIngredients, function (item) {
+      let filter = _.filter(tempSelectedIngredients, (item) => {
         return item.name !== ingredient.name;
       });
       context.setValue("selectedIngredients", filter);
@@ -61,7 +61,7 @@ export const IngredientsSelectionModal = () => {
 
   const handleRemoveTag = (ingredient) => {
     let tempSelectedIngredients = context.selectedIngredients;
-    let filter = _.filter(tempSelectedIngredients, function (item) {
+    let filter = _.filter(tempSelectedIngredients, (item) => {
       return item.name !== ingredient.name;
     });
     context.setValue("selectedIngredients", filter);
@@ -180,20 +180,26 @@ export const IngredientsSelectionModal = () => {
                   </>
                 )}
                 {_.size(context.selectedIngredients) === 0 && (
-                  <p className="bodyM">ไม่มีรายการวัตถุดิบที่เลือก</p>
+                  <p className="bodyM mt-2">ไม่มีรายการวัตถุดิบที่เลือก</p>
                 )}
               </div>
               <div className="flex xl:justify-end space-x-[16px] mt-6">
                 <div className="w-full xl:w-[142px]">
                   <SecondaryButton
                     title="ยกเลิก"
-                    onClick={() => context.closeModal(true)}
+                    onClick={() => {
+                      context.onCancel()
+                      context.closeModal()
+                    }}
                   />
                 </div>
                 <div className="w-full xl:w-[142px]">
                   <PrimaryButton
                     title="ยืนยัน"
-                    onClick={() => context.closeModal(false)}
+                    onClick={() => {
+                      context.onSubmit()
+                      context.closeModal()
+                    }}
                   />
                 </div>
               </div>

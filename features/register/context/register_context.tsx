@@ -16,6 +16,7 @@ class Register {
       email: '',
       password: '',
       confirmPassword: '',
+      isAllergic: false,
       ingredients: []
     }
     makeAutoObservable(this);

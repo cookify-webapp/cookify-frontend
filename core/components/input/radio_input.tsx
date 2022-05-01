@@ -10,10 +10,12 @@ export const RadioInput = ({ label, checked, onClick }: radioInputType) => {
   return (
     <Observer>
       {() => (
-        <div className="flex items-center space-x-4">
+        <div 
+          className="flex items-center space-x-4 cursor-pointer"
+          onClick={() => onClick()}
+          >
           <div
             className="flex items-center justify-center w-6 h-6 bg-white border rounded-full cursor-pointer border-gray-40 shrink-0"
-            onClick={() => onClick()}
           >
             <div
               className={classNames(
@@ -22,7 +24,7 @@ export const RadioInput = ({ label, checked, onClick }: radioInputType) => {
               )}
             />
           </div>
-          {label && <p className="bodyM text-black">{label}</p>}
+          <label className="bodyM text-black">{label}</label>
         </div>
       )}
     </Observer>

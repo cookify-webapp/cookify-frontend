@@ -1,20 +1,20 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
+import _ from "lodash";
 
 class ingredientSelectionModal {
   isOpen: boolean;
   searchWord: string;
   isShowClearValue: boolean;
-  hasIsCheckedAll: boolean;
-  checkAllValue: string;
 
   ingredients;
   selectedIngredients;
 
   onChange: Function;
+  onCancel: () => void
+  onSubmit: () => void
 
   activeTab: string;
-  formik;
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -29,21 +29,16 @@ class ingredientSelectionModal {
   //-------------------
   // ACTION
   //-------------------
-  openModal = (hasIsCheckAll, formik) => {
+  openModal = (onSubmit, onCancel) => {
     this.isOpen = true;
-    this.hasIsCheckedAll = hasIsCheckAll;
-    this.formik = formik;
+    this.onSubmit = onSubmit
+    this.onCancel = onCancel
   };
 
-  closeModal = (clearValue) => {
+  closeModal = () => {
     this.isOpen = false
-    this.hasIsCheckedAll = false
     this.searchWord = ''
-    if (clearValue) {
-      this.selectedIngredients = []
-    } else {
-      this.formik?.setFieldValue('ingredients', this.selectedIngredients)
-    }
+    this.activeTab = 'เนื้อสัตว์'
   }
 
   setValue(key: string, value: any) {
