@@ -9,6 +9,7 @@ class ingredientSelectionModal {
   checkAllValue: string;
 
   ingredients;
+  selectedIngredients;
 
   onChange: Function;
 
@@ -21,6 +22,7 @@ class ingredientSelectionModal {
     this.activeTab = "เนื้อสัตว์";
     this.isOpen = false;
     this.searchWord = "";
+    this.selectedIngredients = []
     makeAutoObservable(this);
   }
 
@@ -33,12 +35,14 @@ class ingredientSelectionModal {
     this.formik = formik;
   };
 
-  closeModal = (clearFormik) => {
+  closeModal = (clearValue) => {
     this.isOpen = false
     this.hasIsCheckedAll = false
     this.searchWord = ''
-    if (clearFormik) {
-      this.formik?.setFieldValue('allergic', '')
+    if (clearValue) {
+      this.selectedIngredients = []
+    } else {
+      this.formik?.setFieldValue('ingredients', this.selectedIngredients)
     }
   }
 
@@ -51,97 +55,97 @@ class ingredientSelectionModal {
       this.ingredients = [
         {
           id: "1",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู1",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "2",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู2",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "3",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู3",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "4",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู4",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "5",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู5",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "6",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู6",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "7",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู7",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "8",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู8",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "9",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู9",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "10",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู10",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "11",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู11",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "12",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู12",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "13",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู13",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "14",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู14",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "15",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู15",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },
         {
           id: "16",
-          name: "เนื้อหมู",
+          name: "เนื้อหมู16",
           src: "/images/core/Item_Raw_Meat.png",
           type: "เนื้อสัตว์",
         },

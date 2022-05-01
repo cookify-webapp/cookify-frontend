@@ -1,6 +1,4 @@
-import { FormikErrors, FormikTouched } from "formik"
-import { ChangeEvent } from "react"
-import { string } from "yup"
+import { FormikErrors } from "formik"
 
 export type primaryButtonType = {
   title: string
@@ -194,4 +192,10 @@ export type textBoxType = {
   type: "text" | "number" | "password"
   onChange: (e) => void
   non_negative?: boolean
+}
+
+export type radioInputType = {
+  label: string
+  checked: boolean
+  onClick: () => void
 }

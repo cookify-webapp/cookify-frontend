@@ -4,17 +4,19 @@ import { makeAutoObservable } from "mobx";
 class Register {
   stepForm
   initValue
+  isAllergic
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.stepForm = 1
+    this.isAllergic = false
     this.initValue = {
       username: '',
       email: '',
       password: '',
       confirmPassword: '',
-      allergy: []
+      ingredients: []
     }
     makeAutoObservable(this);
   }
