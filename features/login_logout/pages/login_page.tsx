@@ -20,6 +20,10 @@ export const LoginPage = () => {
   //---------------------
   useEffect(() => {
     authContext.setValue('modal', modalContext)
+
+    return () => {
+      formik.resetForm()
+    }
   }, []);
 
   //---------------------
@@ -33,8 +37,7 @@ export const LoginPage = () => {
     validationSchema: () => LoginValidateSchema,
     initialValues: authContext.initValue,
     onSubmit: (value) => {
-      // authContext.login(value)
-      alert(value.username + ", " + value.password);
+      authContext.login(value)
     },
   });
   //---------------------

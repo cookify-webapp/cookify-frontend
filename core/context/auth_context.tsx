@@ -33,7 +33,9 @@ class Auth {
 
   login = async (value) => {
     try {
-      const data = value;
+      const data = {
+        data: value
+      };
       const resp = await login(JSON.stringify(data));
       if (resp.status === 200) {
         const token = resp.data?.token;
@@ -52,7 +54,7 @@ class Auth {
       } else {
         this.modal.openModal(
           "เกิดปัญหาในการเข้าสู่ระบบ",
-          error.massage,
+          error.message,
           () => this.modal.closeModal(),
           "ปิด",
           "ตกลง"
@@ -77,7 +79,7 @@ class Auth {
     } catch (error) {
       this.modal.openModal(
         "เกิดปัญหาในการดึงข้อมูลผู้ใช้งาน",
-        error.massage,
+        error.message,
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
