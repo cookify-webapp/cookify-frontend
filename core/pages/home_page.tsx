@@ -122,7 +122,6 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-
             <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               Snapshot ใหม่ล่าสุด
               <Link href="/snapshots" passHref>
@@ -149,7 +148,7 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6 mb-8">
               {_.map(context.ingredients, (ingredient, index) => (
                 <div
                   className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
