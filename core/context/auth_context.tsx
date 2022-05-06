@@ -3,11 +3,16 @@ import { makeAutoObservable } from "mobx";
 
 class Auth {
   user
+  initValue
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.user = null
+    this.initValue = {
+      username: "",
+      password: ""
+    }
     makeAutoObservable(this);
   }
 
