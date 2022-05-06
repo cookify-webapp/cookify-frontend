@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
-import { SideBar } from "./sidebar";
+import { SideBar } from "../sidebar";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { AuthContext } from "core/context/auth_context";
 import classNames from "classnames";
-import { Navbar } from "./navbar";
+import { Navbar } from "../navbar";
 
 export const HomeLayout = ({ children }) => {
   //---------------------
@@ -54,7 +54,7 @@ export const HomeLayout = ({ children }) => {
             )}
           >
             <div className="">
-              <SideBar notiCount={10} role={authContext.user?.role} />
+              <SideBar notiCount={10} role={authContext.user?.accountType} />
             </div>
           </div>
           {context.isShowSidebar && (

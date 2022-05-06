@@ -1,10 +1,12 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useContext } from "react";
 import { Observer } from "mobx-react-lite";
 import { ImageWithFallback } from "./image_with_fallback";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import router from "next/router";
 import { userAccountType } from "core/types/core_components_type";
 import Link from "next/link";
+import { AuthContext } from "core/context/auth_context";
+import { ModalContext } from "core/context/modal_context";
 
 export const UserAccount = ({ src, userName, role }: userAccountType) => {
   //---------------------
@@ -13,7 +15,13 @@ export const UserAccount = ({ src, userName, role }: userAccountType) => {
   const [isShowDropdown, setIsShowDropdown] = useState(false);
 
   //---------------------
-  //   REF
+  // CONTEXT
+  //---------------------
+  const authContext = useContext(AuthContext)
+  const modalContext = useContext(ModalContext)
+
+  //---------------------
+  // REF
   //---------------------
   const ref: any = createRef();
 
@@ -24,7 +32,13 @@ export const UserAccount = ({ src, userName, role }: userAccountType) => {
   });
 
   const onHandleLogOut = () => {
-    alert("logout");
+    modalContext.openModal(
+      'ออกจากระบบ',
+      'คุณต้องการออกจากระบบใช่หรือไม่',
+      () => authContext.logout(),
+      'ปิด',
+      'ตกลง'
+    )
   };
 
   //---------------------

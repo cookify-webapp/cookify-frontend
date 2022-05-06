@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
-import { HomeLayout } from "@core/components/home_layout";
+import { HomeLayout } from "@core/components/layouts/home_layout";
 import { HomePageContext } from "core/context/home_page_context";
 import { AuthContext } from "core/context/auth_context";
 import { SearchBox } from "@core/components/input/search_box";
@@ -22,8 +22,6 @@ export default function HomePage() {
   const authContext = useContext(AuthContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
 
-  const modalContext = useContext(ModalContext);
-
   //---------------------
   //  ROUTER
   //---------------------
@@ -32,7 +30,9 @@ export default function HomePage() {
   //---------------------
   //  EFFECT
   //---------------------
-  useEffect(() => {}, []);
+  useEffect(() => {
+
+  }, []);
 
   //---------------------
   //  FUNCTION
@@ -87,7 +87,7 @@ export default function HomePage() {
                 >
                   <Recipe
                     recipe={recipe}
-                    role={authContext.user?.role}
+                    role={authContext.user?.accountType}
                     isBookmark={checkIsBookmark(recipe.id)}
                     onClick={() => console.log("bookmark click")}
                   />
