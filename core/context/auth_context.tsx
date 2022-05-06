@@ -40,7 +40,8 @@ class Auth {
       if (resp.status === 200) {
         const token = resp.data?.token;
         Cookies.set("token", token, { expires: 1 });
-        this.fetchMe();
+        await this.fetchMe();
+        Router.back();
       }
     } catch (error) {
       if (error.status === 403) {
@@ -68,13 +69,15 @@ class Auth {
       let noCookie = Cookies.get("token") === undefined;
       if (noCookie) {
         this.user = null
+        localStorage.setItem('user', null)
       } else {
         const token = Cookies.get("token")
+        console.log(token)
         const resp = await getMe(token);
         if (resp.status === 200) {
           this.user = resp.data?.account;
           this.isLogIn = true;
-          Router.back();
+          localStorage.setItem('user', JSON.stringify(this.user))
         }
       }
     } catch (error) {
@@ -91,6 +94,7 @@ class Auth {
   logout = () => {
     this.user = null
     Cookies.remove('token')
+    localStorage.setItem('user', null)
     location.reload()
   }
 }
