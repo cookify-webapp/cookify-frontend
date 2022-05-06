@@ -32,6 +32,17 @@ jobs:
             docker rm -f nextjs-dev
             docker rmi ghcr.io/cookify-webapp/cookify-frontend:dev
             docker-compose -f docker-compose.dev.yml up -d
+  test:
+    needs: deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          build: npm run build
+          start: npm start
   notify:
     name: Discord Notification
     runs-on: ubuntu-20.04

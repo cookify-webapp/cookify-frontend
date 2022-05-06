@@ -71,7 +71,7 @@ export default function HomePage() {
                 }}
               />
             </div>
-            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4">
+            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4" data-cy="new_recipes">
               สูตรอาหารใหม่ล่าสุด
               <Link href="/recipes" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">

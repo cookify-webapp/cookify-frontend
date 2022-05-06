@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@tailwindcss/line-clamp": "^0.3.1",
@@ -30,6 +32,7 @@
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.39",
     "autoprefixer": "^10.4.2",
+    "cypress": "^9.6.0",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
     "postcss": "^8.4.5",
