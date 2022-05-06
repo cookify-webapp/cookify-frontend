@@ -95,7 +95,7 @@ export const IngredientsSelectionModal = () => {
             { fixed: context.isOpen }
           )}
         >
-          <div className="bg-white rounded-[12px] w-full md:w-[706px] xl:w-[1164px] card-shadow py-6">
+          <div className="bg-white rounded-[12px] w-full md:w-[706px] xl:w-[1164px] card-shadow py-6 animate-fade-in">
             <div className="px-6">
               <h3 className="headlineM">เลือกวัตถุดิบ</h3>
               <div className="mt-3 w-full xl:w-[575px]">

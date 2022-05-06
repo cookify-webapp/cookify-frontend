@@ -24,7 +24,7 @@ export const Modal = () => {
             { fixed: context.isOpen }
           )}
         >
-          <div className="bg-white rounded-[12px] w-full md:w-[500px] card-shadow py-6">
+          <div className="bg-white rounded-[12px] w-full md:w-[500px] card-shadow py-6 animate-fade-in">
             <div className="px-6">
               <h3 className="headlineM">{context.title}</h3>
               <p className="bodyM mt-6">{context.detail}</p>
