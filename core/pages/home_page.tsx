@@ -22,8 +22,6 @@ export default function HomePage() {
   const authContext = useContext(AuthContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
 
-  const modalContext = useContext(ModalContext);
-
   //---------------------
   //  ROUTER
   //---------------------
@@ -87,7 +85,7 @@ export default function HomePage() {
                 >
                   <Recipe
                     recipe={recipe}
-                    role={authContext.user?.role}
+                    role={authContext.user?.accountType}
                     isBookmark={checkIsBookmark(recipe.id)}
                     onClick={() => console.log("bookmark click")}
                   />

@@ -64,9 +64,9 @@ export const Navbar = () => {
               </div>
               {authContext.user && (
                 <UserAccount
-                  role={authContext.user.role}
-                  src={authContext.user.src}
-                  userName={authContext.user.userName}
+                  role={authContext.user.accountType}
+                  src={authContext.user.image}
+                  userName={authContext.user.username}
                 />
               )}
               {!authContext.user && (

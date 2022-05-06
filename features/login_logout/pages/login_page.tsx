@@ -6,17 +6,21 @@ import { TextBox } from "@core/components/input/text_box";
 import { useFormik } from "formik";
 import { LoginValidateSchema } from "../forms/login_form";
 import { PrimaryButton } from "@core/components/button/primary_button";
+import { ModalContext } from "core/context/modal_context";
 
 export const LoginPage = () => {
   //---------------------
   // CONTEXT
   //---------------------
   const authContext = useContext(AuthContext);
+  const modalContext = useContext(ModalContext)
 
   //---------------------
   // EFFECT
   //---------------------
-  useEffect(() => {}, []);
+  useEffect(() => {
+    authContext.setValue('modal', modalContext)
+  }, []);
 
   //---------------------
   //  FORMIK

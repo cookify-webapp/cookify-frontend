@@ -54,7 +54,7 @@ export const HomeLayout = ({ children }) => {
             )}
           >
             <div className="">
-              <SideBar notiCount={10} role={authContext.user?.role} />
+              <SideBar notiCount={10} role={authContext.user?.accountType} />
             </div>
           </div>
           {context.isShowSidebar && (
