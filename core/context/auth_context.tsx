@@ -67,9 +67,10 @@ class Auth {
     try {
       let noCookie = Cookies.get("token") === undefined;
       if (noCookie) {
-        this.logout();
+        this.user = null
       } else {
-        const resp = await getMe();
+        const token = Cookies.get("token")
+        const resp = await getMe(token);
         if (resp.status === 200) {
           this.user = resp.data?.account;
           this.isLogIn = true;
