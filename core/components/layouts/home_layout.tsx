@@ -48,9 +48,9 @@ export const HomeLayout = ({ children }) => {
             className={classNames(
               "",
               {
-                "absolute top-0 left-0 z-50 translate-x-0 transition-all duration-300": context.isShowSidebar,
+                "fixed top-0 left-0 z-50 translate-x-0 transition-all duration-300": context.isShowSidebar,
               },
-              { "absolute top-0 left-0 z-50 -translate-x-[254px] transition-all duration-300": !context.isShowSidebar && !isDesktop }
+              { "fixed top-0 left-0 z-50 -translate-x-[254px] transition-all duration-300": !context.isShowSidebar && !isDesktop }
             )}
           >
             <div className="">
@@ -59,7 +59,7 @@ export const HomeLayout = ({ children }) => {
           </div>
           {context.isShowSidebar && (
             <div
-              className="absolute w-screen h-screen bg-black opacity-25 z-40"
+              className="fixed w-screen h-screen bg-black opacity-25 z-40"
               onClick={() => context.setValue("isShowSidebar", false)}
             ></div>
           )}
