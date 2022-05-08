@@ -36,7 +36,7 @@ jobs:
       - name: Install modules
         run: npm install
       - name: Run Test
-        run: npm run test:dev
+        run: npm run test:prd
   notify:
     name: Discord Notification
     runs-on: ubuntu-20.04
