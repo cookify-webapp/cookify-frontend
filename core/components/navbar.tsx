@@ -31,7 +31,7 @@ export const Navbar = () => {
   return (
     <Observer>
       {() => (
-        <div className="bg-gray-10 sticky top-0 z-30">
+        <div className="bg-black sticky top-0 z-30">
           <div className="w-full xl:w-[calc(100vw-254px)] mx-auto xl:max-w-6xl 2xl:max-w-7xl">
             <div className="flex items-center justify-between px-5 2xl:px-0 h-[84px] md:h-24 xl:h-[104px]">
               <div>
