@@ -48,7 +48,7 @@ jobs:
     needs:
       - build
       - deploy
-      - test
+      # - test
     if: ${{ always() }}
     steps:
       - name: Notify
