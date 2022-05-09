@@ -32,16 +32,16 @@ jobs:
             docker rm -f nextjs-dev
             docker rmi ghcr.io/cookify-webapp/cookify-frontend:dev
             docker-compose -f docker-compose.dev.yml up -d
-  test:
-    needs: deploy
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install modules
-        run: npm install
-      - name: Run Test
-        run: npm run test:dev
+  # test:
+  #   needs: deploy
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Install modules
+  #       run: npm install
+  #     - name: Run Test
+  #       run: npm run test:dev
   notify:
     name: Discord Notification
     runs-on: ubuntu-20.04
