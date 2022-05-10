@@ -69,6 +69,7 @@ export default function HomePage() {
                     query: { searchWord: homeLayoutContext.searchWord },
                   });
                 }}
+                height="h-16"
               />
             </div>
             <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4" data-cy="new_recipes">

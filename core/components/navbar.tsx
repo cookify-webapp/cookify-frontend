@@ -53,6 +53,7 @@ export const Navbar = () => {
                         query: { searchWord: context.searchWord },
                       });
                     }}
+                    height="h-16"
                   />
                 </div>
                 <div

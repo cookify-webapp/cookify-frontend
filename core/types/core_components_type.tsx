@@ -54,6 +54,7 @@ export type searchBoxType = {
   isButton?: boolean
   buttonOnClick?: Function
   isShowClearValue?: boolean
+  height: string
 }
 
 export type recipePropType = {
@@ -198,4 +199,15 @@ export type radioInputType = {
   label: string
   checked: boolean
   onClick: () => void
+}
+
+export type selectInputType = {
+  title?: string | string[]
+  value: string | string[]
+  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[]
+  placeholder?: string
+  disabled?: boolean
+  options: { name: string; value: any; }
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  isBorder?: boolean
 }
