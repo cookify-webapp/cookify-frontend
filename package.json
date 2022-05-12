@@ -9,8 +9,8 @@
     "lint": "next lint",
     "cypress:open": "cypress open",
     "cy:run": "cypress run",
-    "test:dev": "cypress run --config baseUrl=https://dev.cookifywebapp.com/",
-    "test:prd": "cypress run --config baseUrl=https://www.cookifywebapp.com/"
+    "test:dev": "cypress run --config baseUrl=https://cookifywebapp-dev.sit.kmutt.ac.th/",
+    "test:prd": "cypress run --config baseUrl=https://cookifywebapp.sit.kmutt.ac.th/"
   },
   "dependencies": {
     "@tailwindcss/line-clamp": "^0.3.1",
