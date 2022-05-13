@@ -72,7 +72,6 @@ class Auth {
         localStorage.setItem('user', null)
       } else {
         const token = Cookies.get("token")
-        console.log(token)
         const resp = await getMe(token);
         if (resp.status === 200) {
           this.user = resp.data?.account;

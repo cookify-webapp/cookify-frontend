@@ -63,7 +63,7 @@ export const SelectInput = ({
           <div
             ref={ref}
             className={classNames(
-              "w-full placeholder-gray-50 py-2 px-4 rounded-[12px] bg-white flex justify-between items-center",
+              "w-full placeholder-gray-50 py-2 px-4 rounded-[12px] bg-white flex justify-between items-center cursor-pointer",
               {"border border-gray-40 text-black h-10": isBorder},
               {"text-black card-shadow h-[48px]": !isBorder},
               {"border border-error h-10": error},
