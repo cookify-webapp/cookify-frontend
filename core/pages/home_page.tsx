@@ -21,6 +21,7 @@ export default function HomePage() {
   const context = useContext(HomePageContext);
   const authContext = useContext(AuthContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
+  const modalContext = useContext(ModalContext);
 
   //---------------------
   //  ROUTER
@@ -31,7 +32,8 @@ export default function HomePage() {
   //  EFFECT
   //---------------------
   useEffect(() => {
-
+    context.setValue("modalContext", modalContext);
+    context.prepareIngredient();
   }, []);
 
   //---------------------
@@ -72,7 +74,10 @@ export default function HomePage() {
                 height="h-16"
               />
             </div>
-            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4" data-cy="new_recipes">
+            <h2
+              className="px-5 2xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4"
+              data-cy="new_recipes"
+            >
               สูตรอาหารใหม่ล่าสุด
               <Link href="/recipes" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -149,20 +154,22 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6 mb-8">
-              {_.map(context.ingredients, (ingredient, index) => (
-                <div
-                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
-                  key={`${ingredient.name}_${index}`}
-                >
-                  <Link href={`/ingredients/${ingredient.id}`} passHref>
-                    <a>
-                      <Ingredient ingredient={ingredient} />
-                    </a>
-                  </Link>
-                </div>
-              ))}
-            </div>
+            {!context.loading && (
+              <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6 mb-8">
+                {_.map(context.ingredients, (ingredient, index) => (
+                  <div
+                    className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                    key={`${ingredient.name}_${index}`}
+                  >
+                    <Link href={`/ingredients/${ingredient._id}`} passHref>
+                      <a>
+                        <Ingredient ingredient={ingredient} />
+                      </a>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </HomeLayout>
       )}
