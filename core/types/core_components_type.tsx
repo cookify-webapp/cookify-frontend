@@ -76,10 +76,13 @@ export type recipePropType = {
 
 export type ingredientPropType = {
   ingredient: {
-    id: string
+    _id: string
     name: string
-    src: string
-    type: string
+    type: {
+      _id: string
+      name: string
+    }
+    image: string
   } | null
   isBorder?: boolean
   hasCheckbox?: boolean

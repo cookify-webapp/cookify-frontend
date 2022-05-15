@@ -2,16 +2,24 @@ import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import _ from "lodash";
 import { Router } from "next/router";
-import { getIngredientTypes } from "@core/services/ingredients/get_ingredients";
+import { getIngredientsList, getIngredientTypes } from "@core/services/ingredients/get_ingredients";
 
 class IngredientsList {
   searchWord;
   isShowClearValue;
   typeSelected;
   ingredientTypes;
-  ingredients;
+  ingredientsList;
+  itemsToShow
+
+  page
+  perPage
+  totalCount
+  totalPages
 
   modalContext;
+
+  loading
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -20,7 +28,13 @@ class IngredientsList {
     this.searchWord = "";
     this.isShowClearValue = false;
     this.ingredientTypes = [];
-    this.ingredients = [];
+    this.ingredientsList = [];
+    this.itemsToShow = []
+    this.page = 1
+    this.perPage = 40
+    this.totalCount = 0
+    this.totalPages = 1
+    this.loading = true
     makeAutoObservable(this);
   }
 
@@ -37,7 +51,7 @@ class IngredientsList {
       if (resp.status === 200) {
         this.ingredientTypes = _.map(resp.data?.ingredientTypes, (type) => ({
           name: type.name,
-          value: type.name,
+          value: type._id,
         }));
         this.ingredientTypes = [
           { name: "ทั้งหมด", value: "all" },
@@ -54,5 +68,34 @@ class IngredientsList {
       );
     }
   };
+
+  prepareIngredientsList = async () => {
+    try {
+      const resp = await getIngredientsList({
+        searchWord: this.searchWord,
+        typeId: this.typeSelected === 'all' ? '' : this.typeSelected,
+        page: this.page,
+        perPage: this.perPage,
+      })
+      if (resp.status === 200) {
+        this.ingredientsList = resp.data?.ingredients
+        this.itemsToShow = [...this.itemsToShow, ...this.ingredientsList]
+        this.page = resp.data?.page
+        this.totalCount = resp.data?.totalCount
+        this.totalPages = resp.data?.totalPages
+      } else if (resp.status === 204) {
+        this.ingredientsList = []
+        this.page = 0
+      }
+    } catch (error) {
+      this.modalContext.openModal(
+        "มีปัญหาในการดึงรายการวัตถุดิบ",
+        error.message,
+        () => this.modalContext.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  }
 }
 export const IngredientsListContext = createContext(new IngredientsList());

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -10,29 +10,70 @@ import { PrimaryButton } from "@core/components/button/primary_button";
 import { IngredientsListContext } from "../context/ingredients_list_context";
 import { SelectInput } from "@core/components/input/select_input";
 import _ from "lodash";
+import { ModalContext } from "core/context/modal_context";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Link from "next/link";
+import { Ingredient } from "@core/components/ingredient";
+import { useScreen } from "core/utils/useScreen";
 
 export const IngredientsListPage = () => {
+  //---------------------
+  // STATE
+  //---------------------
+  const [hasMore, setHasMore] = useState(true);
+
   //---------------------
   // CONTEXT
   //---------------------
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
   const context = useContext(IngredientsListContext);
+  const modalContext = useContext(ModalContext);
 
   //---------------------
   // EFFECT
   //---------------------
-  useEffect(() => {}, []);
+  useEffect(() => {
+    context.prepareIngredientsList();
+    context.prepareIngredientTypes();
+    context.setValue("modalContext", modalContext);
+    return () => {
+      context.setValue("searchWord", "");
+      context.setValue("typeSelected", "");
+      context.setValue("page", 1);
+      context.setValue("totalPages", 1);
+      context.setValue("ingredientsList", []);
+      context.setValue("itemsToShow", []);
+    };
+  }, []);
 
   //---------------------
   // Handler
   //---------------------
   const handlerSearchAuto = useCallback(
     _.debounce(() => {
-      console.log()
+      if (context.searchWord === "") {
+        setHasMore(true);
+      }
+      context.setValue("page", 1);
+      context.setValue("ingredientsList", []);
+      context.setValue("itemsToShow", [])
+      context.prepareIngredientsList();
     }, 500),
     []
-  )
+  );
+
+  //---------------------
+  // HANDLER
+  //---------------------
+  const preparation = async () => {
+    setHasMore(true)
+    context.setValue("page", context.page + 1);
+    context.prepareIngredientsList();
+    if (context.page === context.totalPages) {
+      setHasMore(false);
+    }
+  };
   //---------------------
   // RENDER
   //---------------------
@@ -40,7 +81,7 @@ export const IngredientsListPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl h-screen">
+          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl h-[calc(100vh-104px)]">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -76,8 +117,8 @@ export const IngredientsListPage = () => {
                 <SearchBox
                   onChange={(value) => {
                     context.setValue("searchWord", value);
-                    context.setValue('isShowClearValue', true)
-                    handlerSearchAuto()
+                    context.setValue("isShowClearValue", true);
+                    handlerSearchAuto();
                   }}
                   placeholder="ค้นหาชื่อวัตถุดิบ"
                   value={context.searchWord}
@@ -86,15 +127,49 @@ export const IngredientsListPage = () => {
                 />
               </div>
               <div className="w-full md:w-[255px] mt-4 md:mt-0">
-                <SelectInput 
-                  placeholder="เลือกประเภท" 
-                  value={context.typeSelected} 
-                  options={context.options} 
+                <SelectInput
+                  placeholder="เลือกประเภท"
+                  value={context.typeSelected}
+                  options={context.ingredientTypes}
                   onChange={(value) => {
-                    context.setValue('typeSelected', value)
-                    //prepareNewArray
+                    setHasMore(true);
+                    context.setValue("typeSelected", value);
+                    context.setValue("itemsToShow", []);
+                    context.setValue("ingredientsList", []);
+                    context.setValue("page", 1);
+                    context.prepareIngredientsList();
                   }}
                 />
+              </div>
+            </div>
+
+            <div className="px-5 2xl:px-0 mt-6 md:mt-8 pb-8">
+              <div
+                id="scrollableDiv"
+                className="max-h-[calc(100vh-290px)] overflow-y-auto"
+              >
+                <InfiniteScroll
+                  dataLength={context.itemsToShow.length}
+                  next={preparation}
+                  hasMore={hasMore}
+                  loader={<p className="text-center">loading</p>}
+                  scrollableTarget="scrollableDiv"
+                >
+                  <div className="grid grid-cols-12 gap-x-6 gap-y-4">
+                    {_.map(context.itemsToShow, (ingredient, index) => (
+                      <div
+                        className="col-span-12 md:col-span-4 lg:col-span-3 w-auto"
+                        key={`ingredients_${index}`}
+                      >
+                        <Link href={`/ingredients/${ingredient._id}`} passHref>
+                          <a>
+                            <Ingredient ingredient={ingredient} />
+                          </a>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </InfiniteScroll>
               </div>
             </div>
           </div>
