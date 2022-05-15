@@ -95,6 +95,8 @@ class IngredientsList {
         "ปิด",
         "ตกลง"
       );
+    } finally {
+      this.loading = false
     }
   }
 }

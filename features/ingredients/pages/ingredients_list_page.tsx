@@ -57,7 +57,7 @@ export const IngredientsListPage = () => {
       }
       context.setValue("page", 1);
       context.setValue("ingredientsList", []);
-      context.setValue("itemsToShow", [])
+      context.setValue("itemsToShow", []);
       context.prepareIngredientsList();
     }, 500),
     []
@@ -67,7 +67,7 @@ export const IngredientsListPage = () => {
   // HANDLER
   //---------------------
   const preparation = async () => {
-    setHasMore(true)
+    setHasMore(true);
     context.setValue("page", context.page + 1);
     context.prepareIngredientsList();
     if (context.page === context.totalPages) {
@@ -81,7 +81,7 @@ export const IngredientsListPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl h-[calc(100vh-104px)]">
+          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl h-[calc(100vh-84px)] md:h-[calc(100vh-96px)] lg:h-[calc(100vh-104px)]">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -100,7 +100,7 @@ export const IngredientsListPage = () => {
               />
             </div>
             <div
-              className={classNames("px-5 2xl:px-0 pt-8 lg:pt-2", {
+              className={classNames("px-5 2xl:px-0 pt-8 lg:pt-2 sticky", {
                 "flex justify-between items-center":
                   authContext.user?.accountType === "admin",
               })}
@@ -144,33 +144,45 @@ export const IngredientsListPage = () => {
             </div>
 
             <div className="px-5 2xl:px-0 mt-6 md:mt-8 pb-8">
-              <div
-                id="scrollableDiv"
-                className="max-h-[calc(100vh-290px)] overflow-y-auto"
-              >
-                <InfiniteScroll
-                  dataLength={context.itemsToShow.length}
-                  next={preparation}
-                  hasMore={hasMore}
-                  loader={<p className="text-center">loading</p>}
-                  scrollableTarget="scrollableDiv"
+              {_.size(context.ingredientsList) > 0 && !context.loading ? (
+                <div
+                  id="scrollableDiv"
+                  className="max-h-[calc(100vh-318px)] md:max-h-[calc(100vh-378px)] lg:max-h-[calc(100vh-290px)] overflow-y-auto"
                 >
-                  <div className="grid grid-cols-12 gap-x-6 gap-y-4">
-                    {_.map(context.itemsToShow, (ingredient, index) => (
-                      <div
-                        className="col-span-12 md:col-span-4 lg:col-span-3 w-auto"
-                        key={`ingredients_${index}`}
-                      >
-                        <Link href={`/ingredients/${ingredient._id}`} passHref>
-                          <a>
-                            <Ingredient ingredient={ingredient} />
-                          </a>
-                        </Link>
-                      </div>
-                    ))}
+                  <InfiniteScroll
+                    dataLength={context.itemsToShow.length}
+                    next={preparation}
+                    hasMore={hasMore}
+                    loader=""
+                    scrollableTarget="scrollableDiv"
+                  >
+                    <div className="grid grid-cols-12 gap-x-6 gap-y-4">
+                      {_.map(context.itemsToShow, (ingredient, index) => (
+                        <div
+                          className="col-span-12 md:col-span-4 lg:col-span-3 w-auto"
+                          key={`ingredients_${index}`}
+                        >
+                          <Link
+                            href={`/ingredients/${ingredient._id}`}
+                            passHref
+                          >
+                            <a>
+                              <Ingredient ingredient={ingredient} />
+                            </a>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </InfiniteScroll>
+                </div>
+              ) : (
+                <div className="h-[calc(100vh-422px)] md:h-[calc(100vh-378px)] lg:h-[calc(100vh-290px)] flex items-center text-center text-gray-50">
+                  <div>
+                    <i className="fas fa-egg text-[48px] w-12 h-12"></i>
+                    <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>                    
                   </div>
-                </InfiniteScroll>
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </HomeLayout>
