@@ -14,7 +14,6 @@ import { ModalContext } from "core/context/modal_context";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Link from "next/link";
 import { Ingredient } from "@core/components/ingredient";
-import { useScreen } from "core/utils/useScreen";
 
 export const IngredientsListPage = () => {
   //---------------------
