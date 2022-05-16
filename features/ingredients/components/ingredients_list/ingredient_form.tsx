@@ -100,12 +100,12 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
             "fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen bg-black bg-opacity-25 px-5 md:px-0",
           )}
         >
-          <div className="bg-white rounded-[12px] max-h-[calc(100vh-64px)] md:max-h-min w-full md:w-[564px] card-shadow py-6 animate-fade-in">
-            <div className="px-4 md:px-6">
+          <div className="bg-white rounded-[12px] max-h-[calc(100vh-64px)] md:max-h-min w-full md:w-[564px] overflow-y-auto scrollbar-hide card-shadow py-6 animate-fade-in">
+            <div className="px-4 pb-6 md:pb-0 md:px-6">
               <h3 className="headlineM">
                 {isEdit ? "แก้ไขวัตถุดิบ" : "เพิ่มวัตถุดิบ"}
               </h3>
-              <div className="mt-6 grid grid-cols-12 gap-x-6">
+              <div className="mt-6 grid grid-cols-12 gap-x-6 max-h-[calc(100vh-261px)] md:max-h-min overflow-y-auto scrollbar-hide">
                 <div className="col-span-12 md:col-span-5">
                   <div className="w-[192px] h-[192px] rounded-[12px] border border-gray-30 mx-auto overflow-hidden">
                     <img
@@ -215,7 +215,7 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
                 </div>
               </div>
             </div>
-            <div className="mt-6 border-t border-gray-30 pb-6"></div>
+            <div className="md:mt-6 border-t border-gray-30 pb-6"></div>
             <div className="flex justify-between md:justify-end space-x-4 px-6">
               <div className="w-full md:w-[125px]">
                 <SecondaryButton onClick={() => onCancel()} title="ยกเลิก"/>
