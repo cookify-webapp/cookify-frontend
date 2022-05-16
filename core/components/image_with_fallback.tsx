@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 
 interface ImageWithFallbackProps {
-  src: string
+  src: string 
   alt: string
   fallBackSrc?: string | StaticImageData
   classStyle: string

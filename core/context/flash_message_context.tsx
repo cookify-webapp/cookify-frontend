@@ -27,6 +27,19 @@ class FlashMessage {
     }, 3000)
   }
 
+  handleShowFlashMessageAfterRedirect() {
+    const flashMessageCase = localStorage.getItem('flashMessage')
+    localStorage.removeItem('flashMessage')
+    const flashMessage = {
+      create_ingredient: { title: 'เพิ่มสำเร็จ',detail: 'เพิ่มวัตถุดิบสำเร็จ'},
+    }
+
+    const messageSelected = flashMessage[flashMessageCase]
+    if (messageSelected) {
+      return this.handleShow(messageSelected?.title, messageSelected?.message)
+    }
+  }
+
   setValue(key: string, value: any) {
     this[key] = value;
   }

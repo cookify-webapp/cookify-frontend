@@ -12,6 +12,8 @@ class IngredientsList {
   ingredientsList;
   itemsToShow
 
+  isOpen:boolean
+
   page
   perPage
   totalCount
@@ -24,6 +26,7 @@ class IngredientsList {
   // CONSTUCTOR
   //-------------------
   constructor() {
+    this.isOpen = false
     this.typeSelected = "";
     this.searchWord = "";
     this.isShowClearValue = false;

@@ -101,7 +101,7 @@ export const SelectInput = ({
           </div>
 
           {open && (
-            <div className="absolute z-10 w-full bg-white card-shadow mt-2 rounded-[12px]">
+            <div className="absolute z-10 w-full bg-white card-shadow mt-2 rounded-[12px] max-h-[250px] overflow-y-auto">
               {_.map(options, (item: any) => (
                 <p
                   key={`${item.name}`}
