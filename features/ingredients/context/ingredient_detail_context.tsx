@@ -6,6 +6,7 @@ import { getIngredientDetail, getSampleIngredients } from "@core/services/ingred
 class IngredientDetail {
   isOpen
   loading
+  loadingSample
 
   ingredientDetail: ingredientDetailType
   sampleIngredients: sampleIngredientType[]
@@ -17,6 +18,7 @@ class IngredientDetail {
   constructor() {
     this.isOpen = false
     this.loading = true
+    this.loadingSample = true
     makeAutoObservable(this);
   }
 
@@ -49,6 +51,7 @@ class IngredientDetail {
 
   prepareSampleIngredients = async (id) => {
     try {
+      this.loadingSample = true
       const resp = await getSampleIngredients(id)
       if (resp.status === 200) {
         this.sampleIngredients = resp.data?.ingredients
@@ -61,6 +64,8 @@ class IngredientDetail {
         "ปิด",
         "ตกลง"
       );
+    } finally {
+      this.loadingSample = false
     }
   }
 }

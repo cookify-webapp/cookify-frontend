@@ -15,6 +15,9 @@ import { ModalContext } from "core/context/modal_context";
 import { TertiaryMiniButton } from "@core/components/button/tertiary_mini_button";
 import { TertiaryButton } from "@core/components/button/tertiary_button";
 import { NutritionLabel } from "@core/components/nutrition_label";
+import _ from "lodash";
+import Link from "next/link";
+import { Ingredient } from "@core/components/ingredient";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -39,6 +42,11 @@ export const IngredientDetailPage = () => {
   useEffect(() => {
     context.prepareIngredientDetail(ingredientId);
     context.prepareSampleIngredients(ingredientId);
+
+    return () => {
+      context.setValue('ingredientDetail', null)
+      context.setValue('sampleIngredients', [])
+    }
   }, []);
 
   //---------------------
@@ -93,7 +101,7 @@ export const IngredientDetailPage = () => {
                   />
                   <div className="grid grid-cols-12 gap-6 mt-6">
                     <div className="col-span-12 lg:col-span-9">
-                      <div className="rounded-[12px] card-shadow h-[100px] md:h-[128px] flex justify-between items-center bg-white p-4 md:p-6">
+                      <div className="rounded-[12px] h-[100px] md:h-[128px] flex justify-between items-center bg-white p-4 md:p-6">
                         <div className="flex items-center w-auto">
                           <ImageWithFallback
                             alt="ingredient cover image"
@@ -169,12 +177,36 @@ export const IngredientDetailPage = () => {
                       </div>
                       <div className="mt-6">
                         <NutritionLabel
-                          nutrition={context.ingredientDetail?.nutritionalDetail}
+                          nutrition={
+                            context.ingredientDetail?.nutritionalDetail
+                          }
                           type="ingredient"
                           unit={context.ingredientDetail?.unit?.queryKey}
                         />
                       </div>
                     </div>
+                    {
+                      !context.loadingSample && (
+                        <div className="col-span-12 lg:col-span-3">
+                          <p className="titleM">วัตถุดิบอื่น ๆ ในประเภทเดียวกัน</p>
+                          <div className="mt-6 grid grid-cols-2 gap-x-6 lg:gap-x-0 gap-y-4">
+                            {_.map(context.sampleIngredients, (ingredient) => (
+                              <div key={ingredient._id} className="col-span-2 md:col-span-1 lg:col-span-2">
+                              <Link
+                                href={`/ingredients/${ingredient._id}`}
+                                passHref
+                              >
+                                <a>
+                                  <Ingredient ingredient={ingredient} />
+                                </a>
+                              </Link>                            
+                              </div>
+
+                            ))}
+                          </div>
+                        </div>                        
+                      )
+                    }
                   </div>
                 </div>
               </div>
