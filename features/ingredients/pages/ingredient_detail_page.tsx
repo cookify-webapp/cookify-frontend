@@ -42,9 +42,12 @@ export const IngredientDetailPage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
+    context.setValue('router', router)
+    context.setValue('modalContext', modalContext)
+    context.setValue('flashMessageContext', flashMessageContext)
     context.prepareIngredientDetail(ingredientId);
     context.prepareSampleIngredients(ingredientId);
-
+    
     return () => {
       context.setValue('ingredientDetail', null)
       context.setValue('sampleIngredients', [])
@@ -134,7 +137,7 @@ export const IngredientDetailPage = () => {
                                   modalContext.openModal(
                                     "ลบวัตถุดิบ",
                                     "คุณจะไม่สามารถลบวัตถุดิบนี้ได้ ถ้าหากมีสูตรอาหารที่ ใช้วัตถุดิบนี้อยู่",
-                                    console.log("delete"),
+                                    () => context.deleteIngredient(context.ingredientDetail?._id),
                                     "ยกเลิก",
                                     "ลบ"
                                   );
@@ -196,16 +199,15 @@ export const IngredientDetailPage = () => {
                           <div className="mt-6 grid grid-cols-2 gap-x-6 lg:gap-x-0 gap-y-4">
                             {_.map(context.sampleIngredients, (ingredient) => (
                               <div key={ingredient._id} className="col-span-2 md:col-span-1 lg:col-span-2">
-                              <Link
-                                href={`/ingredients/${ingredient._id}`}
-                                passHref
-                              >
-                                <a>
-                                  <Ingredient ingredient={ingredient} />
-                                </a>
-                              </Link>                            
+                                <Link
+                                  href={`/ingredients/${ingredient._id}`}
+                                  passHref
+                                >
+                                  <a>
+                                    <Ingredient ingredient={ingredient} />
+                                  </a>
+                                </Link>                            
                               </div>
-
                             ))}
                           </div>
                         </div>                        

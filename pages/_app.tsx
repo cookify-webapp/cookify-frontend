@@ -16,14 +16,7 @@ configure({
 })
 
 function MyApp({ Component, pageProps }) {
-  //---------------------
-  // CONTEXT
-  //---------------------
-  const flashMessageContext = useContext(FlashMessageContext)
 
-  useEffect(() => {
-    flashMessageContext.handleShowFlashMessageAfterRedirect()
-  }, [])
   return (
     <>
       <Head>

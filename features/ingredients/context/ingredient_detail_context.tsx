@@ -2,6 +2,7 @@ import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { ingredientDetailType, sampleIngredientType } from "../types/ingredient_detail_type";
 import { getIngredientDetail, getSampleIngredients } from "@core/services/ingredients/get_ingredients";
+import { deleteIngredient } from "@core/services/ingredients/delete_ingredients";
 
 class IngredientDetail {
   isOpen
@@ -12,6 +13,8 @@ class IngredientDetail {
   sampleIngredients: sampleIngredientType[]
 
   modalContext
+  flashMessageContext
+  router
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -58,7 +61,7 @@ class IngredientDetail {
       }
     } catch (error) {
       this.modalContext.openModal(
-        "มีปัญหาในการรายการวัตถุดิบ",
+        "มีปัญหาในการดึงรายการวัตถุดิบ",
         error.message,
         () => this.modalContext.closeModal(),
         "ปิด",
@@ -66,6 +69,35 @@ class IngredientDetail {
       );
     } finally {
       this.loadingSample = false
+    }
+  }
+
+  deleteIngredient = async (id) => {
+    try {
+      const resp = await deleteIngredient(id)
+      if (resp.status === 200) {
+        this.modalContext.closeModal()
+        this.flashMessageContext.handleShow('ลบสำเร็จ', 'ลบวัตถุดิบสำเร็จ')
+        this.router.push('/ingredients')
+      }
+    } catch (error) {
+      if (error.status === 403) {
+        this.modalContext.openModal(
+          "ไม่สามารถลบวัตถุดิบได้",
+          "เนื่องจากมีสูตรอาหารในระบบที่มีวัตถุดิบนี้เป็นส่วนประกอบอยู่",
+          () => this.modalContext.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      } else {
+        this.modalContext.openModal(
+          "มีปัญหาในการลบวัตถุดิบ",
+          error.message,
+          () => this.modalContext.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     }
   }
 }
