@@ -15,11 +15,7 @@ export const RegisterSuccessPage = () => {
             <p className="bodyM text-gray-50 mt-4 text-center lg:text-left">
               กรุณารอสักครู่ ระบบจะพาคุณกลับไปยังหน้าแรก
             </p>
-            <img
-              src="/images/core/loading.gif"
-              className="w-6 h-6 mt-6 mx-auto lg:mx-0"
-              alt="loading animation"
-            />
+            <i className="w-6 h-6 mt-6 mx-auto lg:mx-0 text-[24px] leading-6 fas fa-circle-notch fa-spin"></i>
           </div>
         </RegisterLoginBgCard>
       )}

@@ -18,7 +18,7 @@ export const Recipe = ({ recipe, role, isBookmark, onClick }: recipePropType) =>
         <>
         <Link href={`/recipes/${recipe.id}`} passHref>
           <a>
-            <div className="rounded-[12px] card-shadow bg-white w-full">
+            <div className="rounded-[12px] bg-white w-full">
               <div>
                 <ImageWithFallback
                   alt="recipe cover image"

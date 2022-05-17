@@ -14,7 +14,7 @@ export const Snapshot = ({ snapshot }) => {
       {() => (
         <Link href={`/snapshots/${snapshot.id}`} passHref>
           <a>
-            <div className="bg-white rounded-[12px] card-shadow w-full">
+            <div className="bg-white rounded-[12px] w-full">
               <ImageWithFallback
                 alt="recipe cover image"
                 src={snapshot.src}

@@ -1,68 +1,49 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import _ from "lodash";
+import { Router } from "next/router";
 import { getIngredientsList, getIngredientTypes } from "@core/services/ingredients/get_ingredients";
 
-class ingredientSelectionModal {
-  isOpen: boolean;
-  searchWord: string;
-  isShowClearValue: boolean;
+class IngredientsList {
+  searchWord;
+  isShowClearValue;
+  typeSelected;
+  ingredientTypes;
+  ingredientsList;
+  itemsToShow
+
+  isOpen:boolean
+
   page
   perPage
-
-  ingredients;
-  itemsToShow: any[];
-  selectedIngredients;
-
-  onChange: Function;
-  onCancel: () => void
-  onSubmit: () => void
-
-  activeTab: string;
   totalCount
   totalPages
-  modalContext
-  loading: boolean;
-  ingredientTypes: { name: any; value: any; }[];
-  typeSelected
+
+  modalContext;
+
+  loading
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
-    this.activeTab = "เนื้อสัตว์";
-    this.isOpen = false;
+    this.isOpen = false
+    this.typeSelected = "";
     this.searchWord = "";
-    this.selectedIngredients = []
+    this.isShowClearValue = false;
+    this.ingredientTypes = [];
+    this.ingredientsList = [];
     this.itemsToShow = []
-    this.ingredients = []
     this.page = 1
+    this.perPage = 40
+    this.totalCount = 0
     this.totalPages = 1
     this.loading = true
-    this.perPage = 40
     makeAutoObservable(this);
   }
 
   //-------------------
   // ACTION
   //-------------------
-  openModal = (onSubmit, onCancel) => {
-    this.isOpen = true;
-    this.onSubmit = onSubmit
-    this.onCancel = onCancel
-    this.prepareIngredientTypes()
-    this.prepareIngredient();
-  };
-
-  closeModal = () => {
-    this.isOpen = false
-    this.searchWord = ''
-    this.activeTab = 'เนื้อสัตว์'
-    this.typeSelected = this.ingredientTypes[0].value
-    this.itemsToShow = []
-    this.ingredients = []
-    this.page = 1
-  }
-
   setValue(key: string, value: any) {
     this[key] = value;
   }
@@ -75,7 +56,10 @@ class ingredientSelectionModal {
           name: type.name,
           value: type._id,
         }));
-        this.typeSelected = this.ingredientTypes[0].value
+        this.ingredientTypes = [
+          { name: "ทั้งหมด", value: "all" },
+          ...this.ingredientTypes,
+        ];
       }
     } catch (error) {
       this.modalContext.openModal(
@@ -88,25 +72,25 @@ class ingredientSelectionModal {
     }
   };
 
-  prepareIngredient = async () => {
+  prepareIngredientsList = async () => {
     try {
       if (this.page === 1) {
         this.loading = true
       }
       const resp = await getIngredientsList({
         searchWord: this.searchWord,
-        typeId: this.typeSelected,
+        typeId: this.typeSelected === 'all' ? '' : this.typeSelected,
         page: this.page,
         perPage: this.perPage,
       })
       if (resp.status === 200) {
-        this.ingredients = resp.data?.ingredients
-        this.itemsToShow = [...this.itemsToShow, ...this.ingredients]
+        this.ingredientsList = resp.data?.ingredients
+        this.itemsToShow = [...this.itemsToShow, ...this.ingredientsList]
         this.page = resp.data?.page
         this.totalCount = resp.data?.totalCount
         this.totalPages = resp.data?.totalPages
       } else if (resp.status === 204) {
-        this.ingredients = []
+        this.ingredientsList = []
         this.page = 0
       }
     } catch (error) {
@@ -122,6 +106,4 @@ class ingredientSelectionModal {
     }
   }
 }
-export const IngredientSelectionModalContext = createContext(
-  new ingredientSelectionModal()
-);
+export const IngredientsListContext = createContext(new IngredientsList());
