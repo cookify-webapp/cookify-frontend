@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import _ from "lodash";
-import { Router } from "next/router";
 import { getIngredientsList, getIngredientTypes } from "@core/services/ingredients/get_ingredients";
 
 class IngredientsList {

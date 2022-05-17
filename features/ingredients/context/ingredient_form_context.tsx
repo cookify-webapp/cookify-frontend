@@ -3,7 +3,7 @@ import { makeAutoObservable } from "mobx";
 import { createIngredientFormData, ingredientInitialValues } from "../forms/ingredient_form";
 import { getIngredientDetail, getIngredientTypes, getIngredientUnits } from "@core/services/ingredients/get_ingredients";
 import _ from 'lodash'
-import { Router } from "next/router";
+import Cookies from "js-cookie";
 import { addIngredient } from "@core/services/ingredients/post_ingredients";
 import { editIngredient } from "@core/services/ingredients/put_ingredients";
 
@@ -105,7 +105,8 @@ class IngredientForm {
     try {
       this.loadingAddEdit = true
       const formData = createIngredientFormData(value)
-      const response = await addIngredient(formData)
+      const token = Cookies.get("token")
+      const response = await addIngredient(formData, token)
       if (response.status === 200) {
         this.formik?.resetForm()
         onSuccess()
