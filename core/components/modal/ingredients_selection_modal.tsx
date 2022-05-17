@@ -206,12 +206,19 @@ export const IngredientsSelectionModal = () => {
                         ))}
                       </>
                     )}
-                    {_.size(context.itemsToShow) === 0 && (
+                    {(_.size(context.itemsToShow) === 0 && !context.loading) && (
                       <div className="text-gray-50">
                         <i className="fas fa-egg text-[48px] w-12 h-12"></i>
                         <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>
                       </div>
                     )}
+                    {
+                      context.loading && (
+                        <div className="flex justify-center">
+                          <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin text-gray-50"></i>
+                        </div>
+                      )
+                    }
                   </div>
                 </InfiniteScroll>
               </div>

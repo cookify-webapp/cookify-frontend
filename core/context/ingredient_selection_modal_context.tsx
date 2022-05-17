@@ -90,6 +90,7 @@ class ingredientSelectionModal {
 
   prepareIngredient = async () => {
     try {
+      this.loading = true
       const resp = await getIngredientsList({
         searchWord: this.searchWord,
         typeId: this.typeSelected,

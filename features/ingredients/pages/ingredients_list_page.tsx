@@ -81,23 +81,21 @@ export const IngredientsListPage = () => {
     <Observer>
       {() => (
         <>
-          {
-            context.isOpen && (
-              <IngredientForm 
-                onCancel={() => context.setValue('isOpen', false)}
-                onSuccess={() => {
-                  context.setValue('isOpen', false)
-                  context.setValue("searchWord", "");
-                  context.setValue("typeSelected", "");
-                  context.setValue("page", 1);
-                  context.setValue("totalPages", 1);
-                  context.setValue("ingredientsList", []);
-                  context.setValue("itemsToShow", []);
-                  context.prepareIngredientsList()
-                }}
-              />
-            )
-          }
+          {context.isOpen && (
+            <IngredientForm
+              onCancel={() => context.setValue("isOpen", false)}
+              onSuccess={() => {
+                context.setValue("isOpen", false);
+                context.setValue("searchWord", "");
+                context.setValue("typeSelected", "");
+                context.setValue("page", 1);
+                context.setValue("totalPages", 1);
+                context.setValue("ingredientsList", []);
+                context.setValue("itemsToShow", []);
+                context.prepareIngredientsList();
+              }}
+            />
+          )}
           <HomeLayout>
             <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl h-[calc(100vh-84px)] md:h-[calc(100vh-96px)] lg:h-[calc(100vh-104px)]">
               <div className="px-5 w-full block xl:hidden mt-2">
@@ -126,7 +124,10 @@ export const IngredientsListPage = () => {
                 <h1 className="headlineL">รายการวัตถุดิบ</h1>
                 {authContext.user?.accountType === "admin" && (
                   <div className="w-[150px]">
-                    <PrimaryButton onClick={() => context.setValue('isOpen', true)} title="เพิ่มวัตถุดิบ" />
+                    <PrimaryButton
+                      onClick={() => context.setValue("isOpen", true)}
+                      title="เพิ่มวัตถุดิบ"
+                    />
                   </div>
                 )}
               </div>
@@ -194,18 +195,26 @@ export const IngredientsListPage = () => {
                     </InfiniteScroll>
                   </div>
                 ) : (
-                  <div className="h-[calc(100vh-422px)] md:h-[calc(100vh-378px)] lg:h-[calc(100vh-290px)] flex items-center text-center text-gray-50">
-                    <div>
-                      <i className="fas fa-egg text-[48px] w-12 h-12"></i>
-                      <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>                    
-                    </div>
-                  </div>
+                  <>
+                    {context.loading && (
+                      <div className="h-[calc(100vh-422px)] md:h-[calc(100vh-378px)] lg:h-[calc(100vh-290px)] flex items-center justify-center text-center text-gray-50">
+                        <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                      </div>
+                    )}
+                    {!context.loading && _.size(context.itemsToShow) === 0 && (
+                      <div className="h-[calc(100vh-422px)] md:h-[calc(100vh-378px)] lg:h-[calc(100vh-290px)] flex items-center text-center text-gray-50">
+                        <div>
+                          <i className="fas fa-egg text-[48px] w-12 h-12"></i>
+                          <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
           </HomeLayout>
         </>
-        
       )}
     </Observer>
   );
