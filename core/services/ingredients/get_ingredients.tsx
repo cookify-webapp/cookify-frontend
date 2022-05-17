@@ -36,3 +36,11 @@ export const getIngredientDetail = (id) => {
     },
   })
 }
+
+export const getSampleIngredients = (id) => {
+  return axios.get(`${publicRuntimeConfig.CKF_INGREDIENT_API}/${id}/sample`, {
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+}

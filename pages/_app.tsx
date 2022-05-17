@@ -9,7 +9,11 @@ import { FlashMessage } from "@core/components/flash_message";
 import { Modal } from "@core/components/modal/modal";
 import AuthLayouts from "@core/components/layouts/auth_layout";
 import { FlashMessageContext } from "core/context/flash_message_context";
+import { configure } from 'mobx'
 
+configure({
+  enforceActions: 'never',
+})
 
 function MyApp({ Component, pageProps }) {
   //---------------------

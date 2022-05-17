@@ -5,7 +5,7 @@ import { nutritionLabelType } from "core/types/core_components_type";
 export const NutritionLabel = ({
   nutrition,
   type,
-  ingredient,
+  unit,
 }: nutritionLabelType) => {
   //---------------------
   // RENDER
@@ -28,25 +28,25 @@ export const NutritionLabel = ({
               {type === "recipe" && <p className="w-auto ml-4">1 จาน</p>}
               {type === "ingredient" && (
                 <>
-                  {ingredient.unit === "gram" && (
+                  {unit === "gram" && (
                     <p className="w-auto ml-4">100 กรัม</p>
                   )}
-                  {ingredient.unit === "milliliter" && (
+                  {unit === "milliliter" && (
                     <p className="w-auto ml-4">10 มิลลิลิตร</p>
                   )}
-                  {ingredient.unit === "tablespoon" && (
+                  {unit === "tablespoon" && (
                     <p className="w-auto ml-4">1 ช้อนโต๊ะ</p>
                   )}
-                  {ingredient.unit === "teaspoon" && (
+                  {unit === "teaspoon" && (
                     <p className="w-auto ml-4">1 ช้อนชา</p>
                   )}
-                  {ingredient.unit === "cup" && (
+                  {unit === "cup" && (
                     <p className="w-auto ml-4">1 ถ้วย</p>
                   )}
-                  {ingredient.unit === "piece" && (
+                  {unit === "piece" && (
                     <p className="w-auto ml-4">1 ชิ้น/กลีบ/อัน</p>
                   )}
-                  {ingredient.unit === "whole" && (
+                  {unit === "whole" && (
                     <p className="w-auto ml-4">1 ลูก/ผล/ตัว/ฟอง</p>
                   )}
                 </>
@@ -194,12 +194,6 @@ export const NutritionLabel = ({
               <div className="grid grid-cols-12 gap-x-4">
                 <div className="col-span-6">
                   <div className="flex justify-between">
-                    <p>วิตามินเอ</p>
-                    <p className="text-right">{`${Math.round(
-                      nutrition.totalDaily.VITA_RAE.quantity
-                    )} %`}</p>
-                  </div>
-                  <div className="flex justify-between mt-2">
                     <p>วิตามินบี 1</p>
                     <p className="text-right">{`${Math.round(
                       nutrition.totalDaily.THIA.quantity
