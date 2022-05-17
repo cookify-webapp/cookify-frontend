@@ -44,7 +44,10 @@ export const NutritionLabel = ({
                     <p className="w-auto ml-4">1 ถ้วย</p>
                   )}
                   {unit === "piece" && (
-                    <p className="w-auto ml-4">1 ชิ้น/กลีบ/อัน</p>
+                    <p className="w-auto ml-4">1 ชิ้น</p>
+                  )}
+                  {unit === "slice" && (
+                    <p className="w-auto ml-4">1 แผ่น</p>
                   )}
                   {unit === "whole" && (
                     <p className="w-auto ml-4">1 ลูก/ผล/ตัว/ฟอง</p>
@@ -55,9 +58,9 @@ export const NutritionLabel = ({
             <div className="flex md:ml-8 w-auto mt-2 md:mt-0">
               <p className="font-medium w-auto shrink-0">พลังงานทั้งหมด</p>
               <p className="ml-4 w-auto">
-                {`${nutrition?.calories} กิโลแคลอรี`}
+                {`${nutrition?.calories || "-"} กิโลแคลอรี`}
                 <br className="sm:hidden" />
-                {` (พลังงานจากไขมัน ${nutrition?.totalNutrientsKCal?.FAT_KCAL?.quantity} กิโลแคลอรี)`}
+                {` (พลังงานจากไขมัน ${nutrition?.totalNutrientsKCal?.FAT_KCAL?.quantity || "-"} กิโลแคลอรี)`}
               </p>
             </div>
           </div>
@@ -76,12 +79,12 @@ export const NutritionLabel = ({
                     <p className="w-auto shrink-0 md:shrink">ไขมันทั้งหมด</p>
                     <p className="ml-4 w-auto shrink-0 md:shrink">{`${
                       Math.round(nutrition?.totalNutrients?.FAT?.quantity * 10) /
-                      10
+                      10 || "-"
                     } กรัม`}</p>
                   </div>
                   <p className="text-right">{`${Math.round(
-                    nutrition?.totalDaily?.FAT?.quantity
-                  )} %`}</p>
+                    nutrition?.totalDaily?.FAT?.quantity 
+                  ) || "-"} %`}</p>
                 </div>
                 <div className="pl-[18px] mt-2">
                   <div className="flex justify-between">
@@ -90,25 +93,25 @@ export const NutritionLabel = ({
                       <p className="ml-4 w-auto">{`${
                         Math.round(
                           nutrition?.totalNutrients?.FASAT?.quantity * 10
-                        ) / 10
+                        ) / 10 || "-"
                       } กรัม`}</p>
                     </div>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.FASAT?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex mt-2">
                     <p className="w-auto">ไขมันไม่อิ่มตัวเชิงเดี่ยว</p>
                     <p className="ml-4 w-auto">{`${
                       Math.round(nutrition?.totalNutrients?.FAMS?.quantity * 10) /
-                      10
+                      10 || "-"
                     } กรัม`}</p>
                   </div>
                   <div className="flex mt-2">
                     <p className="w-auto">ไขมันไม่อิ่มตัวเชิงซ้อน</p>
                     <p className="ml-4 w-auto">{`${
                       Math.round(nutrition?.totalNutrients?.FAPU?.quantity * 10) /
-                      10
+                      10 || "-"
                     } กรัม`}</p>
                   </div>
                 </div>
@@ -118,23 +121,23 @@ export const NutritionLabel = ({
                   <p className="w-auto shrink-0 md:shrink">คอเรสเตอรอล</p>
                   <p className="ml-4 w-auto shrink-0 md:shrink">{`${
                     Math.round(nutrition?.totalNutrients?.CHOLE?.quantity * 10) /
-                    10
+                    10 || "-"
                   } มิลลิกรัม`}</p>
                 </div>
                 <p className="text-right">{`${Math.round(
                   nutrition?.totalDaily?.CHOLE?.quantity
-                )} %`}</p>
+                ) || "-"} %`}</p>
               </div>
               <div className="font-medium flex justify-between mt-2">
                 <div className="flex">
                   <p className="w-auto">โซเดียม</p>
                   <p className="ml-4 w-auto">{`${
-                    Math.round(nutrition?.totalNutrients?.NA?.quantity * 10) / 10
+                    Math.round(nutrition?.totalNutrients?.NA?.quantity * 10) / 10 || "-"
                   } มิลลิกรัม`}</p>
                 </div>
                 <p className="text-right">{`${Math.round(
                   nutrition?.totalDaily?.NA?.quantity
-                )} %`}</p>
+                ) || "-"} %`}</p>
               </div>
               <div className="mt-2">
                 <div className="font-medium flex justify-between">
@@ -143,12 +146,12 @@ export const NutritionLabel = ({
                     <p className="ml-4 w-auto shrink-0 md:shrink">{`${
                       Math.round(
                         nutrition?.totalNutrients?.CHOCDF?.quantity * 10
-                      ) / 10
+                      ) / 10 || "-"
                     } กรัม`}</p>
                   </div>
                   <p className="text-right">{`${Math.round(
                     nutrition?.totalDaily?.CHOCDF?.quantity
-                  )} %`}</p>
+                  ) || "-"} %`}</p>
                 </div>
                 <div className="mt-2 pl-[18px]">
                   <div className="flex justify-between">
@@ -157,18 +160,18 @@ export const NutritionLabel = ({
                       <p className="ml-4 w-auto">{`${
                         Math.round(
                           nutrition?.totalNutrients?.FIBTG?.quantity * 10
-                        ) / 10
+                        ) / 10 || "-"
                       } กรัม`}</p>
                     </div>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.FIBTG?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex mt-2">
                     <p className="w-auto">น้ำตาล</p>
                     <p className="ml-4 w-auto">{`${
                       Math.round(nutrition?.totalNutrients?.SUGAR?.quantity * 10) /
-                      10
+                      10 || "-"
                     } กรัม`}</p>
                   </div>
                 </div>
@@ -178,12 +181,12 @@ export const NutritionLabel = ({
                   <p className="w-auto">โปรตีน</p>
                   <p className="ml-4 w-auto">{`${
                     Math.round(nutrition?.totalNutrients?.PROCNT?.quantity * 10) /
-                    10
+                    10 || "-"
                   } กรัม`}</p>
                 </div>
                 <p className="text-right">{`${Math.round(
                   nutrition?.totalDaily?.PROCNT?.quantity
-                )} %`}</p>
+                ) || "-"} %`}</p>
               </div>
             </div>
             <div className="col-span-12 md:col-span-6 bodyS mt-2 md:mt-0">
@@ -197,49 +200,49 @@ export const NutritionLabel = ({
                     <p>วิตามินบี 1</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.THIA?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินบี 2</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.RIBF?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินบี 3</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.NIA?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินบี 6</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.VITB6A?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินบี 9</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.FOLDFE?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินบี 12</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.VITB12?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินซี</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.VITC?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินดี</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.VITD?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                 </div>
                 <div className="col-span-6">
@@ -247,49 +250,49 @@ export const NutritionLabel = ({
                     <p>วิตามินอี</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.TOCPHA?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>วิตามินเค</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.VITK1?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>แคลเซียม</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.CA?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>แมกนีเซียม</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.MG?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>โพแทสเซียม</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.K?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>เหล็ก</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.FE?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>ซิงค์</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.ZN?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>ฟอสฟอรัส</p>
                     <p className="text-right">{`${Math.round(
                       nutrition?.totalDaily?.P?.quantity
-                    )} %`}</p>
+                    ) || "-"} %`}</p>
                   </div>
                 </div>
               </div>
