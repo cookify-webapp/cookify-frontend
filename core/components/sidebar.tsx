@@ -45,7 +45,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "วัตถุดิบ",
       icon: "fas fa-egg",
-      link: ["/ingredients"],
+      link: ["/ingredients", "/ingredients/[ingredientId]"],
     },
   ];
 

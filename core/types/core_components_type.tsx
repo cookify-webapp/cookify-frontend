@@ -203,6 +203,6 @@ export type selectInputType = {
 export type breadcrumbType = {
   routes: {
     title: string;
-    onRoute: () => void;
+    onRoute: string;
   }[];
 };

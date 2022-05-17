@@ -83,11 +83,11 @@ export const IngredientDetailPage = () => {
                     routes={[
                       {
                         title: "รายการวัตถุดิบ",
-                        onRoute: () => router.push("/ingredients"),
+                        onRoute: "/ingredients",
                       },
                       {
                         title: context.ingredientDetail?.name,
-                        onRoute: () => null,
+                        onRoute: "",
                       },
                     ]}
                   />
