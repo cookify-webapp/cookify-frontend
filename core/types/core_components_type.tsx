@@ -4,6 +4,7 @@ export type primaryButtonType = {
   title: string;
   onClick: Function;
   disabled?: boolean;
+  loading?: boolean
 };
 
 export type secondaryButtonType = {

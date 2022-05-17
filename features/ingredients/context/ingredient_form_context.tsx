@@ -11,6 +11,8 @@ class IngredientForm {
   initValue = ingredientInitialValues()
   loading: boolean
 
+  loadingAddEdit: boolean
+
   formik
   modalContext
   flashMessageContext
@@ -21,7 +23,7 @@ class IngredientForm {
   // CONSTUCTOR
   //-------------------
   constructor() {
-    
+    this.loadingAddEdit = false
     makeAutoObservable(this);
   }
 
@@ -101,6 +103,7 @@ class IngredientForm {
 
   addIngredient = async (value, onSuccess) => {
     try {
+      this.loadingAddEdit = true
       const formData = createIngredientFormData(value)
       const response = await addIngredient(formData)
       if (response.status === 200) {
@@ -126,11 +129,14 @@ class IngredientForm {
           "ตกลง"
         )        
       )
+    } finally {
+      this.loadingAddEdit = false
     }
   }
 
   editIngredient = async (value, id, onSuccess) => {
     try {
+      this.loadingAddEdit = true
       const formData = createIngredientFormData(value)
       const response = await editIngredient(id, formData)
       if (response.status === 200) {
@@ -156,6 +162,8 @@ class IngredientForm {
           "ตกลง"
         )        
       )
+    } finally {
+      this.loadingAddEdit = false
     }
   }
 }

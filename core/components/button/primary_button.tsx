@@ -3,7 +3,7 @@ import { Observer } from "mobx-react-lite";
 import classNames from "classnames";
 import { primaryButtonType } from "core/types/core_components_type";
 
-export const PrimaryButton = ({ disabled, title, onClick }: primaryButtonType) => {
+export const PrimaryButton = ({ disabled, title, onClick, loading }: primaryButtonType) => {
   //---------------------
   // RENDER
   //---------------------
@@ -19,7 +19,11 @@ export const PrimaryButton = ({ disabled, title, onClick }: primaryButtonType) =
           onClick={() => onClick()}
           disabled={disabled}
         >
-          {title}
+          {
+            loading ?
+            <i className="fas fa-circle-notch fa-spin"></i>
+            :<span>{title}</span> 
+          }
         </button>
       )}
     </Observer>
