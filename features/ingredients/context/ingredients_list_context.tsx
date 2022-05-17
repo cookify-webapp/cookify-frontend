@@ -74,7 +74,9 @@ class IngredientsList {
 
   prepareIngredientsList = async () => {
     try {
-      this.loading = true
+      if (this.page === 1) {
+        this.loading = true
+      }
       const resp = await getIngredientsList({
         searchWord: this.searchWord,
         typeId: this.typeSelected === 'all' ? '' : this.typeSelected,
