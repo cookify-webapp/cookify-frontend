@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 import { ingredientDetailType, sampleIngredientType } from "../types/ingredient_detail_type";
 import { getIngredientDetail, getSampleIngredients } from "@core/services/ingredients/get_ingredients";
 import { deleteIngredient } from "@core/services/ingredients/delete_ingredients";
+import Cookies from "js-cookie";
 
 class IngredientDetail {
   isOpen
@@ -74,7 +75,8 @@ class IngredientDetail {
 
   deleteIngredient = async (id) => {
     try {
-      const resp = await deleteIngredient(id)
+      const token = Cookies.get("token")
+      const resp = await deleteIngredient(id, token)
       if (resp.status === 200) {
         this.modalContext.closeModal()
         this.flashMessageContext.handleShow('ลบสำเร็จ', 'ลบวัตถุดิบสำเร็จ')

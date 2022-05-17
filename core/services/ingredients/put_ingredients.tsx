@@ -3,9 +3,8 @@ import getConfig from 'next/config'
 import Cookies from "js-cookie";
 
 const { publicRuntimeConfig } = getConfig()
-const token = Cookies.get("token")
 
-export const editIngredient = (id,ingredient) => {
+export const editIngredient = (id, ingredient, token) => {
   return axios.put(`${publicRuntimeConfig.CKF_INGREDIENT_API}/${id}/edit`, ingredient, { 
     headers: { 
       Authorization: `Bearer ${token}`,

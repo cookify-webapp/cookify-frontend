@@ -52,7 +52,7 @@ export const IngredientDetailPage = () => {
       context.setValue('ingredientDetail', null)
       context.setValue('sampleIngredients', [])
     }
-  }, []);
+  }, [ingredientId]);
 
   //---------------------
   // RENDER

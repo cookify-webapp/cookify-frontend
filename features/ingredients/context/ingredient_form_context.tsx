@@ -139,7 +139,8 @@ class IngredientForm {
     try {
       this.loadingAddEdit = true
       const formData = createIngredientFormData(value)
-      const response = await editIngredient(id, formData)
+      const token = Cookies.get("token")
+      const response = await editIngredient(id, formData, token)
       if (response.status === 200) {
         this.formik?.resetForm()
         onSuccess()
