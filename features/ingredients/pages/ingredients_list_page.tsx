@@ -83,6 +83,7 @@ export const IngredientsListPage = () => {
         <>
           {context.isOpen && (
             <IngredientForm
+            isEdit={false}
               onCancel={() => context.setValue("isOpen", false)}
               onSuccess={() => {
                 context.setValue("isOpen", false);

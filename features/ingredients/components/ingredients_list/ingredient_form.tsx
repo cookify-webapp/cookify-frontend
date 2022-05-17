@@ -1,9 +1,8 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { createRef, useContext, useEffect } from "react";
 import { Observer } from "mobx-react-lite";
 import { IngredientFormContext } from "@features/ingredients/context/ingredient_form_context";
 import classNames from "classnames";
 import _ from "lodash";
-import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import { IngredientValidateSchema } from "@features/ingredients/forms/ingredient_form";
 import { ModalContext } from "core/context/modal_context";
@@ -16,21 +15,25 @@ import { FlashMessageContext } from "core/context/flash_message_context";
 
 const { publicRuntimeConfig } = getConfig();
 
-export const IngredientForm = ({onCancel, onSuccess}) => {
+interface IngredientFormProps {
+  onCancel: () => void;
+  onSuccess: () => void;
+  isEdit: boolean;
+  ingredientId?: string;
+}
+
+export const IngredientForm = ({
+  onCancel,
+  onSuccess,
+  isEdit,
+  ingredientId,
+}: IngredientFormProps) => {
   //---------------------
   // CONTEXT
   //---------------------
   const context = useContext(IngredientFormContext);
   const modalContext = useContext(ModalContext);
-  const flashMessageContext = useContext(FlashMessageContext)
-
-  //---------------------
-  //  ROUTER
-  //---------------------
-  const router = useRouter();
-  const { ingredientId } = router.query;
-
-  const isEdit = _.includes(router.pathname, ingredientId);
+  const flashMessageContext = useContext(FlashMessageContext);
 
   //---------------------
   //  FORMIK
@@ -43,7 +46,9 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
     validationSchema: () => IngredientValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      isEdit ? context.editIngredient(value, ingredientId) : context.addIngredient(value, () => onSuccess())
+      isEdit
+        ? context.editIngredient(value, ingredientId, () => onSuccess())
+        : context.addIngredient(value, () => onSuccess());
     },
   });
 
@@ -53,14 +58,17 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
   useEffect(() => {
     context.setValue("formik", formik);
     context.setValue("modalContext", modalContext);
-    context.setValue("flashMessageContext", flashMessageContext)
-    context.prepareIngredientTypes()
-    context.prepareIngredientUnits()
-    
-    isEdit && context.preparation(ingredientId as string);
-    return () => {
-      context.handlerResetInitValue()
+    context.setValue("flashMessageContext", flashMessageContext);
+    context.prepareIngredientTypes();
+    context.prepareIngredientUnits();
+
+    if (isEdit) {
+      context.preparation(ingredientId);
     }
+    return () => {
+      formik.resetForm()
+      context.handlerResetInitValue();
+    };
   }, []);
 
   //------------------
@@ -75,12 +83,16 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const reader = new FileReader();
-      const preview = document.querySelector('img');
+      const preview = document.querySelector("img");
 
-      reader.addEventListener("load", function () {
-        // convert image file to base64 string
-        preview.src = reader.result as string;
-      }, false)
+      reader.addEventListener(
+        "load",
+        function () {
+          // convert image file to base64 string
+          preview.src = reader.result as string;
+        },
+        false
+      );
 
       reader.readAsDataURL(file);
 
@@ -97,7 +109,7 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
       {() => (
         <div
           className={classNames(
-            "fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen bg-black bg-opacity-25 px-5 md:px-0",
+            "fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen bg-black bg-opacity-25 px-5 md:px-0"
           )}
         >
           <div className="bg-white rounded-[12px] max-h-[calc(100vh-64px)] md:max-h-min w-full md:w-[564px] overflow-y-auto scrollbar-hide card-shadow py-6 animate-fade-in">
@@ -108,13 +120,17 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
               <div className="mt-6 grid grid-cols-12 gap-x-6 max-h-[calc(100vh-261px)] md:max-h-min overflow-y-auto scrollbar-hide">
                 <div className="col-span-12 md:col-span-5">
                   <div className="w-[192px] h-[192px] rounded-[12px] border border-gray-30 mx-auto overflow-hidden">
-                    <img
-                      src={
-                        `${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${formik.values?.imageFileName}` ? 
-                        "/images/core/default.png" : `${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${formik.values?.imageFileName}`
-                      }
-                      className="w-full h-full object-cover"
-                    />
+                    {formik.values?.imageFileName ? (
+                      <img
+                        src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${formik.values?.imageFileName}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src="/images/core/default.png"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
                   <div className="w-[125px] mt-4 mx-auto">
                     <SecondaryButton
@@ -171,12 +187,12 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
                       options={context.ingredientTypes}
                       onChange={(value) => {
                         formik.setFieldTouched("type");
-                        formik.setFieldValue('type', value)
+                        formik.setFieldValue("type", value);
                       }}
                       error={
                         formik.errors?.type && formik.touched?.type
-                        ? formik.errors?.type
-                        : ""
+                          ? formik.errors?.type
+                          : ""
                       }
                     />
                   </div>
@@ -189,12 +205,12 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
                       options={context.ingredientUnits}
                       onChange={(value) => {
                         formik.setFieldTouched("unit");
-                        formik.setFieldValue('unit', value)
+                        formik.setFieldValue("unit", value);
                       }}
                       error={
                         formik.errors?.unit && formik.touched?.unit
-                        ? formik.errors?.unit
-                        : ""
+                          ? formik.errors?.unit
+                          : ""
                       }
                     />
                   </div>
@@ -218,12 +234,12 @@ export const IngredientForm = ({onCancel, onSuccess}) => {
             <div className="md:mt-6 border-t border-gray-30 pb-6"></div>
             <div className="flex justify-between md:justify-end space-x-4 px-6">
               <div className="w-full md:w-[125px]">
-                <SecondaryButton onClick={() => onCancel()} title="ยกเลิก"/>
+                <SecondaryButton onClick={() => onCancel()} title="ยกเลิก" />
               </div>
               <div className="w-full md:w-[125px]">
                 <PrimaryButton
-                  onClick={() => formik.submitForm()} 
-                  title="เพิ่ม"
+                  onClick={() => formik.submitForm()}
+                  title={isEdit ? "บันทึก":"เพิ่ม"}
                   disabled={!formik.dirty || !formik.isValid}
                 />
               </div>

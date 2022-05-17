@@ -5,6 +5,7 @@ import { getIngredientDetail, getIngredientTypes, getIngredientUnits } from "@co
 import _ from 'lodash'
 import { Router } from "next/router";
 import { addIngredient } from "@core/services/ingredients/post_ingredients";
+import { editIngredient } from "@core/services/ingredients/put_ingredients";
 
 class IngredientForm {
   initValue = ingredientInitialValues()
@@ -82,7 +83,7 @@ class IngredientForm {
       this.loading = true
       const resp = await getIngredientDetail(id)
       if (resp.status === 200) {
-        this.initValue = ingredientInitialValues(resp.data?.area)
+        this.initValue = ingredientInitialValues(resp.data?.ingredient)
         this.formik.setValues(this.initValue)
       }
     } catch (error) {
@@ -128,8 +129,34 @@ class IngredientForm {
     }
   }
 
-  editIngredient = async (value, id) => {
-
+  editIngredient = async (value, id, onSuccess) => {
+    try {
+      const formData = createIngredientFormData(value)
+      const response = await editIngredient(id, formData)
+      if (response.status === 200) {
+        this.formik?.resetForm()
+        onSuccess()
+        this.flashMessageContext.handleShow('แก้ไขสำเร็จ', 'แก้ไขวัตถุดิบสำเร็จ')
+      }
+    } catch (error) {
+      if (error.message.includes("Ingredient validation failed")) {
+        this.modalContext.openModal(
+          "ไม่สามารถแก้ไขวัตถุดิบได้",
+          "เนื่องจากมีวัตถุดิบที่ใช้ชื่อนี้อยู่ในระบบแล้ว",
+          () => this.modalContext.closeModal(),
+          "ปิด",
+          "ตกลง"
+        ) 
+      } else (
+        this.modalContext.openModal(
+          "มีปัญหาในการแก้ไขวัตถุดิบ",
+          error.message,
+          () => this.modalContext.closeModal(),
+          "ปิด",
+          "ตกลง"
+        )        
+      )
+    }
   }
 }
 export const IngredientFormContext = createContext(new IngredientForm());

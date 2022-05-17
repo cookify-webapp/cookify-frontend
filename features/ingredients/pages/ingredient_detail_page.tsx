@@ -18,6 +18,7 @@ import { NutritionLabel } from "@core/components/nutrition_label";
 import _ from "lodash";
 import Link from "next/link";
 import { Ingredient } from "@core/components/ingredient";
+import { FlashMessageContext } from "core/context/flash_message_context";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -29,6 +30,7 @@ export const IngredientDetailPage = () => {
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
   const modalContext = useContext(ModalContext);
+  const flashMessageContext = useContext(FlashMessageContext)
 
   //---------------------
   //  ROUTER
@@ -58,6 +60,8 @@ export const IngredientDetailPage = () => {
         <>
           {context.isOpen && (
             <IngredientForm
+              isEdit={true}
+              ingredientId={context.ingredientDetail?._id}
               onCancel={() => context.setValue("isOpen", false)}
               onSuccess={() => {
                 context.setValue("isOpen", false);

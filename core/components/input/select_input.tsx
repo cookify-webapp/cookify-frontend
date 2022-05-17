@@ -86,7 +86,7 @@ export const SelectInput = ({
             >
               <p className="truncate">
                 {value
-                  ? valueFinder(value).name 
+                  ? valueFinder(value)?.name 
                   : placeholder}
               </p>
             </div>

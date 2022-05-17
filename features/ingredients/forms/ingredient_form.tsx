@@ -16,13 +16,13 @@ export const IngredientValidateSchema = Yup.object().shape({
 export const ingredientInitialValues = (value?: any) => {
   if (value) {
     return {
-      name: value.ingredient.name,
-      queryKey: value.ingredient.queryKey,
-      unit: value.ingredient.unit._id,
-      type: value.type._id,
+      name: value.name,
+      queryKey: value.queryKey,
+      unit: value.unit?._id,
+      type: value.type?._id,
       shopUrl: value.shopUrl,
       imageFileName: value.image,
-      ingredientImage: Object
+      ingredientImage: null
     }
   }
   return {
@@ -50,7 +50,9 @@ export const createIngredientFormData = (value) => {
   }
 
   formData.append('data', JSON.stringify(data))
-  formData.append('ingredientImage', value.ingredientImage, value.imageFileName)
+  if (value.ingredientImage !== null) {
+    formData.append('ingredientImage', value.ingredientImage, value.imageFileName)
+  }
 
   return formData
 }
