@@ -70,7 +70,7 @@ export type recipePropType = {
     created_at: string;
     tags: [];
   } | null;
-  role: "" | "user" | "admin";
+  isLogIn: boolean
   isBookmark: boolean;
   onClick: Function;
 };

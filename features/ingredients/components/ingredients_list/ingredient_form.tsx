@@ -178,7 +178,7 @@ export const IngredientForm = ({
                         : ""
                     }
                   />
-                  <div>
+                  <div className="">
                     <p className="titleS pb-2">ประเภทของวัตถุดิบ *</p>
                     <SelectInput
                       placeholder="เลือกประเภท"

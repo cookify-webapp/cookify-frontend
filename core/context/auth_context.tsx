@@ -69,6 +69,7 @@ class Auth {
       let noCookie = Cookies.get("token") === undefined;
       if (noCookie) {
         this.user = null
+        this.isLogIn = false
         localStorage.setItem('user', null)
       } else {
         const token = Cookies.get("token")

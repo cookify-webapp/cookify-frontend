@@ -8,7 +8,7 @@ import "dayjs/locale/th";
 import _ from "lodash";
 import Link from "next/link";
 
-export const Recipe = ({ recipe, role, isBookmark, onClick }: recipePropType) => {
+export const Recipe = ({ recipe, isLogIn, isBookmark, onClick }: recipePropType) => {
   //---------------------
   // RENDER
   //---------------------
@@ -19,13 +19,13 @@ export const Recipe = ({ recipe, role, isBookmark, onClick }: recipePropType) =>
         <Link href={`/recipes/${recipe.id}`} passHref>
           <a>
             <div className="rounded-[12px] bg-white w-full">
-              <div>
+              <div className="relative">
                 <ImageWithFallback
                   alt="recipe cover image"
                   src={recipe.src}
                   classStyle="rounded-t-[12px] h-[180px]"
                 />
-                {role && (
+                {isLogIn && (
                   <div 
                     className="absolute top-0 right-0 mt-2 mr-2 w-9 h-9 p-[6px] bg-black bg-opacity-75 rounded-full text-center" 
                     onClick={(e) => {

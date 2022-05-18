@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <script src="https://kit.fontawesome.com/9c44f5505c.js" crossOrigin="anonymous"></script>
       </Head>
-      <body className='scrollbar-hide'>
+      <body>
         <Main />
         <NextScript />
       </body>

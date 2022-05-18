@@ -9,6 +9,29 @@
   padding: 0;
   width: 100%;
   font-family: "Kanit";
+  
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: #E5E5E5;
+  border-radius: 5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #6B4F4F; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #483434; 
 }
 
 @layer utilities {

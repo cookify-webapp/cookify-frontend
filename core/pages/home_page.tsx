@@ -93,7 +93,7 @@ export default function HomePage() {
                 >
                   <Recipe
                     recipe={recipe}
-                    role={authContext.user?.accountType}
+                    isLogIn={authContext.isLogIn}
                     isBookmark={checkIsBookmark(recipe.id)}
                     onClick={() => console.log("bookmark click")}
                   />
