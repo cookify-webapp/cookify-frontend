@@ -113,7 +113,7 @@ class IngredientForm {
         this.flashMessageContext.handleShow('เพิ่มสำเร็จ', 'เพิ่มวัตถุดิบสำเร็จ')
       }
     } catch (error) {
-      if (error.message.includes("Ingredient validation failed")) {
+      if (error?.response?.message.includes("Ingredient validation failed")) {
         this.modalContext.openModal(
           "ไม่สามารถเพิ่มวัตถุดิบได้",
           "เนื่องจากมีวัตถุดิบที่ใช้ชื่อนี้อยู่ในระบบแล้ว",
@@ -147,7 +147,7 @@ class IngredientForm {
         this.flashMessageContext.handleShow('แก้ไขสำเร็จ', 'แก้ไขวัตถุดิบสำเร็จ')
       }
     } catch (error) {
-      if (error.message.includes("Ingredient validation failed")) {
+      if (error?.response?.message.includes("Ingredient validation failed")) {
         this.modalContext.openModal(
           "ไม่สามารถแก้ไขวัตถุดิบได้",
           "เนื่องจากมีวัตถุดิบที่ใช้ชื่อนี้อยู่ในระบบแล้ว",

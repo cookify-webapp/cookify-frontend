@@ -27,8 +27,8 @@ class Auth {
   //-------------------
   // ACTION
   //-------------------
-  setValue(key: string, value: any) {
-    this[key] = value;
+  setValue = <k extends keyof this>(key: k, value: this[k]) => {
+    this[key] = value
   }
 
   login = async (value) => {
@@ -44,7 +44,7 @@ class Auth {
         Router.back();
       }
     } catch (error) {
-      if (error.status === 403) {
+      if (error?.response?.status === 403) {
         this.modal.openModal(
           "ไม่สามารถเข้าสู่ระบบได้",
           "เนื่องจากชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง",
