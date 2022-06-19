@@ -72,7 +72,7 @@ export const UserAccount = ({ src, userName, role }: userAccountType) => {
                 <ImageWithFallback
                   src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${src}`}
                   alt="user profile image"
-                  classStyle="rounded-full border border-gray-10 w-[36px] sm:w-[48px] h-[36px] sm:h-[48px]"
+                  className="rounded-full border border-gray-10 w-[36px] sm:w-[48px] h-[36px] sm:h-[48px]"
                 />
               </div>
               <div className="shrink-0 w-[85px] sm:w-[123px] ml-3">

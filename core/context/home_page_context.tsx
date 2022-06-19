@@ -18,53 +18,101 @@ class HomePage {
     this.loading = true
     this.recipes = [
       {
-        id: "1",
-        title: "สเต็กริบอายซอสพริกไทยดำ 1",
-        description:
-          "สเต็กริบอายสูตรเฉพาะของไรเดน โชกุน อร่อยที่สุดในเมืองอินาซุมะ อร่อยจนคุโจว ซาระลองชิมแล้วถึงกับต้องขอเพิ่มอีก 10 จาน ใครว่าโชกุนทำอาหารไม่เป็นกันนะ",
-        src: "/images/core/rib-eye_steak.jpg",
-        created_by: "ไรเดน โชกุน",
-        created_at: "2022-04-12T08:00:00.000Z",
-        tags: ["อาหารทั่วไป", "อาหารประเภทย่าง", "มีส่วนประกอบของเนื้อ"],
-        rating: 5.0,
-        rating_count: 120,
+        _id: "62a4a48b1ac09ddd225d611a",
+        name: "สเต็กริบอายซอสพริกไทยดํา",
+        method: {
+          _id: "626c3a279c65b3a236797b53",
+          "name": "ปิ้งย่าง"
+        },
+        image: "5cc3afbdc1e1e588.jpg",
+        author: {
+          _id: "625ec5d9cb848302931ce63f",
+          "username": "MrnDew"
+        },
+        createdAt: "2022-06-11T14:19:56.469Z",
+        averageRating: 0,
+        bookmarked: false
       },
       {
-        id: "2",
-        title: "สเต็กริบอายซอสพริกไทยดำ 2",
-        description:
-          "สเต็กริบอายสูตรเฉพาะของไรเดน โชกุน อร่อยที่สุดในเมืองอินาซุมะ อร่อยจนคุโจว ซาระลองชิมแล้วถึงกับต้องขอเพิ่มอีก 10 จาน ใครว่าโชกุนทำอาหารไม่เป็นกันนะ",
-        src: "/images/core/rib-eye_steak.jpg",
-        created_by: "ไรเดน โชกุน",
-        created_at: "2022-04-12T08:00:00.000Z",
-        tags: ["อาหารทั่วไป", "อาหารประเภทย่าง", "มีส่วนประกอบของเนื้อ"],
-        rating: 4.7,
-        rating_count: 80,
+        _id: "62a4a48b1ac09ddd225d611a",
+        name: "สเต็กริบอายซอสพริกไทยดํา",
+        method: {
+          _id: "626c3a279c65b3a236797b53",
+          "name": "ปิ้งย่าง"
+        },
+        image: "5cc3afbdc1e1e588.jpg",
+        author: {
+          _id: "625ec5d9cb848302931ce63f",
+          "username": "MrnDew"
+        },
+        createdAt: "2022-06-11T14:19:56.469Z",
+        averageRating: 3,
+        bookmarked: false
       },
       {
-        id: "3",
-        title: "สเต็กริบอายซอสพริกไทยดำ 3",
-        description:
-          "สเต็กริบอายสูตรเฉพาะของไรเดน โชกุน อร่อยที่สุดในเมืองอินาซุมะ อร่อยจนคุโจว ซาระลองชิมแล้วถึงกับต้องขอเพิ่มอีก 10 จาน ใครว่าโชกุนทำอาหารไม่เป็นกันนะ",
-        src: "/images/core/rib-eye_steak.jpg",
-        created_by: "ไรเดน โชกุน",
-        created_at: "2022-04-12T08:00:00.000Z",
-        tags: ["อาหารทั่วไป", "อาหารประเภทย่าง", "มีส่วนประกอบของเนื้อ"],
-        rating: 0.6,
-        rating_count: 10,
+        _id: "62a4a48b1ac09ddd225d611a",
+        name: "สเต็กริบอายซอสพริกไทยดํา",
+        method: {
+          _id: "626c3a279c65b3a236797b53",
+          "name": "ปิ้งย่าง"
+        },
+        image: "5cc3afbdc1e1e588.jpg",
+        author: {
+          _id: "625ec5d9cb848302931ce63f",
+          "username": "MrnDew"
+        },
+        createdAt: "2022-06-11T14:19:56.469Z",
+        averageRating: 2.5,
+        bookmarked: false
       },
       {
-        id: "4",
-        title: "สเต็กริบอายซอสพริกไทยดำ 4",
-        description:
-          "สเต็กริบอายสูตรเฉพาะของไรเดน โชกุน อร่อยที่สุดในเมืองอินาซุมะ อร่อยจนคุโจว ซาระลองชิมแล้วถึงกับต้องขอเพิ่มอีก 10 จาน ใครว่าโชกุนทำอาหารไม่เป็นกันนะ",
-        src: "/images/core/rib-eye_steak.jpg",
-        created_by: "ไรเดน โชกุน",
-        created_at: "2022-04-12T08:00:00.000Z",
-        tags: ["อาหารทั่วไป", "อาหารประเภทย่าง", "มีส่วนประกอบของเนื้อ"],
-        rating: 0.2,
-        rating_count: 40,
+        _id: "62a4a48b1ac09ddd225d611a",
+        name: "สเต็กริบอายซอสพริกไทยดํา",
+        method: {
+          _id: "626c3a279c65b3a236797b53",
+          "name": "ปิ้งย่าง"
+        },
+        image: "5cc3afbdc1e1e588.jpg",
+        author: {
+          _id: "625ec5d9cb848302931ce63f",
+          "username": "MrnDew"
+        },
+        createdAt: "2022-06-11T14:19:56.469Z",
+        averageRating: 4.8,
+        bookmarked: false
       },
+      {
+        _id: "62a4a48b1ac09ddd225d611a",
+        name: "สเต็กริบอายซอสพริกไทยดํา",
+        method: {
+          _id: "626c3a279c65b3a236797b53",
+          "name": "ปิ้งย่าง"
+        },
+        image: "5cc3afbdc1e1e588.jpg",
+        author: {
+          _id: "625ec5d9cb848302931ce63f",
+          "username": "MrnDew"
+        },
+        createdAt: "2022-06-11T14:19:56.469Z",
+        averageRating: 1.2,
+        bookmarked: false
+      },
+      {
+        _id: "62a4a48b1ac09ddd225d611a",
+        name: "สเต็กริบอายซอสพริกไทยดํา",
+        method: {
+          _id: "626c3a279c65b3a236797b53",
+          "name": "ปิ้งย่าง"
+        },
+        image: "5cc3afbdc1e1e588.jpg",
+        author: {
+          _id: "625ec5d9cb848302931ce63f",
+          "username": "MrnDew"
+        },
+        createdAt: "2022-06-11T14:19:56.469Z",
+        averageRating: 5,
+        bookmarked: false
+      }
     ];
     this.snapshots = [
       {
@@ -105,6 +153,30 @@ class HomePage {
       },
       {
         id: "4",
+        detail:
+          "อร่อยมากแบบมากที่สุด อร่อยจนอยากให้ท่านเทพบาร์บาทอสได้มาลองทานสิ่งนี้ดูบ้างจังเลยค่ะ เผื่อว่าท่านเทพจะหันมามองหนูบ้าง",
+        src: "/images/core/mockSteak.png",
+        created_by: "บาบาร่า อิคุโย๊",
+        created_at: "2022-04-13T08:00:00.000Z",
+        recipe: {
+          id: "1",
+          title: "สเต็กริบอายซอสพริกไทยดำ 1",
+        },
+      },
+      {
+        id: "5",
+        detail:
+          "อร่อยมากแบบมากที่สุด อร่อยจนอยากให้ท่านเทพบาร์บาทอสได้มาลองทานสิ่งนี้ดูบ้างจังเลยค่ะ เผื่อว่าท่านเทพจะหันมามองหนูบ้าง",
+        src: "/images/core/mockSteak.png",
+        created_by: "บาบาร่า อิคุโย๊",
+        created_at: "2022-04-13T08:00:00.000Z",
+        recipe: {
+          id: "1",
+          title: "สเต็กริบอายซอสพริกไทยดำ 1",
+        },
+      },
+      {
+        id: "6",
         detail:
           "อร่อยมากแบบมากที่สุด อร่อยจนอยากให้ท่านเทพบาร์บาทอสได้มาลองทานสิ่งนี้ดูบ้างจังเลยค่ะ เผื่อว่าท่านเทพจะหันมามองหนูบ้าง",
         src: "/images/core/mockSteak.png",

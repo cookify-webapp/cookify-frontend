@@ -5,7 +5,7 @@ interface ImageWithFallbackProps {
   src: string 
   alt: string
   fallBackSrc?: string | StaticImageData
-  classStyle: string
+  className: string
   width?: number | string
   height?: number | string
   placeholder?: 'empty' | 'blur'
@@ -15,7 +15,7 @@ export const ImageWithFallback = ({
   src,
   alt,
   fallBackSrc = '/images/core/default.png',
-  classStyle,
+  className,
   placeholder = 'blur',
 }: ImageWithFallbackProps) => {
   //---------------------
@@ -27,13 +27,13 @@ export const ImageWithFallback = ({
   // RENDER
   //---------------------
   return (
-    <div style={{ position: 'relative' }} className={classStyle}>
+    <div style={{ position: 'relative' }} className={className}>
       <Image
         src={imageError || !src ? fallBackSrc : src}
         alt={alt}
         objectFit="cover"
         placeholder={placeholder}
-        className={classStyle}
+        className={className}
         blurDataURL="/images/core/default.png"
         onError={() => setImageError(true)}
         layout='fill'

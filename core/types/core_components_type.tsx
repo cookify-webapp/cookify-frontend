@@ -59,20 +59,12 @@ export type searchBoxType = {
 };
 
 export type recipePropType = {
-  recipe: {
-    id: string;
-    src: string;
-    rating: number;
-    rating_count: number;
-    title: string;
-    description: string;
-    created_by: string;
-    created_at: string;
-    tags: [];
-  } | null;
-  isLogIn: boolean
-  isBookmark: boolean;
-  onClick: Function;
+  id: string
+  name: string
+  method: string
+  image: string
+  author: string
+  averageRating: 0
 };
 
 export type ingredientPropType = {
@@ -89,6 +81,7 @@ export type ingredientPropType = {
   hasCheckbox?: boolean;
   onChange?: Function;
   isChecked?: boolean;
+  hasArrow?: boolean
 };
 
 export type nutrientType = {

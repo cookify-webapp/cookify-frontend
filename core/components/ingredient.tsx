@@ -14,6 +14,7 @@ export const Ingredient = ({
   hasCheckbox,
   onChange,
   isChecked,
+  hasArrow
 }: ingredientPropType) => {
   //---------------------
   // RENDER
@@ -30,7 +31,7 @@ export const Ingredient = ({
           <div className="flex items-center">
             <ImageWithFallback
               alt="ingredient cover image"
-              classStyle="w-[52px] h-[52px] border border-gray-30 rounded-[12px]"
+              className="w-[52px] h-[52px] border border-gray-30 rounded-[12px]"
               src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${ingredient.image}`}
             />
             <div className="w-auto mx-4 ">
@@ -40,7 +41,7 @@ export const Ingredient = ({
               </p>
             </div>
           </div>
-          {!hasCheckbox && (
+          {hasArrow && (
             <i className="fas fa-chevron-right text-[16px] h-4 w-4"></i>
           )}
           {hasCheckbox && (

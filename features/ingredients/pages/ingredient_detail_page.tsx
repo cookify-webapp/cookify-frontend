@@ -112,7 +112,7 @@ export const IngredientDetailPage = () => {
                         <div className="flex items-center w-auto">
                           <ImageWithFallback
                             alt="ingredient cover image"
-                            classStyle="w-[60px] h-[60px] md:w-[80px] md:h-[80px] border border-gray-30 rounded-[12px]"
+                            className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] border border-gray-30 rounded-[12px]"
                             src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${context.ingredientDetail?.image}`}
                           />
                           <div className="w-auto mx-4 md:mx-6">

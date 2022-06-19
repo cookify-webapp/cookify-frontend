@@ -85,17 +85,19 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+            <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
               {_.map(context.recipes, (recipe) => (
                 <div
-                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
                   key={recipe.title}
                 >
                   <Recipe
-                    recipe={recipe}
-                    isLogIn={authContext.isLogIn}
-                    isBookmark={checkIsBookmark(recipe.id)}
-                    onClick={() => console.log("bookmark click")}
+                    id={recipe._id}
+                    author={recipe.author?.username}
+                    averageRating={recipe.averageRating}
+                    image={recipe.image}
+                    method={recipe.method?.name}
+                    name={recipe.name}
                   />
                 </div>
               ))}
@@ -139,7 +141,7 @@ export default function HomePage() {
             <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
               {_.map(context.snapshots, (snapshot) => (
                 <div
-                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
                   key={`snapshot_${snapshot.id}`}
                 >
                   <Snapshot snapshot={snapshot} />
@@ -163,7 +165,7 @@ export default function HomePage() {
                   >
                     <Link href={`/ingredients/${ingredient._id}`} passHref>
                       <a>
-                        <Ingredient ingredient={ingredient} />
+                        <Ingredient ingredient={ingredient} hasArrow/>
                       </a>
                     </Link>
                   </div>
