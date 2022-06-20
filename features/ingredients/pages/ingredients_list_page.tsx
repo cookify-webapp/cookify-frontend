@@ -83,7 +83,7 @@ export const IngredientsListPage = () => {
         <>
           {context.isOpen && (
             <IngredientForm
-            isEdit={false}
+              isEdit={false}
               onCancel={() => context.setValue("isOpen", false)}
               onSuccess={() => {
                 context.setValue("isOpen", false);
@@ -109,10 +109,7 @@ export const IngredientsListPage = () => {
                   value={homeLayoutContext.searchWord}
                   isButton
                   buttonOnClick={() => {
-                    router.push({
-                      pathname: "/recipes",
-                      query: { searchWord: homeLayoutContext.searchWord },
-                    });
+                    router.push("/recipes");
                   }}
                 />
               </div>

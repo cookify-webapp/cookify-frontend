@@ -1,12 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { SideBar } from "../sidebar";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { AuthContext } from "core/context/auth_context";
 import classNames from "classnames";
 import { Navbar } from "../navbar";
+import router from "next/router";
 
-export const HomeLayout = ({ children }) => {
+interface HomeLayoutProps {
+  children: ReactNode
+  onClickSearch?: () => void
+}
+
+export const HomeLayout = ({ children, onClickSearch } : HomeLayoutProps) => {
   //---------------------
   // CONTEXT
   //---------------------
@@ -65,7 +71,7 @@ export const HomeLayout = ({ children }) => {
           )}
 
           <div className="">
-            <Navbar />
+            <Navbar onClickSearch={router.pathname.includes('recipes') ? () => onClickSearch() : null}/>
             <div className="w-full xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">
               {children}
             </div>

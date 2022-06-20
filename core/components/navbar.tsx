@@ -3,12 +3,15 @@ import { Observer } from "mobx-react-lite";
 import { SearchBox } from "./input/search_box";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { useRouter } from "next/router";
-import classNames from "classnames";
 import { AuthContext } from "core/context/auth_context";
 import { UserAccount } from "./user_account";
 import { PrimaryButton } from "./button/primary_button";
 
-export const Navbar = () => {
+interface NavbarProps {
+  onClickSearch?: () => void
+}
+
+export const Navbar = ({onClickSearch}: NavbarProps) => {
   //---------------------
   // CONTEXT
   //---------------------
@@ -35,11 +38,7 @@ export const Navbar = () => {
           <div className="w-full xl:w-[calc(100vw-254px)] mx-auto xl:max-w-6xl 2xl:max-w-7xl">
             <div className="flex items-center justify-between px-5 2xl:px-0 h-[84px] md:h-24 xl:h-[104px]">
               <div>
-                <div
-                  className={classNames("xl:w-[798px] hidden", {
-                    "xl:block": !router.pathname.includes("/recipes"),
-                  })}
-                >
+                <div className="xl:w-[798px] hidden xl:block">
                   <SearchBox
                     onChange={(value) => {
                       context.setValue("searchWord", value);
@@ -48,10 +47,14 @@ export const Navbar = () => {
                     value={context.searchWord}
                     isButton
                     buttonOnClick={() => {
-                      router.push({
-                        pathname: "/recipes",
-                        query: { searchWord: context.searchWord },
-                      });
+                      if (!router.pathname.includes('recipes')) {
+                        router.push({
+                          pathname: "/recipes",
+                          query: { searchWord: context.searchWord },
+                        });                        
+                      } else {
+                        onClickSearch()
+                      }
                     }}
                     height="h-16"
                   />
