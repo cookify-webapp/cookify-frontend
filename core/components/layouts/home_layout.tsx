@@ -5,7 +5,7 @@ import { HomeLayoutContext } from "core/context/home_layout_context";
 import { AuthContext } from "core/context/auth_context";
 import classNames from "classnames";
 import { Navbar } from "../navbar";
-import router from "next/router";
+import { useRouter } from "next/router";
 
 interface HomeLayoutProps {
   children: ReactNode
@@ -23,6 +23,11 @@ export const HomeLayout = ({ children, onClickSearch } : HomeLayoutProps) => {
   // HOOKS
   //---------------------
   const [isDesktop, setIsDesktop] = useState(false);
+
+  //---------------------
+  // ROUTER
+  //---------------------
+  const router = useRouter()
 
   //---------------------
   // FUNCTION
