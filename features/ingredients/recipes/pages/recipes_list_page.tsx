@@ -37,7 +37,11 @@ export const RecipesListPage = () => {
     context.setValue("searchWord", homeLayoutContext.searchWord);
     context.setValue("modal", modal);
     context.prepareCookingMethods();
-    context.prepareRecipesList()
+    context.prepareRecipesList();
+
+    return () => {
+      context.setValue('recipesList', [])
+    }
   }, []);
 
   //---------------------
@@ -50,6 +54,10 @@ export const RecipesListPage = () => {
     });
     context.setValue("selectedIngredients", filter);
     ingredientSelectionModalContext.setValue("selectedIngredients", filter);
+    setHasMore(true);
+    context.setValue("recipesList", []);
+    context.setValue("page", 1);
+    context.prepareRecipesList();
   };
 
   const preparation = async () => {
@@ -73,7 +81,7 @@ export const RecipesListPage = () => {
             context.setValue("searchWord", homeLayoutContext.searchWord);
             context.setValue("recipesList", []);
             context.setValue("page", 1);
-            context.prepareRecipesList()
+            context.prepareRecipesList();
           }}
         >
           <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
@@ -90,7 +98,7 @@ export const RecipesListPage = () => {
                   setHasMore(true);
                   context.setValue("recipesList", []);
                   context.setValue("page", 1);
-                  context.prepareRecipesList()
+                  context.prepareRecipesList();
                 }}
               />
             </div>
@@ -120,7 +128,7 @@ export const RecipesListPage = () => {
                       context.setValue("selectedCookingMethod", method.name);
                       context.setValue("recipesList", []);
                       context.setValue("page", 1);
-                      context.prepareRecipesList()
+                      context.prepareRecipesList();
                     }}
                   >
                     <p className="headlineM">{method.name}</p>
@@ -153,7 +161,7 @@ export const RecipesListPage = () => {
                           );
                           context.setValue("recipesList", []);
                           context.setValue("page", 1);
-                          context.prepareRecipesList()
+                          context.prepareRecipesList();
                         },
                         () => {
                           ingredientSelectionModalContext.setValue(
@@ -202,28 +210,27 @@ export const RecipesListPage = () => {
                   dataLength={context.recipesList.length}
                   next={preparation}
                   hasMore={hasMore}
-                  loader={
-                    <div className="py-4 flex items-center justify-center text-center text-gray-50">
-                      <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
-                    </div>
-                  }
+                  loader={""}
                 >
                   <div className="grid grid-cols-12 gap-4">
-                    {_.map(context.recipesList, (recipe: recipesListType, index) => (
-                      <div
-                        className="col-span-12 md:col-span-6 xl:col-span-4"
-                        key={`recipe_${index}`}
-                      >
-                        <Recipe
-                          author={recipe.author?.username}
-                          averageRating={recipe.averageRating}
-                          id={recipe._id}
-                          image={recipe.image}
-                          method={recipe.method?.name}
-                          name={recipe.name}
-                        />
-                      </div>
-                    ))}
+                    {_.map(
+                      context.recipesList,
+                      (recipe: recipesListType, index) => (
+                        <div
+                          className="col-span-12 md:col-span-6 xl:col-span-4"
+                          key={`recipe_${index}`}
+                        >
+                          <Recipe
+                            author={recipe.author?.username}
+                            averageRating={recipe.averageRating}
+                            id={recipe._id}
+                            image={recipe.image}
+                            method={recipe.method?.name}
+                            name={recipe.name}
+                          />
+                        </div>
+                      )
+                    )}
                   </div>
                 </InfiniteScroll>
               )}

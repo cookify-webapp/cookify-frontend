@@ -30,6 +30,7 @@ class RecipesList {
   //-------------------
   constructor() {
     this.searchWord = ""
+    this.recipesList = []
     this.isShowClearValue = false
     this.loading = false
     this.methodImage = [
@@ -114,14 +115,26 @@ class RecipesList {
           ingredientId.push(ingredient._id)
         })
       }
-      console.log(ingredientId)
-      const resp = await getRecipesList({
-        searchWord: this.searchWord,
-        methodId: this.selectedCookingMethod === 'ทั้งหมด' ? '' : this.valueFinder(this.selectedCookingMethod),
-        ingredientId: (_.size(ingredientId) > 0) ? ingredientId : "",
-        page: this.page,
-        perPage: this.perPage,
-      })
+      let queryParam = new Object()
+      if (_.size(ingredientId) > 0) {
+        queryParam = {
+          searchWord: this.searchWord,
+          methodId: this.selectedCookingMethod === 'ทั้งหมด' ? '' : this.valueFinder(this.selectedCookingMethod),
+          "ingredientId[]": ingredientId,
+          page: this.page,
+          perPage: this.perPage
+        }
+      } else {
+        queryParam = {
+          searchWord: this.searchWord,
+          methodId: this.selectedCookingMethod === 'ทั้งหมด' ? '' : this.valueFinder(this.selectedCookingMethod),
+          ingredientId: "",
+          page: this.page,
+          perPage: this.perPage
+        }
+      }
+
+      const resp = await getRecipesList(queryParam)
       if (resp.status === 200) {
         this.recipesList = [...this.recipesList, ...resp.data?.recipes] 
         this.page = resp.data?.page
