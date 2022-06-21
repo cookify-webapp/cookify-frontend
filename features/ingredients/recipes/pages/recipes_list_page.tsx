@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -10,6 +10,9 @@ import { ModalContext } from "core/context/modal_context";
 import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { Tag } from "@core/components/tag";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Recipe } from "@core/components/recipe";
+import { recipesListType } from "@features/ingredients/types/recipes";
 
 export const RecipesListPage = () => {
   //---------------------
@@ -34,31 +37,28 @@ export const RecipesListPage = () => {
     context.setValue("searchWord", homeLayoutContext.searchWord);
     context.setValue("modal", modal);
     context.prepareCookingMethods();
+    context.prepareRecipesList()
   }, []);
 
   //---------------------
   // Handler
   //---------------------
-  const handlerSearchAuto = useCallback(
-    _.debounce(() => {
-      if (context.searchWord === "") {
-        setHasMore(true);
-      }
-      // context.setValue("page", 1);
-      // context.setValue("ingredientsList", []);
-      // context.setValue("itemsToShow", []);
-      // context.prepareIngredientsList();
-    }, 500),
-    []
-  );
-
   const handleRemoveTag = (ingredient) => {
     let tempSelectedIngredients = _.cloneDeep(context.selectedIngredients);
     let filter = _.filter(tempSelectedIngredients, (item) => {
       return item.name !== ingredient.name;
     });
-    context.setValue('selectedIngredients', filter)
+    context.setValue("selectedIngredients", filter);
     ingredientSelectionModalContext.setValue("selectedIngredients", filter);
+  };
+
+  const preparation = async () => {
+    setHasMore(true);
+    context.setValue("page", context.page + 1);
+    context.prepareRecipesList();
+    if (context.page === context.totalPages) {
+      setHasMore(false);
+    }
   };
 
   //---------------------
@@ -69,8 +69,11 @@ export const RecipesListPage = () => {
       {() => (
         <HomeLayout
           onClickSearch={() => {
+            setHasMore(true);
             context.setValue("searchWord", homeLayoutContext.searchWord);
-            // context.prepare
+            context.setValue("recipesList", []);
+            context.setValue("page", 1);
+            context.prepareRecipesList()
           }}
         >
           <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
@@ -78,15 +81,16 @@ export const RecipesListPage = () => {
               <SearchBox
                 onChange={(value) => {
                   context.setValue("searchWord", value);
-                  context.setValue("isShowClearValue", true);
-                  handlerSearchAuto();
                 }}
                 height="h-16"
                 placeholder="ค้นหาสูตรอาหารได้ที่นี่"
                 value={context.searchWord}
                 isButton
                 buttonOnClick={() => {
-                  // context.prepare
+                  setHasMore(true);
+                  context.setValue("recipesList", []);
+                  context.setValue("page", 1);
+                  context.prepareRecipesList()
                 }}
               />
             </div>
@@ -103,7 +107,7 @@ export const RecipesListPage = () => {
                       "w-[119px] h-[50px] text-white text-center flex items-center cursor-pointer rounded-[12px] shrink-0 md:shrink md:w-full md:col-span-2",
                       {
                         "border-4 border-black":
-                          method.value === context.selectedCookingMethod,
+                          method.name === context.selectedCookingMethod,
                       }
                     )}
                     style={{
@@ -112,8 +116,11 @@ export const RecipesListPage = () => {
                     }}
                     key={`method_${index}`}
                     onClick={() => {
-                      context.setValue("selectedCookingMethod", method.value);
-                      //context.prepare
+                      setHasMore(true);
+                      context.setValue("selectedCookingMethod", method.name);
+                      context.setValue("recipesList", []);
+                      context.setValue("page", 1);
+                      context.prepareRecipesList()
                     }}
                   >
                     <p className="headlineM">{method.name}</p>
@@ -121,7 +128,7 @@ export const RecipesListPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
+              <div className="flex justify-center xl:max-w-6xl 2xl:max-w-7xl text-gray-50">
                 <i className="w-6 h-6 mt-6 text-center lg:mx-0 text-[24px] leading-6 fas fa-circle-notch fa-spin"></i>
               </div>
             )}
@@ -139,11 +146,14 @@ export const RecipesListPage = () => {
                       );
                       ingredientSelectionModalContext.openModal(
                         () => {
+                          setHasMore(true);
                           context.setValue(
                             "selectedIngredients",
                             ingredientSelectionModalContext.selectedIngredients
                           );
-                          //context.prepare
+                          context.setValue("recipesList", []);
+                          context.setValue("page", 1);
+                          context.prepareRecipesList()
                         },
                         () => {
                           ingredientSelectionModalContext.setValue(
@@ -178,10 +188,58 @@ export const RecipesListPage = () => {
                     </>
                   )}
                   {_.size(context.selectedIngredients) === 0 && (
-                    <p className="bodyM text-gray-50">ไม่มีรายการวัตถุดิบที่เลือก</p>
+                    <p className="bodyM text-gray-50">
+                      ไม่มีรายการวัตถุดิบที่เลือก
+                    </p>
                   )}
                 </div>
               </div>
+            </div>
+            <div className="mt-6 md:mt-8">
+              <p className="headlineL mb-4">{`สูตรอาหาร - ${context.selectedCookingMethod}`}</p>
+              {_.size(context.recipesList) > 0 && !context.loading && (
+                <InfiniteScroll
+                  dataLength={context.recipesList.length}
+                  next={preparation}
+                  hasMore={hasMore}
+                  loader={
+                    <div className="py-4 flex items-center justify-center text-center text-gray-50">
+                      <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                    </div>
+                  }
+                >
+                  <div className="grid grid-cols-12 gap-4">
+                    {_.map(context.recipesList, (recipe: recipesListType, index) => (
+                      <div
+                        className="col-span-12 md:col-span-6 xl:col-span-4"
+                        key={`recipe_${index}`}
+                      >
+                        <Recipe
+                          author={recipe.author?.username}
+                          averageRating={recipe.averageRating}
+                          id={recipe._id}
+                          image={recipe.image}
+                          method={recipe.method?.name}
+                          name={recipe.name}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </InfiniteScroll>
+              )}
+              {context.loading && (
+                <div className="py-10 flex items-center justify-center text-center text-gray-50">
+                  <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                </div>
+              )}
+              {!context.loading && _.size(context.recipesList) === 0 && (
+                <div className="py-10 flex items-center text-center text-gray-50">
+                  <div>
+                    <i className="fas fa-book text-[48px] w-12 h-12"></i>
+                    <p className="titleM mt-4">ไม่มีรายการสูตรอาหาร</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </HomeLayout>

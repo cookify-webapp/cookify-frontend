@@ -64,7 +64,7 @@ export type recipePropType = {
   method: string
   image: string
   author: string
-  averageRating: 0
+  averageRating: number
 };
 
 export type ingredientPropType = {

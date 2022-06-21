@@ -1,7 +1,8 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
-import { getCookingMethods } from "@core/services/recipes/get_recipes";
+import { getCookingMethods, getRecipesList } from "@core/services/recipes/get_recipes";
 import _ from 'lodash'
+import { recipesListType } from "@features/ingredients/types/recipes";
 
 class RecipesList {
   searchWord: string
@@ -15,18 +16,26 @@ class RecipesList {
   methodImage: string[]
   selectedIngredients
 
+  recipesList: recipesListType[]
+
   modal
-  isMethodLoaded
+  isMethodLoaded: boolean
+  loading: boolean
+  page: number;
+  perPage: number;
+  totalCount: number;
+  totalPages: number;
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.searchWord = ""
     this.isShowClearValue = false
+    this.loading = false
     this.methodImage = [
       "/images/recipes/methods/all.svg",
-      "/images/recipes/methods/boiled.svg",
       "/images/recipes/methods/baked.svg",
+      "/images/recipes/methods/boiled.svg",
       "/images/recipes/methods/fry.svg",
       "/images/recipes/methods/steam.svg",
       "/images/recipes/methods/smoked.svg",
@@ -37,9 +46,11 @@ class RecipesList {
       "/images/recipes/methods/yum.svg",
       "/images/recipes/methods/cooled.svg"
     ]
-    this.selectedCookingMethod = 'all'
+    this.selectedCookingMethod = 'ทั้งหมด'
     this.isMethodLoaded = false
     this.selectedIngredients = []
+    this.page = 1
+    this.perPage = 18
     makeAutoObservable(this);
   }
 
@@ -79,6 +90,56 @@ class RecipesList {
       );
     } finally {
       this.isMethodLoaded =  true
+    }
+  }
+
+  valueFinder = (name) => {
+    let value = ''
+    _.forEach(this.cookingMethods, (method) => {
+      if (method.name === name) {
+        value = method.value
+      }
+    })
+    return value
+  }
+
+  prepareRecipesList = async () => {
+    try {
+      if (this.page === 1) {
+        this.loading = true
+      }
+      let ingredientId = []
+      if (_.size(this.selectedIngredients) > 0) {
+        _.forEach(this.selectedIngredients, (ingredient) => {
+          ingredientId.push(ingredient._id)
+        })
+      }
+      console.log(ingredientId)
+      const resp = await getRecipesList({
+        searchWord: this.searchWord,
+        methodId: this.selectedCookingMethod === 'ทั้งหมด' ? '' : this.valueFinder(this.selectedCookingMethod),
+        ingredientId: (_.size(ingredientId) > 0) ? ingredientId : "",
+        page: this.page,
+        perPage: this.perPage,
+      })
+      if (resp.status === 200) {
+        this.recipesList = [...this.recipesList, ...resp.data?.recipes] 
+        this.page = resp.data?.page
+        this.totalCount = resp.data?.totalCount
+        this.totalPages = resp.data?.totalPages
+      } else if (resp.status === 204) {
+        this.recipesList = []
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการดึงรายการสูตรอาหาร",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.loading = false
     }
   }
 }

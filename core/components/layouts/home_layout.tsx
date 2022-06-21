@@ -77,7 +77,7 @@ export const HomeLayout = ({ children, onClickSearch } : HomeLayoutProps) => {
 
           <div className="">
             <Navbar onClickSearch={router.pathname.includes('recipes') ? () => onClickSearch() : null}/>
-            <div className="w-full xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">
+            <div className="w-full min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-96px)] xl:min-h-[calc(100vh-104px)] xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">
               {children}
             </div>
           </div>

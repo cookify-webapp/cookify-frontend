@@ -11,3 +11,12 @@ export const getCookingMethods = () => {
     },
   });
 };
+
+export const getRecipesList = (params) => {
+  const query = querystring.stringify(params)
+  return axios.get(`${publicRuntimeConfig.CKF_RECIPE_API}/list?${query}`, {
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+}
