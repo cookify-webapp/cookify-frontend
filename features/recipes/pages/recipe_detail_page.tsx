@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -8,15 +8,37 @@ import { HomeLayoutContext } from "core/context/home_layout_context";
 import { RecipeDetailContext } from "../contexts/recipe_detail_context";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
 import getConfig from "next/config";
+import "dayjs/locale/th";
+import dayjs from "dayjs";
+import { useOnClickOutside } from "core/utils/useOnClickOutside";
+import { AuthContext } from "core/context/auth_context";
+import { Rating } from "@core/components/rating";
 
 const { publicRuntimeConfig } = getConfig();
 
 export const RecipeDetailPage = () => {
   //---------------------
+  //   STATE
+  //---------------------
+  const [open, setOpen] = useState(false);
+
+  //---------------------
+  //   REF
+  //---------------------
+  const ref: any = createRef();
+
+  //  USE CLICK OUTSIDE
+  //---------------------
+  useOnClickOutside(ref, () => {
+    setOpen(false);
+  });
+
+  //---------------------
   // CONTEXT
   //---------------------
   const context = useContext(RecipeDetailContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
+  const authContext = useContext(AuthContext);
 
   //---------------------
   //  ROUTER
@@ -27,7 +49,13 @@ export const RecipeDetailPage = () => {
   //---------------------
   // EFFECT
   //---------------------
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (authContext.isLogIn) {
+      context.prepareRecipeDetail(recipeId, true);
+    } else {
+      context.prepareRecipeDetail(recipeId, false);
+    }
+  }, []);
 
   //---------------------
   // RENDER
@@ -35,57 +63,147 @@ export const RecipeDetailPage = () => {
   return (
     <Observer>
       {() => (
-        <HomeLayout>
-          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl pb-8">
-            <div className="px-5 w-full block xl:hidden mt-2">
-              <SearchBox
-                onChange={(value) => {
-                  homeLayoutContext.setValue("searchWord", value);
-                }}
-                height="h-16"
-                placeholder="ค้นหาสูตรอาหารได้ที่นี่"
-                value={homeLayoutContext.searchWord}
-                isButton
-                buttonOnClick={() => {
-                  router.push({
-                    pathname: "/recipes",
-                    query: { searchWord: homeLayoutContext.searchWord },
-                  });
-                }}
-              />
-            </div>
-            <div className="px-5 2xl:px-0 pt-8 lg:pt-2">
-              <Breadcrumb
-                routes={[
-                  {
-                    title: "สูตรอาหาร",
-                    onRoute: "/recipes",
-                  },
-                  {
-                    title: context.recipeDetail?.name,
-                    onRoute: "",
-                  },
-                ]}
-              />
-            </div>
-            <div className="mx-5 p-6 2xl:px-0 mt-4 lg:mt-6 bg-white rounded-[12px] flex flex-row md:flex-col space-y-4 md:space-y-0 md:space-x-6">
-              <div className="w-full flex justify-center md:justify-start md:w-[247px] md:h-[247px]">
-                <ImageWithFallback
-                  alt="ingredient cover image"
-                  className="w-full h-full border border-gray-30 rounded-[12px]"
-                  src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${context.recipeDetail?.image}`}
-                />
-              </div>
-              <div>
-                <div className="flex justify-between">
-                  <div>
-                    <h3 className="headlineL"></h3>
+        <>
+          {!context.loading && (
+            <HomeLayout>
+              <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl pb-8">
+                <div className="px-5 w-full block xl:hidden mt-2">
+                  <SearchBox
+                    onChange={(value) => {
+                      homeLayoutContext.setValue("searchWord", value);
+                    }}
+                    height="h-16"
+                    placeholder="ค้นหาสูตรอาหารได้ที่นี่"
+                    value={homeLayoutContext.searchWord}
+                    isButton
+                    buttonOnClick={() => {
+                      router.push({
+                        pathname: "/recipes",
+                        query: { searchWord: homeLayoutContext.searchWord },
+                      });
+                    }}
+                  />
+                </div>
+                <div className="px-5 2xl:px-0 pt-8 lg:pt-2">
+                  <Breadcrumb
+                    routes={[
+                      {
+                        title: "สูตรอาหาร",
+                        onRoute: "/recipes",
+                      },
+                      {
+                        title: context.recipeDetail?.name,
+                        onRoute: "",
+                      },
+                    ]}
+                  />
+                </div>
+                <div className="px-5 2xl:px-0">
+                  <div className="p-6 mt-4 lg:mt-6 bg-white rounded-[12px] flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
+                    <div className="flex justify-center md:justify-start md:w-auto">
+                      <div className="w-[247px] h-[247px]">
+                        <ImageWithFallback
+                          alt="ingredient cover image"
+                          className="w-full h-full border border-gray-30 rounded-[12px]"
+                          src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${context.recipeDetail?.image}`}
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full">
+                      <div className="flex justify-between space-x-3">
+                        <div>
+                          <h3 className="headlineL">
+                            {context.recipeDetail?.name}
+                          </h3>
+                          <p className="bodyM text-gray-50">{`โดย ${dayjs(
+                            context.recipeDetail?.createdAt
+                          )
+                            .locale("th")
+                            .add(543, "year")
+                            .format("D MMM YY เวลา HH:mm น.")}`}</p>
+                        </div>
+                        <div className="w-auto flex space-x-2">
+                          {authContext.isLogIn && (
+                            <div
+                              className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
+                              onClick={() => null}
+                            >
+                              {context.recipeDetail?.bookmarked ? (
+                                <i className=" text-[16px] leading-[16px] fas fa-bookmark text-white"></i>
+                              ) : (
+                                <i className=" text-[16px] leading-[16px] far fa-bookmark text-white"></i>
+                              )}
+                            </div>
+                          )}
+                          <div className="relative">
+                            <div
+                              ref={ref}
+                              className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
+                              onClick={() => setOpen(!open)}
+                            >
+                              <i className=" text-[16px] leading-[16px] fas fa-ellipsis-v text-white"></i>
+                            </div>
+                            {open && (
+                              <div className="flex justify-end">
+                                {context.recipeDetail?.isMe ? (
+                                  <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
+                                    <div
+                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] h-[40px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                      onClick={() =>
+                                        router.push(`/recipes/${recipeId}/edit`)
+                                      }
+                                    >
+                                      <i className="fas fa-pen"></i>
+                                      <p className="ml-3">แก้ไขสูตรอาหาร</p>
+                                    </div>
+                                    <div
+                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] h-[40px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                      onClick={() => null}
+                                    >
+                                      <i className="fas fa-trash"></i>
+                                      <p className="ml-3">ลบสูตรอาหาร</p>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
+                                    <div
+                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                      onClick={() => null}
+                                    >
+                                      <i className="fas fa-exclamation-triangle w-auto"></i>
+                                      <p className="ml-3">รายงานสูตรอาหาร</p>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center mt-2">
+                        <p className="bodyM mr-4 w-auto">{`หน่วยบริโภค: ${context.recipeDetail?.serving}`}</p>
+                        <div className="flex items-center w-auto">
+                          <div>
+                            <Rating
+                              rating={context.recipeDetail?.averageRating}
+                              spaceX="space-x-2"
+                            />
+                          </div>
+                          <p className="ml-2">
+                            {context.recipeDetail?.averageRating.toFixed(1)}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="mt-3 bodyM text-gray-50">
+                        {context.recipeDetail?.desc}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </HomeLayout>
+            </HomeLayout>
+          )}
+        </>
       )}
     </Observer>
   );

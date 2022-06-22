@@ -17,7 +17,7 @@ export const SelectInput = ({
   isBorder
 }: selectInputType) => {
   //---------------------
-  //   REF
+  //   STATE
   //---------------------
   const [open, setOpen] = useState(false);
 

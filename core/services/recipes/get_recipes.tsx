@@ -20,3 +20,20 @@ export const getRecipesList = (params) => {
     },
   })
 }
+
+export const getRecipeDetail = (id, token?) => {
+  if (token) {
+    return axios.get(`${publicRuntimeConfig.CKF_RECIPE_API}/${id}`, {
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "content-type": "application/json" 
+      },
+    });
+  } else {
+    return axios.get(`${publicRuntimeConfig.CKF_RECIPE_API}/${id}`, {
+      headers: { 
+        "content-type": "application/json" 
+      },
+    });
+  }
+} 
