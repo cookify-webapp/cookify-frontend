@@ -13,6 +13,8 @@ import { Tag } from "@core/components/tag";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Recipe } from "@core/components/recipe";
 import { recipesListType } from "@features/ingredients/types/recipes";
+import { AuthContext } from "core/context/auth_context";
+import { useRouter } from "next/router";
 
 export const RecipesListPage = () => {
   //---------------------
@@ -25,10 +27,16 @@ export const RecipesListPage = () => {
   //---------------------
   const context = useContext(RecipesListContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
+  const authContext = useContext(AuthContext);
   const modal = useContext(ModalContext);
   const ingredientSelectionModalContext = useContext(
     IngredientSelectionModalContext
   );
+
+  //---------------------
+  // ROUTER
+  //---------------------
+  const router = useRouter()
 
   //---------------------
   // EFFECT
@@ -40,8 +48,8 @@ export const RecipesListPage = () => {
     context.prepareRecipesList();
 
     return () => {
-      context.setValue('recipesList', [])
-    }
+      context.setValue("recipesList", []);
+    };
   }, []);
 
   //---------------------
@@ -141,7 +149,7 @@ export const RecipesListPage = () => {
               </div>
             )}
           </div>
-          <div className="px-5 mx-auto xl:max-w-6xl 2xl:max-w-7xl mt-6">
+          <div className="px-5 mx-auto xl:max-w-6xl 2xl:max-w-7xl py-6">
             <div className="bg-white rounded-[12px] py-6 grid grid-cols-12 gap-x-4">
               <div className="px-6 col-span-12 md:col-span-5 xl:col-span-4">
                 <p className="titleM">ค้นหาสูตรอาหารจากวัตถุดิบ</p>
@@ -213,6 +221,18 @@ export const RecipesListPage = () => {
                   loader={""}
                 >
                   <div className="grid grid-cols-12 gap-4">
+                    {authContext.isLogIn && (
+                      <div
+                        className="text-white h-[120px] text-center flex items-center cursor-pointer rounded-[12px] col-span-12 md:col-span-6 xl:col-span-4"
+                        style={{
+                          background: `url(/images/recipes/add_recipe.svg) no-repeat center`,
+                          backgroundSize: "cover",
+                        }}
+                        onClick={() => router.push('/recipes/create')}
+                      >
+                        <p className="headlineM">เพิ่มสูตรอาหารที่นี่</p>
+                      </div>
+                    )}
                     {_.map(
                       context.recipesList,
                       (recipe: recipesListType, index) => (
