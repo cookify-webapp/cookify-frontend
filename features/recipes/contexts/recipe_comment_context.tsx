@@ -13,10 +13,12 @@ class RecipeComment {
   totalRow: number;
   modal
   initValue
+  isEdit
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
+    this.isEdit = false
     this.page = 1
     this.perPage = 5
     this.isCommentLoading = false

@@ -355,7 +355,7 @@ export const RecipeDetailPage = () => {
                     )}
                     {authContext.isLogIn && (
                       <div className="mt-4">
-                        <CommentInputBlock />
+                        <CommentInputBlock isEdit={false}/>
                       </div>
                     )}
                     <div className="border-t-[1px] border-gray-30 my-6" />
