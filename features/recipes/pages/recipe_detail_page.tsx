@@ -26,6 +26,8 @@ import { Ingredient } from "@core/components/ingredient";
 import { NutritionLabel } from "@core/components/nutrition_label";
 import { CommentInputBlock } from "../components/recipe_detail/comment_input_block";
 import { RecipeCommentContext } from "../contexts/recipe_comment_context";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { CommentBlock } from "../components/recipe_detail/comment_block";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -53,7 +55,7 @@ export const RecipeDetailPage = () => {
   const context = useContext(RecipeDetailContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
-  const recipeCommentContext = useContext(RecipeCommentContext)
+  const recipeCommentContext = useContext(RecipeCommentContext);
 
   //---------------------
   //  ROUTER
@@ -71,6 +73,10 @@ export const RecipeDetailPage = () => {
     } else {
       context.prepareRecipeDetail(recipeId, false);
       recipeCommentContext.prepareCommentsList(recipeId, false);
+    }
+    return () => {
+      context.setValue('activeTab', 'วัตถุดิบหลัก')
+      recipeCommentContext.setValue('commentsList', [])
     }
   }, []);
 
@@ -345,21 +351,68 @@ export const RecipeDetailPage = () => {
                     {!authContext.isLogIn && (
                       <p className="bodyL mt-4 text-center">
                         {`สูตรอาหารนี้เป็นอย่างไรบ้าง `}
-                        <br className="md:hidden"/>
-                        <Link href='/login' passHref>
-                          <a className="underline text-brown-10">ลงชื่อเข้าสู่ระบบ</a> 
+                        <br className="md:hidden" />
+                        <Link href="/login" passHref>
+                          <a className="underline text-brown-10">
+                            ลงชื่อเข้าสู่ระบบ
+                          </a>
                         </Link>
-                        <br className="md:hidden"/>
+                        <br className="md:hidden" />
                         {` เพื่อแสดงความคิดเห็นเลย`}
                       </p>
                     )}
                     {authContext.isLogIn && (
                       <div className="mt-4">
-                        <CommentInputBlock isEdit={false}/>
+                        <CommentInputBlock isEdit={false} />
                       </div>
                     )}
                     <div className="border-t-[1px] border-gray-30 my-6" />
-
+                    <div className="mt-4">
+                      {_.size(recipeCommentContext.commentsList) > 0 &&
+                        !recipeCommentContext.isCommentLoading && (
+                          <div
+                            id="scrollableComments"
+                            className="max-h-[500px] overflow-y-auto pb-6"
+                          >
+                            <InfiniteScroll
+                              dataLength={
+                                recipeCommentContext.commentsList.length
+                              }
+                              next={preparation}
+                              hasMore={hasMore}
+                              loader=""
+                              scrollableTarget="scrollableComments"
+                            >
+                              <div className="space-y-6">
+                                {_.map(
+                                  recipeCommentContext.commentsList,
+                                  (comment, index) => (
+                                    <Fragment key={`comment_${index}`}>
+                                      <CommentBlock comment={comment} />
+                                    </Fragment>
+                                  )
+                                )}
+                              </div>
+                            </InfiniteScroll>
+                          </div>
+                        )}
+                      {_.size(recipeCommentContext.commentsList) === 0 &&
+                        !recipeCommentContext.isCommentLoading && (
+                          <div className="py-10 flex items-center text-center text-gray-50">
+                            <div>
+                              <i className="fas fa-comment text-[48px] w-12 h-12"></i>
+                              <p className="titleM mt-4">
+                                ไม่มีรายการความคิดเห็น
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      {recipeCommentContext.isCommentLoading && (
+                        <div className="py-10 flex items-center justify-center text-center text-gray-50">
+                          <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

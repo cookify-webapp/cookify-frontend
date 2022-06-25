@@ -81,6 +81,8 @@ class RecipeComment {
         "ปิด",
         "ตกลง"
       );
+    } finally {
+      this.isCommentLoading = false
     }
   };
 }
