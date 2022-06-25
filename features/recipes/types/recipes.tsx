@@ -27,6 +27,11 @@ export type ingredientType = {
   _id: string
   name: string
   unit: unitType
+  type: {
+    _id: string
+    name: string
+  }
+  image: string
 }
 
 export type recipeDetailType = {
@@ -39,12 +44,12 @@ export type recipeDetailType = {
     quantity: number
     _id: string
   }[]
-  subIngredients: []
+  subIngredients: ingredientType[]
   method: {
     _id: string
     name: string
   }
-  step: string[]
+  steps: string[]
   image: string
   author: {
     _id: string

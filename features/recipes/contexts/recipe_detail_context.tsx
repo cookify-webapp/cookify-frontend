@@ -8,11 +8,13 @@ class RecipeDetail {
   recipeDetail: recipeDetailType
   loading: boolean
   modal
+  activeTab
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.loading = false
+    this.activeTab = 'วัตถุดิบหลัก'
     makeAutoObservable(this);
   }
 
