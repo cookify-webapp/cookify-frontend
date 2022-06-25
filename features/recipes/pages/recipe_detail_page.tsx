@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { createRef, Fragment, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -302,6 +302,19 @@ export const RecipeDetailPage = () => {
                         </div>
                       )
                     }
+                  </div>
+                  <div className="bg-white pt-4 px-6 pb-6 mt-4 rounded-[10px]">
+                    <h3 className="headlineM">ขั้นตอนการประกอบอาหาร</h3>
+                    <div className="mt-3 grid grid-cols-12 gap-3">
+                      {
+                        _.map(context.recipeDetail?.steps, (step, index) => (
+                          <Fragment key={`step_${index}`}>
+                            <p>{`${index+1}.`}</p>
+                            <p className="col-span-11">{step}</p>
+                          </Fragment>
+                        ))
+                      }
+                    </div>
                   </div>
                 </div>
               </div>
