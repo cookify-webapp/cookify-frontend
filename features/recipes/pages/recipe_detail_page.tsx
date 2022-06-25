@@ -1,4 +1,10 @@
-import React, { createRef, Fragment, useContext, useEffect, useState } from "react";
+import React, {
+  createRef,
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -18,6 +24,8 @@ import _ from "lodash";
 import Link from "next/link";
 import { Ingredient } from "@core/components/ingredient";
 import { NutritionLabel } from "@core/components/nutrition_label";
+import { CommentInputBlock } from "../components/recipe_detail/comment_input_block";
+import { RecipeCommentContext } from "../contexts/recipe_comment_context";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -26,6 +34,7 @@ export const RecipeDetailPage = () => {
   //   STATE
   //---------------------
   const [open, setOpen] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   //---------------------
   //   REF
@@ -44,6 +53,7 @@ export const RecipeDetailPage = () => {
   const context = useContext(RecipeDetailContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
+  const recipeCommentContext = useContext(RecipeCommentContext)
 
   //---------------------
   //  ROUTER
@@ -57,10 +67,28 @@ export const RecipeDetailPage = () => {
   useEffect(() => {
     if (authContext.isLogIn) {
       context.prepareRecipeDetail(recipeId, true);
+      recipeCommentContext.prepareCommentsList(recipeId, true);
     } else {
       context.prepareRecipeDetail(recipeId, false);
+      recipeCommentContext.prepareCommentsList(recipeId, false);
     }
   }, []);
+
+  //---------------------
+  // HANDLER
+  //---------------------
+  const preparation = async () => {
+    setHasMore(true);
+    recipeCommentContext.setValue("page", recipeCommentContext.page + 1);
+    if (authContext.isLogIn) {
+      recipeCommentContext.prepareCommentsList(recipeId, true);
+    } else {
+      recipeCommentContext.prepareCommentsList(recipeId, false);
+    }
+    if (recipeCommentContext.page === recipeCommentContext.totalPages) {
+      setHasMore(false);
+    }
+  };
 
   //---------------------
   // RENDER
@@ -110,7 +138,7 @@ export const RecipeDetailPage = () => {
                         <ImageWithFallback
                           alt="ingredient cover image"
                           className="w-full h-full border border-gray-30 rounded-[12px]"
-                          src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${context.recipeDetail?.image}`}
+                          src={`${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${context.recipeDetail?.image}`}
                         />
                       </div>
                     </div>
@@ -237,7 +265,7 @@ export const RecipeDetailPage = () => {
                                   passHref
                                 >
                                   <a>
-                                    <div className="flex bg-gray-20 rounded-[10px] border border-gray-30 h-auto items-center pr-2 justify-between">
+                                    <div className="flex bg-gray-20 rounded-[12px] border border-gray-30 h-auto items-center pr-2 justify-between">
                                       <div className="w-[200px] md:w-[250px] flex-shrink-0">
                                         <Ingredient
                                           ingredient={ingredient?.ingredient}
@@ -291,30 +319,47 @@ export const RecipeDetailPage = () => {
                         </div>
                       </div>
                     )}
-                    {
-                      context.activeTab === 'โภชนาการ' && (
-                        <div className="-mt-2">
-                          <NutritionLabel
-                            nutrition={context.recipeDetail?.nutritionalDetail}
-                            type='recipe'
-                            serve={context.recipeDetail?.serving}
-                          />
-                        </div>
-                      )
-                    }
+                    {context.activeTab === "โภชนาการ" && (
+                      <div className="-mt-2">
+                        <NutritionLabel
+                          nutrition={context.recipeDetail?.nutritionalDetail}
+                          type="recipe"
+                          serve={context.recipeDetail?.serving}
+                        />
+                      </div>
+                    )}
                   </div>
-                  <div className="bg-white pt-4 px-6 pb-6 mt-4 rounded-[10px]">
+                  <div className="bg-white pt-4 px-6 pb-6 mt-4 rounded-[12px]">
                     <h3 className="headlineM">ขั้นตอนการประกอบอาหาร</h3>
                     <div className="mt-3 grid grid-cols-12 gap-3">
-                      {
-                        _.map(context.recipeDetail?.steps, (step, index) => (
-                          <Fragment key={`step_${index}`}>
-                            <p>{`${index+1}.`}</p>
-                            <p className="col-span-11">{step}</p>
-                          </Fragment>
-                        ))
-                      }
+                      {_.map(context.recipeDetail?.steps, (step, index) => (
+                        <Fragment key={`step_${index}`}>
+                          <p>{`${index + 1}.`}</p>
+                          <p className="col-span-11">{step}</p>
+                        </Fragment>
+                      ))}
                     </div>
+                  </div>
+                  <div className="bg-white rounded-[12px] mt-4 pt-4 px-6">
+                    <h3 className="headlineM">ความคิดเห็น</h3>
+                    {!authContext.isLogIn && (
+                      <p className="bodyL mt-4 text-center">
+                        {`สูตรอาหารนี้เป็นอย่างไรบ้าง `}
+                        <br className="md:hidden"/>
+                        <Link href='/login' passHref>
+                          <a className="underline text-brown-10">ลงชื่อเข้าสู่ระบบ</a> 
+                        </Link>
+                        <br className="md:hidden"/>
+                        {` เพื่อแสดงความคิดเห็นเลย`}
+                      </p>
+                    )}
+                    {authContext.isLogIn && (
+                      <div className="mt-4">
+                        <CommentInputBlock />
+                      </div>
+                    )}
+                    <div className="border-t-[1px] border-gray-30 my-6" />
+
                   </div>
                 </div>
               </div>

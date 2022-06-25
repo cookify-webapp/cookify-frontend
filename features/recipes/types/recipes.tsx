@@ -62,3 +62,18 @@ export type recipeDetailType = {
   isMe: boolean
   bookmarked: boolean
 }
+
+export type recipeCommentType = {
+  _id: string
+  type: 'Recipe',
+  post: string
+  author: {
+    _id: string
+    username: string
+    image: string
+  }
+  comment: string
+  rating: number
+  createdAt: string
+  isMe: boolean
+}

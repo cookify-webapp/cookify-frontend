@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
-import { recipeDetailType } from "../types/recipes";
+import { recipeCommentType, recipeDetailType } from "../types/recipes";
 import { getRecipeDetail } from "@core/services/recipes/get_recipes";
 import Cookies from "js-cookie";
 
@@ -52,5 +52,6 @@ class RecipeDetail {
       this.loading = false
     }
   }
+
 }
 export const RecipeDetailContext = createContext(new RecipeDetail());
