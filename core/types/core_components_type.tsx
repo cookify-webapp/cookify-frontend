@@ -162,8 +162,13 @@ export type nutritionType = {
 
 export type nutritionLabelType = {
   type: 'recipe' | 'ingredient'
-  unit: string
+  unit?: {
+    _id: string
+    name: string
+    queryKey: string
+  }
   nutrition: nutritionType
+  serve?: number
 }
 
 export type textBoxType = {

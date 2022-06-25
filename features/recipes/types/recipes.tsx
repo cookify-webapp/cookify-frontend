@@ -1,4 +1,4 @@
-import { nutritionLabelType } from "core/types/core_components_type"
+import { nutritionType } from "core/types/core_components_type"
 
 export type recipesListType = {
   _id: string
@@ -56,7 +56,7 @@ export type recipeDetailType = {
     username: string
     image: string
   }
-  nutritionalDetail: nutritionLabelType
+  nutritionalDetail: nutritionType
   createdAt: string
   averageRating: number
   isMe: boolean

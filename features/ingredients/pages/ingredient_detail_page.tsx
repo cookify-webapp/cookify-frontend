@@ -188,7 +188,7 @@ export const IngredientDetailPage = () => {
                             context.ingredientDetail?.nutritionalDetail
                           }
                           type="ingredient"
-                          unit={context.ingredientDetail?.unit?.queryKey}
+                          unit={context.ingredientDetail?.unit}
                         />
                       </div>
                     </div>

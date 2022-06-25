@@ -17,6 +17,7 @@ import { TabFilter } from "@core/components/tab_filter";
 import _ from "lodash";
 import Link from "next/link";
 import { Ingredient } from "@core/components/ingredient";
+import { NutritionLabel } from "@core/components/nutrition_label";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -227,7 +228,10 @@ export const RecipeDetailPage = () => {
                           {_.map(
                             context.recipeDetail?.ingredients,
                             (ingredient, index) => (
-                              <div className="col-span-12 md:col-span-6 xl:col-span-4" key={`ingredient_${index}`}>
+                              <div
+                                className="col-span-12 md:col-span-6 xl:col-span-4"
+                                key={`ingredient_${index}`}
+                              >
                                 <Link
                                   href={`/ingredients/${ingredient.ingredient?._id}`}
                                   passHref
@@ -256,6 +260,48 @@ export const RecipeDetailPage = () => {
                         </div>
                       </div>
                     )}
+                    {context.activeTab === "วัตถุดิบทดแทน" && (
+                      <div className="px-6 pb-6">
+                        <div className="flex space-x-3 items-center text-gray-50">
+                          <i className="fas fa-info-circle w-auto" />
+                          <p>สามารถกดที่วัตถุดิบเพื่อดูรายละเอียดวัตถุดิบได้</p>
+                        </div>
+                        <div className="grid grid-cols-12 gap-4 mt-2">
+                          {_.map(
+                            context.recipeDetail?.subIngredients,
+                            (ingredient, index) => (
+                              <div
+                                className="col-span-12 md:col-span-4 xl:col-span-3"
+                                key={`ingredient_${index}`}
+                              >
+                                <Link
+                                  href={`/ingredients/${ingredient?._id}`}
+                                  passHref
+                                >
+                                  <a>
+                                    <Ingredient
+                                      ingredient={ingredient}
+                                      isBorder
+                                    />
+                                  </a>
+                                </Link>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {
+                      context.activeTab === 'โภชนาการ' && (
+                        <div className="-mt-2">
+                          <NutritionLabel
+                            nutrition={context.recipeDetail?.nutritionalDetail}
+                            type='recipe'
+                            serve={context.recipeDetail?.serving}
+                          />
+                        </div>
+                      )
+                    }
                   </div>
                 </div>
               </div>
