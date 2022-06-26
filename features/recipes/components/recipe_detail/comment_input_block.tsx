@@ -46,6 +46,14 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
     validationSchema: () => commentValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
+      context.isEdit ? 
+      context.editComment(context.myComment?._id, value, () => {
+        context.setValue('isEdit', false)
+        context.prepareMyComment(recipeId)
+        context.setValue('commentsList', [])
+        context.prepareCommentsList(recipeId, true)
+      })
+      :
       context.addComment(recipeId, value, () => {
         context.prepareMyComment(recipeId)
         context.setValue('commentsList', [])
@@ -129,6 +137,7 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
                 onClick={() => {
                   formik.submitForm()
                 }}
+                disabled={!formik.dirty || !formik.isValid}
                 title={context.isEdit ? 'บันทึก' : 'ส่ง'}
               />              
             </div>

@@ -5,6 +5,7 @@ import { getMyComment, getRecipeComments } from "@core/services/recipes/get_reci
 import { recipeCommentType } from "../types/recipes";
 import { addRecipeComment } from "@core/services/recipes/post_recipes";
 import { FormikContextType } from "formik";
+import { editRecipeComment } from "@core/services/recipes/put_recipes";
 
 class RecipeComment {
   isCommentLoading: boolean;
@@ -144,6 +145,33 @@ class RecipeComment {
     } catch (error) {
       this.modal.openModal(
         "มีปัญหาในการเพิ่มความคิดเห็น",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  }
+
+  editComment = async (id, value, onSuccess) => {
+    try {
+      const data = {
+        comment: value.comment,
+        rating: value.rating
+      }
+      const comment = {
+        data: data
+      }
+      const token = Cookies.get("token");
+      const resp = await editRecipeComment(id, JSON.stringify(comment), token)
+      if (resp.status === 200) {
+        this.formik?.resetForm()
+        onSuccess()
+        this.flashMessageContext.handleShow('แก้ไขสำเร็จ', 'แก้ไขความคิดเห็นสำเร็จ')
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการแก้ไขความคิดเห็น",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",
