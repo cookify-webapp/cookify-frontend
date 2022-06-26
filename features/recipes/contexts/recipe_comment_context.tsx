@@ -1,11 +1,12 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import Cookies from "js-cookie";
-import { getRecipeComments } from "@core/services/recipes/get_recipes";
+import { getMyComment, getRecipeComments } from "@core/services/recipes/get_recipes";
 import { recipeCommentType } from "../types/recipes";
 
 class RecipeComment {
   isCommentLoading: boolean;
+  isMyCommentLoading: boolean
   page: number
   perPage: number
   commentsList: recipeCommentType[];
@@ -14,18 +15,22 @@ class RecipeComment {
   modal
   initValue
   isEdit
+  myComment: recipeCommentType
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
+    this.commentsList = []
     this.isEdit = false
     this.page = 1
     this.perPage = 5
     this.isCommentLoading = false
+    this.isMyCommentLoading = false
     this.initValue = {
       rating: 0,
       comment: ''
     }
+    this.myComment = null
     makeAutoObservable(this);
   }
 
@@ -35,6 +40,27 @@ class RecipeComment {
   setValue = <k extends keyof this>(key: k, value: this[k]) => {
     this[key] = value;
   };
+
+  prepareMyComment = async (id) => {
+    try {
+      this.isMyCommentLoading = true
+      const token = Cookies.get("token");
+      const resp = await getMyComment(id, token) 
+      if (resp.status === 200) {
+        this.myComment = resp.data?.comment
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการดึงข้อมูลความคิดเห็นของฉัน",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.isMyCommentLoading = false
+    }
+  }
 
   prepareCommentsList = async (id, isLogin) => {
     try {

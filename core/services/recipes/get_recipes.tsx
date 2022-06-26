@@ -55,3 +55,12 @@ export const getRecipeComments = (id, params, token?, ) => {
     });
   }
 } 
+
+export const getMyComment = (recipeId, token) => {
+  return axios.get(`${publicRuntimeConfig.CKF_COMMENT_API}/recipes/${recipeId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  })
+}

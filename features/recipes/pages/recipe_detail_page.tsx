@@ -70,14 +70,15 @@ export const RecipeDetailPage = () => {
     if (authContext.isLogIn) {
       context.prepareRecipeDetail(recipeId, true);
       recipeCommentContext.prepareCommentsList(recipeId, true);
+      recipeCommentContext.prepareMyComment(recipeId);
     } else {
       context.prepareRecipeDetail(recipeId, false);
       recipeCommentContext.prepareCommentsList(recipeId, false);
     }
     return () => {
-      context.setValue('activeTab', 'วัตถุดิบหลัก')
-      recipeCommentContext.setValue('commentsList', [])
-    }
+      context.setValue("activeTab", "วัตถุดิบหลัก");
+      recipeCommentContext.setValue("commentsList", []);
+    };
   }, []);
 
   //---------------------
@@ -362,12 +363,22 @@ export const RecipeDetailPage = () => {
                       </p>
                     )}
                     {authContext.isLogIn && (
-                      <div className="mt-4">
-                        <CommentInputBlock isEdit={false} />
-                      </div>
+                      <>
+                        {!recipeCommentContext.isMyCommentLoading && recipeCommentContext.myComment !== null ? (
+                          <div className="mt-4">
+                            <p className="titleM mb-4">ความคิดเห็นของฉัน</p>
+                            <CommentBlock comment={recipeCommentContext.myComment} isShowKebab />
+                          </div>
+                        ) : (
+                          <div className="mt-4">
+                            <CommentInputBlock isEdit={false} />
+                          </div>
+                        )}
+                      </>
                     )}
                     <div className="border-t-[1px] border-gray-30 my-6" />
                     <div className="mt-4">
+                      <p className="titleM mb-4">ความคิดเห็นทั้งหมด</p>
                       {_.size(recipeCommentContext.commentsList) > 0 &&
                         !recipeCommentContext.isCommentLoading && (
                           <div

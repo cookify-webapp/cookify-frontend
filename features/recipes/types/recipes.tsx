@@ -75,5 +75,5 @@ export type recipeCommentType = {
   comment: string
   rating: number
   createdAt: string
-  isMe: boolean
+  isMe?: boolean
 }

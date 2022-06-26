@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { createRef, useContext, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { recipeCommentType } from "@features/recipes/types/recipes";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
@@ -25,11 +25,6 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
   // CONTEXT
   //---------------------
   const recipeCommentContext = useContext(RecipeCommentContext);
-
-  //---------------------
-  // EFFECT
-  //---------------------
-  useEffect(() => {}, []);
 
   //---------------------
   //   REF
