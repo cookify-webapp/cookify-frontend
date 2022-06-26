@@ -28,6 +28,7 @@ import { CommentInputBlock } from "../components/recipe_detail/comment_input_blo
 import { RecipeCommentContext } from "../contexts/recipe_comment_context";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CommentBlock } from "../components/recipe_detail/comment_block";
+import { ModalContext } from "core/context/modal_context";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -56,6 +57,7 @@ export const RecipeDetailPage = () => {
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
   const recipeCommentContext = useContext(RecipeCommentContext);
+  const modal = useContext(ModalContext);
 
   //---------------------
   //  ROUTER
@@ -71,14 +73,15 @@ export const RecipeDetailPage = () => {
       context.prepareRecipeDetail(recipeId, true);
       recipeCommentContext.prepareCommentsList(recipeId, true);
       recipeCommentContext.prepareMyComment(recipeId);
-      console.log('hi')
     } else {
       context.prepareRecipeDetail(recipeId, false);
       recipeCommentContext.prepareCommentsList(recipeId, false);
     }
+    recipeCommentContext.setValue("modal", modal);
     return () => {
       context.setValue("activeTab", "วัตถุดิบหลัก");
       recipeCommentContext.setValue("commentsList", []);
+      recipeCommentContext.setValue("isEdit", false);
     };
   }, []);
 
@@ -365,14 +368,34 @@ export const RecipeDetailPage = () => {
                     )}
                     {authContext.user && (
                       <>
-                        {!recipeCommentContext.isMyCommentLoading && recipeCommentContext.myComment !== null ? (
-                          <div className="mt-4">
-                            <p className="titleM mb-4">ความคิดเห็นของฉัน</p>
-                            <CommentBlock comment={recipeCommentContext.myComment} isShowKebab />
-                          </div>
-                        ) : (
-                          <div className="mt-4">
-                            <CommentInputBlock isEdit={false} />
+                        {!recipeCommentContext.isMyCommentLoading &&
+                          recipeCommentContext.isAlreadyComment && (
+                            <div className="mt-4">
+                              {recipeCommentContext.isEdit && (
+                                <CommentInputBlock isEdit={true} />
+                              )}
+                              {!recipeCommentContext.isEdit && (
+                                <>
+                                  <p className="titleM mb-4">
+                                    ความคิดเห็นของฉัน
+                                  </p>
+                                  <CommentBlock
+                                    comment={recipeCommentContext.myComment}
+                                    isShowKebab
+                                  />
+                                </>
+                              )}
+                            </div>
+                          )}
+                        {!recipeCommentContext.isMyCommentLoading &&
+                          !recipeCommentContext.isAlreadyComment && (
+                            <div className="mt-4">
+                              <CommentInputBlock isEdit={false} />
+                            </div>
+                          )}
+                        {recipeCommentContext.isMyCommentLoading && (
+                          <div className="py-8 flex items-center justify-center text-center text-gray-50">
+                            <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
                           </div>
                         )}
                       </>
@@ -384,7 +407,7 @@ export const RecipeDetailPage = () => {
                         !recipeCommentContext.isCommentLoading && (
                           <div
                             id="scrollableComments"
-                            className="max-h-[500px] overflow-y-auto pb-6"
+                            className="max-h-[500px] overflow-y-auto scrollbar-hide pb-6"
                           >
                             <InfiniteScroll
                               dataLength={

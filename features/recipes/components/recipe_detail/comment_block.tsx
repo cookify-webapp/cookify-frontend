@@ -59,7 +59,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                 <div className="flex flex-col md:flex-row md:items-center">
                   <p className="titleS w-auto">{comment?.author?.username}</p>
                   <div className="flex items-center w-auto md:ml-4">
-                    <div>
+                    <div className="w-auto">
                       <Rating rating={comment?.rating} spaceX="space-x-2" />
                     </div>
                     <p className="ml-2">{comment?.rating.toFixed(1)}</p>
@@ -120,7 +120,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
               )}
             </div>
           </div>
-          <p className="md:pl-[60px] pt-3">{comment.comment}</p>
+          <p className="md:pl-[60px] pt-3">{comment?.comment}</p>
         </div>
       )}
     </Observer>

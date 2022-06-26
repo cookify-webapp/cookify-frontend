@@ -9,6 +9,7 @@ import { FormikContextType } from "formik";
 class RecipeComment {
   isCommentLoading: boolean;
   isMyCommentLoading: boolean
+  isAlreadyComment: boolean
   page: number
   perPage: number
   commentsList: recipeCommentType[];
@@ -25,6 +26,7 @@ class RecipeComment {
   //-------------------
   constructor() {
     this.commentsList = []
+    this.myComment = null
     this.isEdit = false
     this.page = 1
     this.perPage = 5
@@ -34,7 +36,6 @@ class RecipeComment {
       rating: 0,
       comment: ''
     }
-    this.myComment = null
     makeAutoObservable(this);
   }
 
@@ -52,7 +53,14 @@ class RecipeComment {
       const resp = await getMyComment(id, token) 
       if (resp.status === 200) {
         this.myComment = resp.data?.comment
-        console.log(this.myComment)
+        this.initValue = {
+          rating: this.myComment?.rating,
+          comment: this.myComment?.comment
+        }
+        this.isAlreadyComment = true
+      } else if (resp.status === 204) {
+        this.myComment = null
+        this.isAlreadyComment = false
       }
     } catch (error) {
       this.modal.openModal(
