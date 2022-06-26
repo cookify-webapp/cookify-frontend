@@ -73,13 +73,13 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
           </div>
           <div className="md:pl-[60px] mt-2 md:flex md:items-center">
             <p className="bodyM w-auto">ให้คะแนนสูตรอาหาร</p>
-            <div className="ml-2 space-x-1 flex w-auto">
+            <div className="mt-2 md:mt-0 md:ml-2 space-x-1 flex just w-auto">
               {_.map(new Array(5), (item, i) => {
                 return (
                   <i
                     key={`${i}_star`}
                     className={classNames(
-                      "text-[24px] leading-6 text-yellow cursor-pointer",
+                      "text-[24px] leading-6 text-yellow cursor-pointer w-auto",
                       {
                         "fas fa-star": formik.values?.rating > i,
                         "far fa-star": formik.values?.rating <= i,

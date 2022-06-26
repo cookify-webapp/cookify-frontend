@@ -52,11 +52,11 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                 src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${comment?.author?.image}`}
               />
             </div>
-            <div className="w-full flex justify-between items-center">
+            <div className="w-full flex justify-between space-x-3 items-center">
               <div className="w-full">
-                <div className="flex items-center">
+                <div className="flex flex-col md:flex-row md:items-center">
                   <p className="titleS w-auto">{comment?.author?.username}</p>
-                  <div className="flex items-center w-auto ml-4">
+                  <div className="flex items-center w-auto md:ml-4">
                     <div>
                       <Rating rating={comment?.rating} spaceX="space-x-2" />
                     </div>
@@ -74,10 +74,10 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                 <div className="relative w-auto">
                   <div
                     ref={ref}
-                    className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
+                    className="cursor-pointer w-auto flex items-center justify-center text-center rounded-full shrink-0"
                     onClick={() => setOpen(!open)}
                   >
-                    <i className=" text-[16px] leading-[16px] fas fa-ellipsis-v text-white"></i>
+                    <i className=" text-[16px] leading-[16px] fas fa-ellipsis-v"></i>
                   </div>
                   {open && (
                     <div className="flex justify-end">
