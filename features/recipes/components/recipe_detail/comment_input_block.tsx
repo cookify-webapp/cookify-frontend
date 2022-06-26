@@ -13,6 +13,8 @@ import { TextAreaInput } from "@core/components/input/text_area_input";
 import { ModalContext } from "core/context/modal_context";
 import { SecondaryButton } from "@core/components/button/secondary_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
+import { useRouter } from "next/router";
+import { FlashMessageContext } from "core/context/flash_message_context";
 
 interface CommentInputBlockProps {
   isEdit: boolean;
@@ -25,6 +27,13 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
   const context = useContext(RecipeCommentContext);
   const authContext = useContext(AuthContext);
   const modal = useContext(ModalContext);
+  const flashMessageContext = useContext(FlashMessageContext)
+
+  //---------------------
+  //  ROUTER
+  //---------------------
+  const router = useRouter();
+  const { recipeId } = router.query;
 
   //---------------------
   //  FORMIK
@@ -37,9 +46,11 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
     validationSchema: () => commentValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      // isEdit
-      //   ? context.editIngredient(value, ingredientId, () => onSuccess())
-      //   : context.addIngredient(value, () => onSuccess());
+      context.addComment(recipeId, value, () => {
+        context.prepareMyComment(recipeId)
+        context.setValue('commentsList', [])
+        context.prepareCommentsList(recipeId, true)
+      })
     },
   });
 
@@ -48,6 +59,7 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue("flashMessageContext", flashMessageContext)
     context.setValue("isEdit", isEdit);
     return () => {
       formik.resetForm();

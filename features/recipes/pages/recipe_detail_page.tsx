@@ -67,10 +67,11 @@ export const RecipeDetailPage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
-    if (authContext.isLogIn) {
+    if (authContext.user) {
       context.prepareRecipeDetail(recipeId, true);
       recipeCommentContext.prepareCommentsList(recipeId, true);
       recipeCommentContext.prepareMyComment(recipeId);
+      console.log('hi')
     } else {
       context.prepareRecipeDetail(recipeId, false);
       recipeCommentContext.prepareCommentsList(recipeId, false);
@@ -87,7 +88,7 @@ export const RecipeDetailPage = () => {
   const preparation = async () => {
     setHasMore(true);
     recipeCommentContext.setValue("page", recipeCommentContext.page + 1);
-    if (authContext.isLogIn) {
+    if (authContext.user) {
       recipeCommentContext.prepareCommentsList(recipeId, true);
     } else {
       recipeCommentContext.prepareCommentsList(recipeId, false);
@@ -163,7 +164,7 @@ export const RecipeDetailPage = () => {
                             .format("D MMM YY เวลา HH:mm น.")}`}</p>
                         </div>
                         <div className="w-auto flex space-x-2">
-                          {authContext.isLogIn && (
+                          {authContext.user && (
                             <div
                               className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
                               onClick={() => null}
@@ -349,7 +350,7 @@ export const RecipeDetailPage = () => {
                   </div>
                   <div className="bg-white rounded-[12px] mt-4 pt-4 px-6">
                     <h3 className="headlineM">ความคิดเห็น</h3>
-                    {!authContext.isLogIn && (
+                    {!authContext.user && (
                       <p className="bodyL mt-4 text-center">
                         {`สูตรอาหารนี้เป็นอย่างไรบ้าง `}
                         <br className="md:hidden" />
@@ -362,7 +363,7 @@ export const RecipeDetailPage = () => {
                         {` เพื่อแสดงความคิดเห็นเลย`}
                       </p>
                     )}
-                    {authContext.isLogIn && (
+                    {authContext.user && (
                       <>
                         {!recipeCommentContext.isMyCommentLoading && recipeCommentContext.myComment !== null ? (
                           <div className="mt-4">

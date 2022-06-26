@@ -8,6 +8,7 @@ import "dayjs/locale/th";
 import dayjs from "dayjs";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import { RecipeCommentContext } from "@features/recipes/contexts/recipe_comment_context";
+import { AuthContext } from "core/context/auth_context";
 
 const { publicRuntimeConfig } = getConfig();
 interface CommentBlocKProps {
@@ -25,6 +26,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
   // CONTEXT
   //---------------------
   const recipeCommentContext = useContext(RecipeCommentContext);
+  const authContext = useContext(AuthContext)
 
   //---------------------
   //   REF
@@ -70,7 +72,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                   .add(543, "year")
                   .format("D MMM YY เวลา HH:mm น.")}`}</p>
               </div>
-              {(!comment.isMe || isShowKebab) && (
+              {((authContext.user?.username !== comment?.author?.username) || isShowKebab) && (
                 <div className="relative w-auto">
                   <div
                     ref={ref}
@@ -84,24 +86,24 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                       {isShowKebab && (
                         <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                           <div
-                            className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] h-[40px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                            className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
                             onClick={() =>
                               recipeCommentContext.setValue("isEdit", true)
                             }
                           >
-                            <i className="fas fa-pen"></i>
-                            <p className="ml-3">แก้ไขความคิดเห็น</p>
+                            <i className="fas fa-pen w-auto"></i>
+                            <p className="ml-3 w-auto">แก้ไขความคิดเห็น</p>
                           </div>
                           <div
-                            className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] h-[40px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                            className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
                             onClick={() => null}
                           >
-                            <i className="fas fa-trash"></i>
-                            <p className="ml-3">ลบความคิดเห็น</p>
+                            <i className="fas fa-trash w-auto"></i>
+                            <p className="ml-3 w-auto">ลบความคิดเห็น</p>
                           </div>
                         </div>
                       )}
-                      {!comment.isMe && (
+                      {(authContext.user?.username !== comment?.author?.username) && (
                         <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                           <div
                             className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
