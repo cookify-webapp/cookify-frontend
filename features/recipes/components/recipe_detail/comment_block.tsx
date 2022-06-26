@@ -9,6 +9,8 @@ import dayjs from "dayjs";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import { RecipeCommentContext } from "@features/recipes/contexts/recipe_comment_context";
 import { AuthContext } from "core/context/auth_context";
+import { ModalContext } from "core/context/modal_context";
+import { useRouter } from "next/router";
 
 const { publicRuntimeConfig } = getConfig();
 interface CommentBlocKProps {
@@ -27,6 +29,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
   //---------------------
   const recipeCommentContext = useContext(RecipeCommentContext);
   const authContext = useContext(AuthContext)
+  const modal = useContext(ModalContext)
 
   //---------------------
   //   REF
@@ -38,6 +41,12 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
   useOnClickOutside(ref, () => {
     setOpen(false);
   });
+
+  //---------------------
+  //  ROUTER
+  //---------------------
+  const router = useRouter();
+  const { recipeId } = router.query;
 
   //---------------------
   // RENDER
@@ -96,7 +105,19 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                           </div>
                           <div
                             className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                            onClick={() => null}
+                            onClick={() => {
+                              modal.openModal(
+                                'ลบความคิดเห็น',
+                                'คุณต้องการลบความคิดเห็นนี้ใช่หรือไม่',
+                                () => recipeCommentContext.deleteComment(comment?._id, () => {
+                                  recipeCommentContext.setValue('isAlreadyComment', false)
+                                  recipeCommentContext.setValue('commentsList', [])
+                                  recipeCommentContext.prepareCommentsList(recipeId, true)
+                                }),
+                                'ยกเลิก',
+                                'ลบ'
+                              )
+                            }}
                           >
                             <i className="fas fa-trash w-auto"></i>
                             <p className="ml-3 w-auto">ลบความคิดเห็น</p>
