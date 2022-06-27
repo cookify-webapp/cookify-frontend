@@ -69,6 +69,7 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
     context.setValue("modal", modal);
     context.setValue("flashMessageContext", flashMessageContext)
     context.setValue("isEdit", isEdit);
+    context.setValue('formik', formik)
     return () => {
       formik.resetForm();
     };

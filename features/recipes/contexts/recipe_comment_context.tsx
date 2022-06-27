@@ -62,6 +62,7 @@ class RecipeComment {
           rating: this.myComment?.rating,
           comment: this.myComment?.comment,
         };
+        this.formik?.setValues(this.initValue)
         this.isAlreadyComment = true;
       } else if (resp.status === 204) {
         this.myComment = null;
@@ -205,10 +206,6 @@ class RecipeComment {
       const resp = await deleteRecipeComment(commentId, token);
       if (resp.status === 200) {
         this.modal.closeModal();
-        this.initValue = {
-          rating: 0,
-          comment: ''
-        }
         this.formik?.resetForm()
         this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบความคิดเห็นสำเร็จ");
         onSuccess();
