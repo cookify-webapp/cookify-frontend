@@ -66,7 +66,7 @@ export const Navbar = ({onClickSearch}: NavbarProps) => {
                   <i className="fas fa-bars text-[31.2px] leading-[31.2px] w-[31.2px] h-[31.2px] md:text-[38.4px] md:leading-[38.4px] md:w-[38.4px] md:h-[38.4px]"></i>
                 </div>
               </div>
-              {authContext.user && (
+              {authContext.isLogIn && (
                 <UserAccount
                   role={authContext.user.accountType}
                   src={authContext.user.image}
