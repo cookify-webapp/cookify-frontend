@@ -30,7 +30,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "สูตรอาหาร",
       icon: "fas fa-book",
-      link: ["/recipes", "/recipes/[recipeId]"],
+      link: ["/recipes", "/recipes/[recipeId]", "/recipes/create", "/recipes/[recipeId]/edit"],
     },
     {
       title: "Snapshot",

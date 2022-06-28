@@ -194,7 +194,7 @@ export type selectInputType = {
   error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
   placeholder?: string;
   disabled?: boolean;
-  options: { name: string; value: any };
+  options: { name: string; value: string }[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isBorder?: boolean;
 };
