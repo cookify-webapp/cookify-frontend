@@ -15,6 +15,11 @@ import { SelectInput } from "@core/components/input/select_input";
 import { SecondaryButton } from "@core/components/button/secondary_button";
 import getConfig from "next/config";
 import { readImageFile } from "core/utils/util_function";
+import _ from "lodash";
+import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
+import { Ingredient } from "@core/components/ingredient";
+import { ingredientType } from "../types/recipes";
+import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
 const { publicRuntimeConfig } = getConfig();
 
 export const RecipeFormPage = () => {
@@ -23,8 +28,8 @@ export const RecipeFormPage = () => {
   //---------------------
   const [cover, setCover] = useState({
     file: null,
-    original_filename: '',
-  })
+    original_filename: "",
+  });
 
   //---------------------
   // CONTEXT
@@ -32,6 +37,12 @@ export const RecipeFormPage = () => {
   const context = useContext(RecipeFormContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
   const modal = useContext(ModalContext);
+  const mainIngredientSelectedModal = useContext(
+    IngredientSelectionModalContext
+  );
+  const subIngredientSelectedModal = useContext(
+    IngredientSelectionModalContext
+  );
 
   //---------------------
   // EFFECT
@@ -81,10 +92,30 @@ export const RecipeFormPage = () => {
       setCover({
         file: imageDataUrl,
         original_filename: file.name,
-      })
+      });
       formik.setFieldValue("recipeImage", file);
-      formik.setFieldValue("imageFileName", file.name)
+      formik.setFieldValue("imageFileName", file.name);
     }
+  };
+
+  const handleRemoveMainIngredient = (ingredient, index) => {
+    let tempSelectedIngredients = _.cloneDeep(context.selectedMainIngredient);
+    let filter = _.filter(tempSelectedIngredients, (item) => {
+      return item.name !== ingredient.name;
+    });
+    let tempQuantity: [] = _.cloneDeep(formik?.values?.quantity)
+    formik.values.quantity = tempQuantity.splice(index, 1)
+    context.setValue("selectedMainIngredient", filter);
+    mainIngredientSelectedModal.setValue("selectedIngredients", filter);
+  };
+
+  const handleRemoveSubIngredient = (ingredient) => {
+    let tempSelectedIngredients = _.cloneDeep(context.selectedSubIngredient);
+    let filter = _.filter(tempSelectedIngredients, (item) => {
+      return item.name !== ingredient.name;
+    });
+    context.setValue("selectedSubIngredient", filter);
+    subIngredientSelectedModal.setValue("selectedIngredients", filter);
   };
 
   //---------------------
@@ -212,10 +243,13 @@ export const RecipeFormPage = () => {
                 <div className="col-span-12 md:col-span-5 bg-white rounded-[12px] p-6">
                   <h3 className="headlineM mb-6">เลือกรูปภาพ</h3>
                   <div className="w-[250px] h-[250px] rounded-[12px] border border-gray-30 mx-auto overflow-hidden">
-                    {(cover?.file || formik.values?.imageFileName) ? (
+                    {cover?.file || formik.values?.imageFileName ? (
                       <img
                         id="recipeImage"
-                        src={cover?.file || `${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${formik.values?.imageFileName}`}
+                        src={
+                          cover?.file ||
+                          `${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${formik.values?.imageFileName}`
+                        }
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -240,6 +274,104 @@ export const RecipeFormPage = () => {
                       accept="image/png, image/jpeg"
                       hidden
                     />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 bg-white rounded-[12px] p-6">
+                <h3 className="headlineM">วัตถุดิบ</h3>
+                <div className="mt-4 grid grid-cols-12 gap-4">
+                  <div className="col-span-7">
+                    <p className="text-[18px]">วัตถุดิบหลัก *</p>
+                    <div className="border border-gray-40 rounded-[12px] p-4 min-h-[100px] mt-2">
+                      {_.size(context.selectedMainIngredient) === 0 && (
+                        <p className="text-[18px] text-gray-50">
+                          รายการวัตถุดิบที่เลือกจะแสดงที่นี่
+                        </p>
+                      )}
+                      <div className="space-y-4">
+                        {_.size(context.selectedMainIngredient) > 0 && (
+                          <>
+                            {_.map(
+                              context.selectedMainIngredient,
+                              (ingredient: ingredientType, index) => (
+                                <div className="flex justify-between items-center">
+                                  <div className="w-[172px] md:w-[188px] xl:w-[275px]">
+                                    <Ingredient
+                                      ingredient={ingredient}
+                                      isBorder
+                                    />
+                                  </div>
+                                  <div className="text-center w-auto">
+                                    <div className="w-[50px] xl:w-[80px]">
+                                      <TextBox
+                                        onChange={async (e) => {
+                                          await formik.setFieldTouched("quantity");
+                                          await formik.setFieldValue(
+                                            `quantity[${index}]`,
+                                            e.target.value
+                                          );
+                                        }}
+                                        type="number"
+                                        value={formik.values?.quantity[index]}
+                                      />
+                                    </div>
+                                    <p className="bodyM">
+                                      {ingredient?.unit?.name}
+                                    </p>
+                                  </div>
+                                  <div className="w-auto">
+                                    <SecondaryMiniButton
+                                      icon="fas fa-trash"
+                                      onClick={() => {
+                                        handleRemoveMainIngredient(
+                                          ingredient,
+                                          index
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="mt-4 flex justify-center">
+                      <div className="w-[125px]">
+                        <SecondaryButton
+                          title="เลือกวัตถุดิบ"
+                          onClick={() => {
+                            const tempSelectedIngredients = _.cloneDeep(
+                              context.selectedMainIngredient
+                            );
+                            mainIngredientSelectedModal.openModal(
+                              () => {
+                                context.setValue(
+                                  "selectedMainIngredient",
+                                  mainIngredientSelectedModal.selectedIngredients
+                                );
+                                _.forEach(
+                                  mainIngredientSelectedModal.selectedIngredients,
+                                  (ingredient, index) => {
+                                    formik.setFieldValue(
+                                      `quantity[${index}]`,
+                                      0
+                                    );
+                                  }
+                                );
+                              },
+                              () => {
+                                mainIngredientSelectedModal.setValue(
+                                  "selectedIngredients",
+                                  tempSelectedIngredients
+                                );
+                              }
+                            );
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

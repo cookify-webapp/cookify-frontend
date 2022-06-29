@@ -76,6 +76,11 @@ export type ingredientPropType = {
       name: string;
     };
     image: string;
+    unit?: {
+      _id: string
+      name: string
+      queryKey: string
+    }
   } | null;
   isBorder?: boolean;
   hasCheckbox?: boolean;
@@ -172,7 +177,7 @@ export type nutritionLabelType = {
 }
 
 export type textBoxType = {
-  label: string;
+  label?: string;
   value: string;
   error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
   placeholder?: string;

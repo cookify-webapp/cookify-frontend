@@ -9,6 +9,9 @@ class RecipeForm {
   recipeDetail: recipeDetailType
   initValue = recipeInitialValues()
   cookingMethods: {name: string; value: string}[]
+  selectedMainIngredient
+  selectedSubIngredient
+  quantity
 
   modal
   isMethodLoaded: boolean;
@@ -16,6 +19,8 @@ class RecipeForm {
   // CONSTUCTOR
   //-------------------
   constructor() {
+    this.selectedMainIngredient = []
+    this.quantity = []
     makeAutoObservable(this);
   }
 

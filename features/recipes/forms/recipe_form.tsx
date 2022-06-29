@@ -6,11 +6,7 @@ export const recipeValidateSchema = Yup.object().shape({
   desc: Yup.string().required('กรุณากรอกรายละเอียดสูตรอาหาร'),
   method: Yup.string().required('กรุณาเลือกประเภท'),
   serving: Yup.number().required('กรุณากรอกจำนวนหน่วยบริโภค').moreThan(0, 'จำนวนหน่วยบริโภคต้องมากกว่า 0'),
-  ingredients: Yup.array().of(Yup.object().shape({
-    ingredient: Yup.string(),
-    quantity: Yup.number().required('กรุณากรอกจำนวนวัตถุดิบให้ครบถ้วน'),
-    unit: Yup.string()
-  })).required('กรุณาเลือกวัตถุดิบหลัก').min(1),
+  ingredientsId: Yup.array().of(Yup.string()).min(1),
   subIngredients: Yup.array().of(Yup.string()).notRequired(),
   steps: Yup.array().of(Yup.string()).required('กรุณากรอกขั้นตอนการประกอบอาหาร'),
   imageFileName: Yup.string().required('กรุณาเพิ่มรูปภ่าพ')
@@ -26,8 +22,9 @@ export const recipeInitialValues = (value?: any) => {
       desc: value.desc,
       method: value.method?._id,
       serving: value.serving,
-      ingredients: value.ingredients,
-      subIngredients: value.subIngredients,
+      ingredientsId: value.ingredients,
+      quantity: value.quantity,
+      subIngredientsId: value.subIngredients,
       steps: value.steps,
       imageFileName: value.image,
       recipeImage: null
@@ -38,8 +35,9 @@ export const recipeInitialValues = (value?: any) => {
     desc: "",
     method: "",
     serving: 1,
-    ingredients: [],
-    subIngredients: [],
+    ingredientsId: [],
+    quantity: [],
+    subIngredientsId: [],
     steps: [],
     imageFileName: "",
     recipeImage: Object

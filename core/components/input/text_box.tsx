@@ -22,9 +22,9 @@ export const TextBox = ({
       {() => (
         <div className="w-full text-left">
           <div>
-            <label className="titleS">{label}</label>
+            <label className="titleS pb-2">{label}</label>
           </div>
-          <div className="mt-2">
+          <div>
             <input
               type={type}
               placeholder={placeholder}
