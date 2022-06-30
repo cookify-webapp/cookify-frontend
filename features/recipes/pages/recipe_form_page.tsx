@@ -50,6 +50,14 @@ export const RecipeFormPage = () => {
   useEffect(() => {
     context.setValue("modal", modal);
     context.prepareCookingMethods();
+
+    return () => {
+      formik.resetForm()
+      context.setValue('selectedMainIngredient', [])
+      context.setValue('selectedSubIngredient', [])
+      mainIngredientSelectedModal.setValue('selectedIngredients', [])
+      subIngredientSelectedModal.setValue('selectedIngredients', [])
+    }
   }, []);
 
   //---------------------
@@ -104,9 +112,15 @@ export const RecipeFormPage = () => {
       return item.name !== ingredient.name;
     });
     let tempQuantity: [] = _.cloneDeep(formik?.values?.quantity)
-    formik.values.quantity = tempQuantity.splice(index, 1)
+    let deletedItem = tempQuantity.splice(index, 1)
+    formik.setFieldValue('quantity', tempQuantity) 
     context.setValue("selectedMainIngredient", filter);
     mainIngredientSelectedModal.setValue("selectedIngredients", filter);
+    let ingredientsId = []
+    _.forEach(context.selectedMainIngredient, (ingredient: ingredientType) => {
+      ingredientsId.push(ingredient._id)
+    })
+    formik.setFieldValue('ingredientsId', ingredientsId)
   };
 
   const handleRemoveSubIngredient = (ingredient) => {
@@ -117,6 +131,10 @@ export const RecipeFormPage = () => {
     context.setValue("selectedSubIngredient", filter);
     subIngredientSelectedModal.setValue("selectedIngredients", filter);
   };
+
+  const checkArrayLength = () => {
+    return formik.values?.ingredientsId.length === formik.values?.quantity.length
+  }
 
   //---------------------
   // RENDER
@@ -280,7 +298,7 @@ export const RecipeFormPage = () => {
               <div className="mt-4 bg-white rounded-[12px] p-6">
                 <h3 className="headlineM">วัตถุดิบ</h3>
                 <div className="mt-4 grid grid-cols-12 gap-4">
-                  <div className="col-span-7">
+                  <div className="col-span-12 md:col-span-7">
                     <p className="text-[18px]">วัตถุดิบหลัก *</p>
                     <div className="border border-gray-40 rounded-[12px] p-4 min-h-[100px] mt-2">
                       {_.size(context.selectedMainIngredient) === 0 && (
@@ -302,13 +320,13 @@ export const RecipeFormPage = () => {
                                     />
                                   </div>
                                   <div className="text-center w-auto">
-                                    <div className="w-[50px] xl:w-[80px]">
+                                    <div className="w-[80px] text-center">
                                       <TextBox
-                                        onChange={async (e) => {
-                                          await formik.setFieldTouched("quantity");
-                                          await formik.setFieldValue(
+                                        onChange={(e) => {
+                                          formik.setFieldTouched("quantity");
+                                          formik.setFieldValue(
                                             `quantity[${index}]`,
-                                            e.target.value
+                                            parseInt(e.target.value)
                                           );
                                         }}
                                         type="number"
@@ -351,15 +369,18 @@ export const RecipeFormPage = () => {
                                   "selectedMainIngredient",
                                   mainIngredientSelectedModal.selectedIngredients
                                 );
+                                let ingredientsId: string[] = []
                                 _.forEach(
                                   mainIngredientSelectedModal.selectedIngredients,
-                                  (ingredient, index) => {
+                                  (ingredient: ingredientType, index) => {
                                     formik.setFieldValue(
                                       `quantity[${index}]`,
                                       0
                                     );
+                                    ingredientsId.push(ingredient._id)
                                   }
                                 );
+                                formik.setFieldValue('ingredientsId', ingredientsId)
                               },
                               () => {
                                 mainIngredientSelectedModal.setValue(
@@ -372,6 +393,9 @@ export const RecipeFormPage = () => {
                         />
                       </div>
                     </div>
+                  </div>
+                  <div className="col-span-12 md:col-span-5">
+
                   </div>
                 </div>
               </div>

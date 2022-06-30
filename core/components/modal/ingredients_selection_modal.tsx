@@ -29,6 +29,7 @@ export const IngredientsSelectionModal = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modalContext", modalContext);
+    context.prepareIngredientTypes()
 
     return () => {
       context.setValue("searchWord", "");
