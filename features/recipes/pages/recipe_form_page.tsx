@@ -112,7 +112,7 @@ export const RecipeFormPage = () => {
       return item.name !== ingredient.name;
     });
     let tempQuantity: [] = _.cloneDeep(formik?.values?.quantity)
-    let deletedItem = tempQuantity.splice(index, 1)
+    tempQuantity.splice(index, 1)
     formik.setFieldValue('quantity', tempQuantity) 
     context.setValue("selectedMainIngredient", filter);
     mainIngredientSelectedModal.setValue("selectedIngredients", filter);
