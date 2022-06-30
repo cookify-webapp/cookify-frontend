@@ -16,7 +16,10 @@ import { SecondaryButton } from "@core/components/button/secondary_button";
 import getConfig from "next/config";
 import { readImageFile } from "core/utils/util_function";
 import _ from "lodash";
-import { IngredientSelectionModalContext, SubIngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
+import {
+  IngredientSelectionModalContext,
+  SubIngredientSelectionModalContext,
+} from "core/context/ingredient_selection_modal_context";
 import { Ingredient } from "@core/components/ingredient";
 import { ingredientType } from "../types/recipes";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
@@ -320,43 +323,45 @@ export const RecipeFormPage = () => {
                               context.selectedMainIngredient,
                               (ingredient: ingredientType, index) => (
                                 <div
-                                  className="flex justify-between items-center"
+                                  className="md:flex md:justify-between md:items-center md:space-x-8"
                                   key={`main_ingredient_${index}`}
                                 >
-                                  <div className="w-[172px] md:w-[188px] xl:w-[275px]">
+                                  <div className="w-full md:w-1/2 flex-shrink-0">
                                     <Ingredient
                                       ingredient={ingredient}
                                       isBorder
                                     />
                                   </div>
-                                  <div className="text-center w-auto">
-                                    <div className="w-[80px] text-center">
-                                      <TextBox
-                                        onChange={(e) => {
-                                          formik.setFieldTouched("quantity");
-                                          formik.setFieldValue(
-                                            `quantity[${index}]`,
-                                            parseInt(e.target.value)
+                                  <div className="flex items-center space-x-4 mt-2 md:mt-0 justify-between">
+                                    <div className="text-center w-auto flex space-x-4 items-center md:block md:items-baseline md:space-x-0 xl:flex xl:space-x-4 xl:items-center">
+                                      <div className="w-[60px] md:w-[80px] text-center flex-shrink-0">
+                                        <TextBox
+                                          onChange={(e) => {
+                                            formik.setFieldTouched("quantity");
+                                            formik.setFieldValue(
+                                              `quantity[${index}]`,
+                                              parseInt(e.target.value)
+                                            );
+                                          }}
+                                          type="number"
+                                          value={formik.values?.quantity[index]}
+                                        />
+                                      </div>
+                                      <p className="bodyM">
+                                        {ingredient?.unit?.name}
+                                      </p>
+                                    </div>
+                                    <div className="w-auto">
+                                      <SecondaryMiniButton
+                                        icon="fas fa-trash"
+                                        onClick={() => {
+                                          handleRemoveMainIngredient(
+                                            ingredient,
+                                            index
                                           );
                                         }}
-                                        type="number"
-                                        value={formik.values?.quantity[index]}
                                       />
                                     </div>
-                                    <p className="bodyM">
-                                      {ingredient?.unit?.name}
-                                    </p>
-                                  </div>
-                                  <div className="w-auto">
-                                    <SecondaryMiniButton
-                                      icon="fas fa-trash"
-                                      onClick={() => {
-                                        handleRemoveMainIngredient(
-                                          ingredient,
-                                          index
-                                        );
-                                      }}
-                                    />
                                   </div>
                                 </div>
                               )
@@ -422,16 +427,16 @@ export const RecipeFormPage = () => {
                               context.selectedSubIngredient,
                               (ingredient: ingredientType, index) => (
                                 <div
-                                  className="flex justify-between items-center"
+                                  className="md:flex md:justify-between md:items-center md:space-x-4 xl:space-x-8"
                                   key={`sub_ingredient_${index}`}
                                 >
-                                  <div className="w-[238px] md:w-[208px] xl:w-[275px]">
+                                  <div className="w-full md:w-[2/3]">
                                     <Ingredient
                                       ingredient={ingredient}
                                       isBorder
                                     />
                                   </div>
-                                  <div className="w-auto">
+                                  <div className="w-full flex justify-center mt-2 md:w-auto md:block md:justify-start md:mt-0">
                                     <SecondaryMiniButton
                                       icon="fas fa-trash"
                                       onClick={() => {

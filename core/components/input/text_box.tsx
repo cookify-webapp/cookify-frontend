@@ -21,8 +21,8 @@ export const TextBox = ({
     <Observer>
       {() => (
         <div className="w-full text-left">
-          <div>
-            <label className="titleS pb-2">{label}</label>
+          <div className="pb-2">
+            <label className="titleS">{label}</label>
           </div>
           <div>
             <input
