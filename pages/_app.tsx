@@ -9,7 +9,7 @@ import { FlashMessage } from "@core/components/flash_message";
 import { Modal } from "@core/components/modal/modal";
 import AuthLayouts from "@core/components/layouts/auth_layout";
 import { configure } from 'mobx'
-import { SubIngredientsSelectionModal } from "@core/components/modal/sub_ingredients_selection_modal copy";
+import { SubIngredientsSelectionModal } from "@core/components/modal/sub_ingredients_selection_modal"
 
 configure({
   enforceActions: 'never',
