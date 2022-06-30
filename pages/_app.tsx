@@ -1,15 +1,15 @@
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import App from "next/app";
 import Head from "next/head";
 import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
 import { FlashMessage } from "@core/components/flash_message";
 import { Modal } from "@core/components/modal/modal";
 import AuthLayouts from "@core/components/layouts/auth_layout";
-import { FlashMessageContext } from "core/context/flash_message_context";
 import { configure } from 'mobx'
+import { SubIngredientsSelectionModal } from "@core/components/modal/sub_ingredients_selection_modal copy";
 
 configure({
   enforceActions: 'never',
@@ -24,6 +24,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <IngredientsSelectionModal />
+      <SubIngredientsSelectionModal />
       <FlashMessage />
       <Modal />
       <AuthLayouts>

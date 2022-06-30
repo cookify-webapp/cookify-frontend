@@ -125,3 +125,6 @@ class ingredientSelectionModal {
 export const IngredientSelectionModalContext = createContext(
   new ingredientSelectionModal()
 );
+export const SubIngredientSelectionModalContext = createContext(
+  new ingredientSelectionModal()
+)

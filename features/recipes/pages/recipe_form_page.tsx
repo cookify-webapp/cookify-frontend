@@ -16,7 +16,7 @@ import { SecondaryButton } from "@core/components/button/secondary_button";
 import getConfig from "next/config";
 import { readImageFile } from "core/utils/util_function";
 import _ from "lodash";
-import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
+import { IngredientSelectionModalContext, SubIngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
 import { Ingredient } from "@core/components/ingredient";
 import { ingredientType } from "../types/recipes";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
@@ -41,7 +41,7 @@ export const RecipeFormPage = () => {
     IngredientSelectionModalContext
   );
   const subIngredientSelectedModal = useContext(
-    IngredientSelectionModalContext
+    SubIngredientSelectionModalContext
   );
 
   //---------------------
@@ -52,12 +52,12 @@ export const RecipeFormPage = () => {
     context.prepareCookingMethods();
 
     return () => {
-      formik.resetForm()
-      context.setValue('selectedMainIngredient', [])
-      context.setValue('selectedSubIngredient', [])
-      mainIngredientSelectedModal.setValue('selectedIngredients', [])
-      subIngredientSelectedModal.setValue('selectedIngredients', [])
-    }
+      formik.resetForm();
+      context.setValue("selectedMainIngredient", []);
+      context.setValue("selectedSubIngredient", []);
+      mainIngredientSelectedModal.setValue("selectedIngredients", []);
+      subIngredientSelectedModal.setValue("selectedIngredients", []);
+    };
   }, []);
 
   //---------------------
@@ -111,16 +111,16 @@ export const RecipeFormPage = () => {
     let filter = _.filter(tempSelectedIngredients, (item) => {
       return item.name !== ingredient.name;
     });
-    let tempQuantity: [] = _.cloneDeep(formik?.values?.quantity)
-    tempQuantity.splice(index, 1)
-    formik.setFieldValue('quantity', tempQuantity) 
+    let tempQuantity: [] = _.cloneDeep(formik?.values?.quantity);
+    tempQuantity.splice(index, 1);
+    formik.setFieldValue("quantity", tempQuantity);
     context.setValue("selectedMainIngredient", filter);
     mainIngredientSelectedModal.setValue("selectedIngredients", filter);
-    let ingredientsId = []
+    let ingredientsId = [];
     _.forEach(context.selectedMainIngredient, (ingredient: ingredientType) => {
-      ingredientsId.push(ingredient._id)
-    })
-    formik.setFieldValue('ingredientsId', ingredientsId)
+      ingredientsId.push(ingredient._id);
+    });
+    formik.setFieldValue("ingredientsId", ingredientsId);
   };
 
   const handleRemoveSubIngredient = (ingredient) => {
@@ -130,11 +130,18 @@ export const RecipeFormPage = () => {
     });
     context.setValue("selectedSubIngredient", filter);
     subIngredientSelectedModal.setValue("selectedIngredients", filter);
+    let ingredientsId = [];
+    _.forEach(context.selectedSubIngredient, (ingredient: ingredientType) => {
+      ingredientsId.push(ingredient._id);
+    });
+    formik.setFieldValue("subIngredientsId", ingredientsId);
   };
 
   const checkArrayLength = () => {
-    return formik.values?.ingredientsId.length === formik.values?.quantity.length
-  }
+    return (
+      formik.values?.ingredientsId.length === formik.values?.quantity.length
+    );
+  };
 
   //---------------------
   // RENDER
@@ -312,7 +319,10 @@ export const RecipeFormPage = () => {
                             {_.map(
                               context.selectedMainIngredient,
                               (ingredient: ingredientType, index) => (
-                                <div className="flex justify-between items-center">
+                                <div
+                                  className="flex justify-between items-center"
+                                  key={`main_ingredient_${index}`}
+                                >
                                   <div className="w-[172px] md:w-[188px] xl:w-[275px]">
                                     <Ingredient
                                       ingredient={ingredient}
@@ -369,7 +379,7 @@ export const RecipeFormPage = () => {
                                   "selectedMainIngredient",
                                   mainIngredientSelectedModal.selectedIngredients
                                 );
-                                let ingredientsId: string[] = []
+                                let ingredientsId: string[] = [];
                                 _.forEach(
                                   mainIngredientSelectedModal.selectedIngredients,
                                   (ingredient: ingredientType, index) => {
@@ -377,10 +387,13 @@ export const RecipeFormPage = () => {
                                       `quantity[${index}]`,
                                       0
                                     );
-                                    ingredientsId.push(ingredient._id)
+                                    ingredientsId.push(ingredient._id);
                                   }
                                 );
-                                formik.setFieldValue('ingredientsId', ingredientsId)
+                                formik.setFieldValue(
+                                  "ingredientsId",
+                                  ingredientsId
+                                );
                               },
                               () => {
                                 mainIngredientSelectedModal.setValue(
@@ -395,7 +408,81 @@ export const RecipeFormPage = () => {
                     </div>
                   </div>
                   <div className="col-span-12 md:col-span-5">
-
+                    <p className="text-[18px]">วัตถุดิบที่สามารถทดแทนได้</p>
+                    <div className="border border-gray-40 rounded-[12px] p-4 min-h-[100px] mt-2">
+                      {_.size(context.selectedSubIngredient) === 0 && (
+                        <p className="text-[18px] text-gray-50">
+                          รายการวัตถุดิบที่เลือกจะแสดงที่นี่
+                        </p>
+                      )}
+                      <div className="space-y-4">
+                        {_.size(context.selectedSubIngredient) > 0 && (
+                          <>
+                            {_.map(
+                              context.selectedSubIngredient,
+                              (ingredient: ingredientType, index) => (
+                                <div
+                                  className="flex justify-between items-center"
+                                  key={`sub_ingredient_${index}`}
+                                >
+                                  <div className="w-[238px] md:w-[208px] xl:w-[275px]">
+                                    <Ingredient
+                                      ingredient={ingredient}
+                                      isBorder
+                                    />
+                                  </div>
+                                  <div className="w-auto">
+                                    <SecondaryMiniButton
+                                      icon="fas fa-trash"
+                                      onClick={() => {
+                                        handleRemoveSubIngredient(ingredient);
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="mt-4 flex justify-center">
+                      <div className="w-[125px]">
+                        <SecondaryButton
+                          title="เลือกวัตถุดิบ"
+                          onClick={() => {
+                            const tempSelectedIngredients = _.cloneDeep(
+                              context.selectedSubIngredient
+                            );
+                            subIngredientSelectedModal.openModal(
+                              () => {
+                                context.setValue(
+                                  "selectedSubIngredient",
+                                  subIngredientSelectedModal.selectedIngredients
+                                );
+                                let ingredientsId: string[] = [];
+                                _.forEach(
+                                  subIngredientSelectedModal.selectedIngredients,
+                                  (ingredient: ingredientType, index) => {
+                                    ingredientsId.push(ingredient._id);
+                                  }
+                                );
+                                formik.setFieldValue(
+                                  "subIngredientsId",
+                                  ingredientsId
+                                );
+                              },
+                              () => {
+                                subIngredientSelectedModal.setValue(
+                                  "selectedIngredients",
+                                  tempSelectedIngredients
+                                );
+                              }
+                            );
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

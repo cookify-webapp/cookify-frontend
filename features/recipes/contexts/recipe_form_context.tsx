@@ -20,6 +20,7 @@ class RecipeForm {
   //-------------------
   constructor() {
     this.selectedMainIngredient = []
+    this.selectedSubIngredient = []
     this.quantity = []
     makeAutoObservable(this);
   }
