@@ -13,6 +13,7 @@ import _ from "lodash";
 import Cookies from "js-cookie";
 import { addRecipe } from "@core/services/recipes/post_recipes";
 import { FormikContextType } from "formik";
+import { editRecipe } from "@core/services/recipes/put_recipes";
 
 class RecipeForm {
   recipeDetail: recipeDetailType;
@@ -28,6 +29,8 @@ class RecipeForm {
   isAddEditRecipe: boolean;
   formik: FormikContextType<any>;
   flashMessageContext;
+  mainIngredientContext
+  subIngredientContext
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -45,6 +48,11 @@ class RecipeForm {
   setValue = <k extends keyof this>(key: k, value: this[k]) => {
     this[key] = value;
   };
+
+  handleResetForm = () => {
+    this.formik.resetForm()
+    this.initValue = recipeInitialValues()
+  }
 
   prepareRecipeDetail = async (id) => {
     try {
@@ -74,6 +82,8 @@ class RecipeForm {
         _.forEach(this.recipeDetail?.subIngredients, (ingredient, index) => {
           subIngredientsId.push(ingredient._id);
         });
+        this.mainIngredientContext.setValue('selectedIngredients', this.selectedMainIngredient)
+        this.subIngredientContext.setValue('selectedIngredients', this.selectedSubIngredient)
         const data = {
           name: this.recipeDetail?.name,
           desc: this.recipeDetail?.desc,
@@ -132,7 +142,7 @@ class RecipeForm {
       const token = Cookies.get("token");
       const resp = await addRecipe(formData, token);
       if (resp.status === 200) {
-        this.formik?.resetForm();
+        this.handleResetForm()
         this.router.push(`/recipes/${resp.data?.id}`);
         this.flashMessageContext.handleShow(
           "เพิ่มสำเร็จ",
@@ -142,6 +152,33 @@ class RecipeForm {
     } catch (error) {
       this.modal.openModal(
         "มีปัญหาในการเพิ่มสูตรอาหาร",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.isAddEditRecipe = false;
+    }
+  };
+
+  editRecipe = async (id, value) => {
+    try {
+      this.isAddEditRecipe = true;
+      const formData = createRecipeFormData(value);
+      const token = Cookies.get("token");
+      const resp = await editRecipe(id, formData, token);
+      if (resp.status === 200) {
+        this.handleResetForm()
+        this.router.push(`/recipes/${id}`);
+        this.flashMessageContext.handleShow(
+          "แก้ไขสำเร็จ",
+          "แก้ไขสูตรอาหารสำเร็จ"
+        );
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการแก้ไขสูตรอาหาร",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",

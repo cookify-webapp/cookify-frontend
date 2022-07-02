@@ -30,6 +30,7 @@ import { Ingredient } from "@core/components/ingredient";
 import { ingredientType } from "../types/recipes";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
+import { FlashMessageContext } from "core/context/flash_message_context";
 const { publicRuntimeConfig } = getConfig();
 
 export const RecipeFormPage = () => {
@@ -53,6 +54,7 @@ export const RecipeFormPage = () => {
   const subIngredientSelectedModal = useContext(
     SubIngredientSelectionModalContext
   );
+  const flashMessageContext = useContext(FlashMessageContext)
 
   //---------------------
   // EFFECT
@@ -61,11 +63,16 @@ export const RecipeFormPage = () => {
     context.setValue("modal", modal);
     context.setValue('formik', formik)
     context.setValue('router', router)
+    context.setValue('flashMessageContext', flashMessageContext)
     context.prepareCookingMethods();
-    isEdit && context.prepareRecipeDetail(recipeId)
+    if (isEdit) {
+      context.prepareRecipeDetail(recipeId)
+      context.setValue('mainIngredientContext', mainIngredientSelectedModal)
+      context.setValue('subIngredientContext', subIngredientSelectedModal)
+    }
 
     return () => {
-      formik.resetForm();
+      context.handleResetForm()
       setCover({
         file: null,
         original_filename: "",
@@ -74,6 +81,7 @@ export const RecipeFormPage = () => {
       context.setValue("selectedSubIngredient", []);
       mainIngredientSelectedModal.setValue("selectedIngredients", []);
       subIngredientSelectedModal.setValue("selectedIngredients", []);
+      context.setValue('recipeDetail', null)
     };
   }, []);
 
@@ -97,7 +105,7 @@ export const RecipeFormPage = () => {
     initialValues: context.initValue,
     onSubmit: (value) => {
       isEdit
-        ? null
+        ? context.editRecipe(recipeId, value)
         : context.addRecipe(value);
     },
   });
@@ -136,6 +144,7 @@ export const RecipeFormPage = () => {
     let ingredientsId = [];
     let unitsId = [];
     _.forEach(context.selectedMainIngredient, (ingredient: ingredientType) => {
+      ingredientsId.push(ingredient?._id)
       unitsId.push(ingredient?.unit?._id);
     });
     await formik.setFieldValue("ingredientsId", ingredientsId);
@@ -418,7 +427,7 @@ export const RecipeFormPage = () => {
                                   (ingredient: ingredientType, index) => {
                                     formik.setFieldValue(
                                       `quantity[${index}]`,
-                                      1
+                                      formik.values.quantity[index] || 1
                                     );
                                     ingredientsId.push(ingredient._id);
                                     unitsId.push(ingredient.unit?._id)
@@ -575,6 +584,7 @@ export const RecipeFormPage = () => {
                           'ต้องการยกเลิกใช่ไหม ?',
                           'หากยกเลิก ระบบจะไม่บันทึกข้อมูลที่ได้ทำการเปลี่ยนแปลง',
                           () => {
+                            modal.closeModal()
                             router.push('/recipes')
                             formik.resetForm()
                             setCover({
@@ -587,7 +597,7 @@ export const RecipeFormPage = () => {
                         )
                       } else {
                         router.push('/recipes')
-                        formik.resetForm()
+                        context.handleResetForm()
                         setCover({
                           file: null,
                           original_filename: "",

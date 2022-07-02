@@ -29,6 +29,7 @@ import { RecipeCommentContext } from "../contexts/recipe_comment_context";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CommentBlock } from "../components/recipe_detail/comment_block";
 import { ModalContext } from "core/context/modal_context";
+import { FlashMessageContext } from "core/context/flash_message_context";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -57,6 +58,7 @@ export const RecipeDetailPage = () => {
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
   const recipeCommentContext = useContext(RecipeCommentContext);
+  const flashMessageContext = useContext(FlashMessageContext)
   const modal = useContext(ModalContext);
 
   //---------------------
@@ -69,6 +71,9 @@ export const RecipeDetailPage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
+    context.setValue('modal', modal)
+    context.setValue('flashMessageContext', flashMessageContext)
+    context.setValue('router', router)
     if (authContext.user) {
       context.prepareRecipeDetail(recipeId, true);
       recipeCommentContext.prepareCommentsList(recipeId, true);
@@ -79,6 +84,7 @@ export const RecipeDetailPage = () => {
     }
     recipeCommentContext.setValue("modal", modal);
     return () => {
+      context.setValue('recipeDetail', null)
       context.setValue("activeTab", "วัตถุดิบหลัก");
       recipeCommentContext.setValue("commentsList", []);
       recipeCommentContext.setValue("isEdit", false);
@@ -202,7 +208,15 @@ export const RecipeDetailPage = () => {
                                     </div>
                                     <div
                                       className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() => null}
+                                      onClick={() => {
+                                        modal.openModal(
+                                          'ลบสูตรอาหาร',
+                                          'คุณต้องการลบสูตรอาหารนี้ใช่หรือไม่',
+                                          () => context.deleteRecipe(recipeId),
+                                          'ยกเลิก',
+                                          'ลบ'
+                                        )
+                                      }}
                                     >
                                       <i className="fas fa-trash w-auto"></i>
                                       <p className="ml-3">ลบสูตรอาหาร</p>

@@ -11,3 +11,12 @@ export const editRecipeComment = (commentId, comment, token) => {
     }
   })
 } 
+
+export const editRecipe = (id, formData, token) => {
+  return axios.put(`${publicRuntimeConfig.CKF_RECIPE_API}/${id}/edit`, formData, { 
+    headers: { 
+      Authorization: `Bearer ${token}`,
+      'content-type': 'multipart/form-data' 
+    }
+  })
+}
