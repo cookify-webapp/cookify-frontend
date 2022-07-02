@@ -192,19 +192,19 @@ export const RecipeDetailPage = () => {
                                 {context.recipeDetail?.isMe ? (
                                   <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                                     <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] h-[40px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
                                       onClick={() =>
                                         router.push(`/recipes/${recipeId}/edit`)
                                       }
                                     >
-                                      <i className="fas fa-pen"></i>
+                                      <i className="fas fa-pen w-auto"></i>
                                       <p className="ml-3">แก้ไขสูตรอาหาร</p>
                                     </div>
                                     <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] h-[40px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
                                       onClick={() => null}
                                     >
-                                      <i className="fas fa-trash"></i>
+                                      <i className="fas fa-trash w-auto"></i>
                                       <p className="ml-3">ลบสูตรอาหาร</p>
                                     </div>
                                   </div>
