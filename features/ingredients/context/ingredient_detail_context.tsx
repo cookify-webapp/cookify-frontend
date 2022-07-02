@@ -83,7 +83,7 @@ class IngredientDetail {
         this.router.push('/ingredients')
       }
     } catch (error) {
-      if (error.status === 403) {
+      if (error.response?.status === 403) {
         this.modalContext.openModal(
           "ไม่สามารถลบวัตถุดิบได้",
           "เนื่องจากมีสูตรอาหารในระบบที่มีวัตถุดิบนี้เป็นส่วนประกอบอยู่",

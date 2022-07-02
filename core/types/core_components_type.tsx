@@ -64,7 +64,7 @@ export type recipePropType = {
   method: string
   image: string
   author: string
-  averageRating: 0
+  averageRating: number
 };
 
 export type ingredientPropType = {
@@ -76,6 +76,11 @@ export type ingredientPropType = {
       name: string;
     };
     image: string;
+    unit?: {
+      _id: string
+      name: string
+      queryKey: string
+    }
   } | null;
   isBorder?: boolean;
   hasCheckbox?: boolean;
@@ -162,12 +167,17 @@ export type nutritionType = {
 
 export type nutritionLabelType = {
   type: 'recipe' | 'ingredient'
-  unit: string
+  unit?: {
+    _id: string
+    name: string
+    queryKey: string
+  }
   nutrition: nutritionType
+  serve?: number
 }
 
 export type textBoxType = {
-  label: string;
+  label?: string;
   value: string;
   error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
   placeholder?: string;
@@ -189,7 +199,7 @@ export type selectInputType = {
   error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
   placeholder?: string;
   disabled?: boolean;
-  options: { name: string; value: any };
+  options: { name: string; value: string }[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isBorder?: boolean;
 };

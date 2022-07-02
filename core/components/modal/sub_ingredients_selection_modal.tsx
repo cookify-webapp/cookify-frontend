@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
-import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
+import { SubIngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
 import classNames from "classnames";
 import { SearchBox } from "../input/search_box";
 import _ from "lodash";
@@ -12,7 +12,7 @@ import { PrimaryButton } from "../button/primary_button";
 import { ModalContext } from "core/context/modal_context";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const IngredientsSelectionModal = () => {
+export const SubIngredientsSelectionModal = () => {
   //---------------------
   // STATE
   //---------------------
@@ -21,7 +21,7 @@ export const IngredientsSelectionModal = () => {
   //---------------------
   // CONTEXT
   //---------------------
-  const context = useContext(IngredientSelectionModalContext);
+  const context = useContext(SubIngredientSelectionModalContext);
   const modalContext = useContext(ModalContext);
 
   //---------------------

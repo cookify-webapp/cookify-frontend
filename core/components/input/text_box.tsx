@@ -21,10 +21,10 @@ export const TextBox = ({
     <Observer>
       {() => (
         <div className="w-full text-left">
-          <div>
+          <div className="pb-2">
             <label className="titleS">{label}</label>
           </div>
-          <div className="mt-2">
+          <div>
             <input
               type={type}
               placeholder={placeholder}

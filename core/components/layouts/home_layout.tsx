@@ -1,12 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { SideBar } from "../sidebar";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { AuthContext } from "core/context/auth_context";
 import classNames from "classnames";
 import { Navbar } from "../navbar";
+import { useRouter } from "next/router";
 
-export const HomeLayout = ({ children }) => {
+interface HomeLayoutProps {
+  children: ReactNode
+  onClickSearch?: () => void
+}
+
+export const HomeLayout = ({ children, onClickSearch } : HomeLayoutProps) => {
   //---------------------
   // CONTEXT
   //---------------------
@@ -17,6 +23,11 @@ export const HomeLayout = ({ children }) => {
   // HOOKS
   //---------------------
   const [isDesktop, setIsDesktop] = useState(false);
+
+  //---------------------
+  // ROUTER
+  //---------------------
+  const router = useRouter()
 
   //---------------------
   // FUNCTION
@@ -65,8 +76,8 @@ export const HomeLayout = ({ children }) => {
           )}
 
           <div className="">
-            <Navbar />
-            <div className="w-full xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">
+            <Navbar onClickSearch={router.pathname.includes('recipes') ? () => onClickSearch() : null}/>
+            <div className="w-full min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-96px)] xl:min-h-[calc(100vh-104px)] xl:w-[calc(100vw-254px)] bg-gray-10 overflow-y-auto ">
               {children}
             </div>
           </div>

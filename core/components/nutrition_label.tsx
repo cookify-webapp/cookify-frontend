@@ -6,6 +6,7 @@ export const NutritionLabel = ({
   nutrition,
   type,
   unit,
+  serve
 }: nutritionLabelType) => {
   //---------------------
   // RENDER
@@ -25,34 +26,10 @@ export const NutritionLabel = ({
           <div className="mt-4 md:flex bodyS">
             <div className="flex w-auto">
               <p className="font-medium w-auto">หน่วยบริโภค</p>
-              {type === "recipe" && <p className="w-auto ml-4">1 จาน</p>}
+              {type === "recipe" && <p className="w-auto ml-4">{`${serve || '1'} จาน`}</p>}
               {type === "ingredient" && (
-                <>
-                  {unit === "gram" && (
-                    <p className="w-auto ml-4">100 กรัม</p>
-                  )}
-                  {unit === "milliliter" && (
-                    <p className="w-auto ml-4">10 มิลลิลิตร</p>
-                  )}
-                  {unit === "tablespoon" && (
-                    <p className="w-auto ml-4">1 ช้อนโต๊ะ</p>
-                  )}
-                  {unit === "teaspoon" && (
-                    <p className="w-auto ml-4">1 ช้อนชา</p>
-                  )}
-                  {unit === "cup" && (
-                    <p className="w-auto ml-4">1 ถ้วย</p>
-                  )}
-                  {unit === "piece" && (
-                    <p className="w-auto ml-4">1 ชิ้น</p>
-                  )}
-                  {unit === "slice" && (
-                    <p className="w-auto ml-4">1 แผ่น</p>
-                  )}
-                  {unit === "whole" && (
-                    <p className="w-auto ml-4">1 ลูก/ผล/ตัว/ฟอง</p>
-                  )}
-                </>
+                <p className="w-auto ml-4">{`${serve || '1'} ${unit?.name}`}</p>
+                  
               )}
             </div>
             <div className="flex md:ml-8 w-auto mt-2 md:mt-0">

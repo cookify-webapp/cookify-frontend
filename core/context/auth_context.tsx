@@ -21,6 +21,9 @@ class Auth {
       password: "",
     };
     this.isLogIn = false;
+    if (typeof window !== 'undefined') {
+      this.user = JSON.parse(localStorage.getItem('user'))
+    }
     makeAutoObservable(this);
   }
 
