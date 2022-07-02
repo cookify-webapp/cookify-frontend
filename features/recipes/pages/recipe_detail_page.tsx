@@ -287,7 +287,7 @@ export const RecipeDetailPage = () => {
                                         <p>
                                           {ingredient?.quantity}
                                           <br />
-                                          {ingredient?.ingredient?.unit?.name}
+                                          {ingredient?.unit?.name}
                                         </p>
                                       </div>
                                     </div>

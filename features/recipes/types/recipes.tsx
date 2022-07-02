@@ -42,7 +42,11 @@ export type recipeDetailType = {
   ingredients: {
     ingredient: ingredientType
     quantity: number
-    _id: string
+    unit: {
+      _id: string
+      name: string
+      queryKey: string
+    }
   }[]
   subIngredients: ingredientType[]
   method: {

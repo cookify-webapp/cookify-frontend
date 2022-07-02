@@ -59,6 +59,8 @@ export const RecipeFormPage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue('formik', formik)
+    context.setValue('router', router)
     context.prepareCookingMethods();
 
     return () => {
