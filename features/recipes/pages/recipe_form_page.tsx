@@ -1,4 +1,10 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, {
+  createRef,
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -138,6 +144,12 @@ export const RecipeFormPage = () => {
       ingredientsId.push(ingredient._id);
     });
     formik.setFieldValue("subIngredientsId", ingredientsId);
+  };
+
+  const handleRemoveStep = (index) => {
+    let tempStep = _.cloneDeep(formik.values?.steps);
+    tempStep.splice(index, 1);
+    formik.setFieldValue("steps", tempStep);
   };
 
   const checkArrayLength = () => {
@@ -489,6 +501,47 @@ export const RecipeFormPage = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="mt-4 bg-white rounded-[12px] p-6">
+                <h3 className="headlineM">ขั้นตอนการประกอบอาหาร</h3>
+                <p className="text-[18px] mt-4">วิธีการประกอบอาหาร *</p>
+                <div className="grid grid-cols-12 gap-4 mt-4">
+                  {_.map(formik.values?.steps, (step, index) => (
+                    <Fragment key={`step_${index}`}>
+                      <div className="col-span-1 flex justify-center">{`${index + 1}.`}</div>
+                      <div className="col-span-10">
+                        <TextAreaInput
+                          onChange={(e) => {
+                            formik.setFieldValue(
+                              `steps[${index}]`,
+                              e.target.value
+                            );
+                          }}
+                          value={step}
+                          height={50}
+                        />
+                      </div>
+                      {_.size(formik.values?.steps) !== 1 && (
+                        <div className="col-span-1 flex justify-center">
+                          <SecondaryMiniButton
+                            icon="fas fa-trash"
+                            onClick={() => {
+                              handleRemoveStep(index);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </Fragment>
+                  ))}
+                </div>
+                <div className="mt-6 w-[125px]">
+                  <SecondaryButton
+                    title="เพิ่มขั้นตอน"
+                    onClick={() => {
+                      formik.setFieldValue(`steps[${_.size(formik.values?.steps)}]`, "")
+                    }}
+                  />
                 </div>
               </div>
             </div>

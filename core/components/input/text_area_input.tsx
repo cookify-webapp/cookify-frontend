@@ -33,7 +33,7 @@ export function TextAreaInput(props: TextAreaInputProps) {
           props.onChange(e);
         }}
         disabled={props.disabled}
-        style={{ height: `${props.height || "120"}px` }}
+        style={{ minHeight: `${props.height || "120"}px` }}
         className={classNames(
           "w-full placeholder-gray-50 py-2 px-4 border rounded-[12px]",
           { "border-gray-40 text-black": !props.error },

@@ -38,7 +38,7 @@ export const recipeInitialValues = (value?: any) => {
     ingredientsId: [],
     quantity: [],
     subIngredientsId: [],
-    steps: [],
+    steps: [""],
     imageFileName: "",
     recipeImage: Object
   }

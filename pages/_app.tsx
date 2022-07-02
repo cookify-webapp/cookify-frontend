@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 
-import React from "react";
+import React, { useEffect } from "react";
 import App from "next/app";
 import Head from "next/head";
 import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
@@ -17,6 +17,19 @@ configure({
 
 function MyApp({ Component, pageProps }) {
 
+  useEffect(() => {
+    const tx = document.getElementsByTagName("textarea");
+    for (let i = 0; i < tx.length; i++) {
+      tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+      tx[i].addEventListener("input", OnInput, false);
+    }
+    
+    function OnInput() {
+      this.style.height = "auto";
+      this.style.height = (this.scrollHeight) + "px";
+    }
+  }, [])
+  
   return (
     <>
       <Head>
