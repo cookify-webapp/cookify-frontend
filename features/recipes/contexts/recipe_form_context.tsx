@@ -1,9 +1,12 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { recipeDetailType } from "../types/recipes";
-import { recipeInitialValues } from '../forms/recipe_form'
+import { createRecipeFormData, recipeInitialValues } from '../forms/recipe_form'
 import { getCookingMethods } from "@core/services/recipes/get_recipes";
 import _ from 'lodash'
+import Cookies from "js-cookie";
+import { addRecipe } from "@core/services/recipes/post_recipes";
+import { FormikContextType } from "formik";
 
 class RecipeForm {
   recipeDetail: recipeDetailType
@@ -14,7 +17,11 @@ class RecipeForm {
   quantity
 
   modal
+  router
   isMethodLoaded: boolean;
+  isAddEditRecipe: boolean
+  formik: FormikContextType<any>
+  flashMessageContext
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -22,6 +29,7 @@ class RecipeForm {
     this.selectedMainIngredient = []
     this.selectedSubIngredient = []
     this.quantity = []
+    this.isAddEditRecipe = false
     makeAutoObservable(this);
   }
 
@@ -54,6 +62,30 @@ class RecipeForm {
       );
     } finally {
       this.isMethodLoaded =  true
+    }
+  }
+
+  addRecipe = async (value) => {
+    try {
+      this.isAddEditRecipe = true
+      const formData = createRecipeFormData(value)
+      const token = Cookies.get("token")
+      const resp = await addRecipe(formData, token)
+      if (resp.status === 200) {
+        this.formik?.resetForm()
+        this.router.push(`/recipes/${resp.data?.id}`)
+        this.flashMessageContext.handleShow('เพิ่มสำเร็จ', 'เพิ่มสูตรอาหารสำเร็จ')
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการเพิ่มสูตรอาหาร",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.isAddEditRecipe = false
     }
   }
 }

@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from "react";
 import _ from "lodash";
 import classNames from "classnames";
+import { FormikErrors } from "formik";
 
 //---------------------
 //   INTERFACE
@@ -8,7 +9,7 @@ import classNames from "classnames";
 interface TextAreaInputProps {
   title?: string | string[];
   value: string;
-  error?: string | string[];
+  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
   placeholder?: string;
   disabled?: boolean;
   height?: number;

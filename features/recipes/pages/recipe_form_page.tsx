@@ -29,6 +29,7 @@ import {
 import { Ingredient } from "@core/components/ingredient";
 import { ingredientType } from "../types/recipes";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
+import { PrimaryButton } from "@core/components/button/primary_button";
 const { publicRuntimeConfig } = getConfig();
 
 export const RecipeFormPage = () => {
@@ -62,6 +63,10 @@ export const RecipeFormPage = () => {
 
     return () => {
       formik.resetForm();
+      setCover({
+        file: null,
+        original_filename: "",
+      })
       context.setValue("selectedMainIngredient", []);
       context.setValue("selectedSubIngredient", []);
       mainIngredientSelectedModal.setValue("selectedIngredients", []);
@@ -88,9 +93,9 @@ export const RecipeFormPage = () => {
     validationSchema: () => recipeValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      // isEdit
-      //   ? context.editIngredient(value, ingredientId, () => onSuccess())
-      //   : context.addIngredient(value, () => onSuccess());
+      isEdit
+        ? null
+        : context.addRecipe(value);
     },
   });
 
@@ -115,21 +120,23 @@ export const RecipeFormPage = () => {
     }
   };
 
-  const handleRemoveMainIngredient = (ingredient, index) => {
+  const handleRemoveMainIngredient = async (ingredient, index) => {
     let tempSelectedIngredients = _.cloneDeep(context.selectedMainIngredient);
     let filter = _.filter(tempSelectedIngredients, (item) => {
       return item.name !== ingredient.name;
     });
     let tempQuantity: [] = _.cloneDeep(formik?.values?.quantity);
     tempQuantity.splice(index, 1);
-    formik.setFieldValue("quantity", tempQuantity);
+    await formik.setFieldValue("quantity", tempQuantity);
     context.setValue("selectedMainIngredient", filter);
     mainIngredientSelectedModal.setValue("selectedIngredients", filter);
     let ingredientsId = [];
+    let unitsId = [];
     _.forEach(context.selectedMainIngredient, (ingredient: ingredientType) => {
-      ingredientsId.push(ingredient._id);
+      unitsId.push(ingredient?.unit?._id);
     });
-    formik.setFieldValue("ingredientsId", ingredientsId);
+    await formik.setFieldValue("ingredientsId", ingredientsId);
+    await formik.setFieldValue("unitsId", unitsId);
   };
 
   const handleRemoveSubIngredient = (ingredient) => {
@@ -240,10 +247,15 @@ export const RecipeFormPage = () => {
                       }}
                       value={formik.values?.desc}
                       title="คำอธิบายสูตรอาหาร *"
+                      error={
+                        formik.errors?.desc && formik.touched?.desc
+                          ? formik.errors?.desc
+                          : ""
+                      }
                     />
                   </div>
                   <div className="mt-4 grid grid-cols-12 gap-x-4">
-                    <div className="col-span-6 md:col-span-8">
+                    <div className="col-span-6 md:col-span-7 xl:col-span-8">
                       <p className="titleS pb-2">ประเภทของอาหาร *</p>
                       <SelectInput
                         placeholder="เลือกประเภท"
@@ -261,7 +273,7 @@ export const RecipeFormPage = () => {
                         }
                       />
                     </div>
-                    <div className="col-span-6 md:col-span-4">
+                    <div className="col-span-6 md:col-span-5 xl:col-span-4">
                       <TextBox
                         label="จำนวนหน่วยบริโภค *"
                         onChange={(e) => {
@@ -391,25 +403,31 @@ export const RecipeFormPage = () => {
                               context.selectedMainIngredient
                             );
                             mainIngredientSelectedModal.openModal(
-                              () => {
+                              async () => {
                                 context.setValue(
                                   "selectedMainIngredient",
                                   mainIngredientSelectedModal.selectedIngredients
                                 );
                                 let ingredientsId: string[] = [];
+                                let unitsId: string[] = []
                                 _.forEach(
                                   mainIngredientSelectedModal.selectedIngredients,
                                   (ingredient: ingredientType, index) => {
                                     formik.setFieldValue(
                                       `quantity[${index}]`,
-                                      0
+                                      1
                                     );
                                     ingredientsId.push(ingredient._id);
+                                    unitsId.push(ingredient.unit?._id)
                                   }
                                 );
-                                formik.setFieldValue(
+                                await formik.setFieldValue(
                                   "ingredientsId",
                                   ingredientsId
+                                );
+                                await formik.setFieldValue(
+                                  "unitsId",
+                                  unitsId
                                 );
                               },
                               () => {
@@ -472,7 +490,7 @@ export const RecipeFormPage = () => {
                               context.selectedSubIngredient
                             );
                             subIngredientSelectedModal.openModal(
-                              () => {
+                              async () => {
                                 context.setValue(
                                   "selectedSubIngredient",
                                   subIngredientSelectedModal.selectedIngredients
@@ -484,7 +502,7 @@ export const RecipeFormPage = () => {
                                     ingredientsId.push(ingredient._id);
                                   }
                                 );
-                                formik.setFieldValue(
+                                await formik.setFieldValue(
                                   "subIngredientsId",
                                   ingredientsId
                                 );
@@ -510,7 +528,7 @@ export const RecipeFormPage = () => {
                   {_.map(formik.values?.steps, (step, index) => (
                     <Fragment key={`step_${index}`}>
                       <div className="col-span-1 flex justify-center">{`${index + 1}.`}</div>
-                      <div className="col-span-10">
+                      <div className="col-span-9 md:col-span-10">
                         <TextAreaInput
                           onChange={(e) => {
                             formik.setFieldValue(
@@ -523,7 +541,7 @@ export const RecipeFormPage = () => {
                         />
                       </div>
                       {_.size(formik.values?.steps) !== 1 && (
-                        <div className="col-span-1 flex justify-center">
+                        <div className="col-span-2 md:col-span-1 flex justify-center">
                           <SecondaryMiniButton
                             icon="fas fa-trash"
                             onClick={() => {
@@ -541,6 +559,46 @@ export const RecipeFormPage = () => {
                     onClick={() => {
                       formik.setFieldValue(`steps[${_.size(formik.values?.steps)}]`, "")
                     }}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center space-x-4 mt-8 items-center">
+                <div className="w-full md:w-[150px]">
+                  <SecondaryButton
+                    title="ยกเลิก"
+                    onClick={() => {
+                      if (formik.dirty) {
+                        modal.openModal(
+                          'ต้องการยกเลิกใช่ไหม ?',
+                          'หากยกเลิก ระบบจะไม่บันทึกข้อมูลที่ได้ทำการเปลี่ยนแปลง',
+                          () => {
+                            router.push('/recipes')
+                            formik.resetForm()
+                            setCover({
+                              file: null,
+                              original_filename: "",
+                            })
+                          },
+                          'ไม่',
+                          'ต้องการยกเลิก'
+                        )
+                      } else {
+                        router.push('/recipes')
+                        formik.resetForm()
+                        setCover({
+                          file: null,
+                          original_filename: "",
+                        })
+                      }
+                    }}
+                  />
+                </div>
+                <div className="w-full md:w-[150px]">
+                  <PrimaryButton
+                    title={isEdit ? 'บันทึก': 'เพิ่ม'}
+                    onClick={() => formik.submitForm()}
+                    disabled={!formik.dirty || (!formik.isValid && checkArrayLength())}
+                    loading={context.isAddEditRecipe}
                   />
                 </div>
               </div>
