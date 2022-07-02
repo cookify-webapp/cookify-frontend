@@ -38,7 +38,7 @@ export const recipeInitialValues = (value?: any) => {
       ingredientsId: value.ingredientsId,
       unitsId: value.unitsId,
       quantity: value.quantity,
-      subIngredientsId: value.subIngredients,
+      subIngredientsId: value.subIngredientsId,
       steps: value.steps,
       imageFileName: value.image,
       recipeImage: null,

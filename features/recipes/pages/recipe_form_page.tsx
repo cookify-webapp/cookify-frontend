@@ -62,6 +62,7 @@ export const RecipeFormPage = () => {
     context.setValue('formik', formik)
     context.setValue('router', router)
     context.prepareCookingMethods();
+    isEdit && context.prepareRecipeDetail(recipeId)
 
     return () => {
       formik.resetForm();
