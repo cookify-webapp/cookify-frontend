@@ -9,12 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        env:
-          FE_VERSION: ${{ github.event.inputs.deploy-version }}
       - name: pull images and deploy
         uses: appleboy/ssh-action@master
+        env:
+          FE_VERSION: ${{ github.event.inputs.deploy-version }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
