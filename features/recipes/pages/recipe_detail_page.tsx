@@ -195,7 +195,7 @@ export const RecipeDetailPage = () => {
                             </div>
                             {open && (
                               <div className="flex justify-end">
-                                {context.recipeDetail?.isMe ? (
+                                {(context.recipeDetail?.isMe && authContext.user) ? (
                                   <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                                     <div
                                       className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"

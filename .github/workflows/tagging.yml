@@ -28,7 +28,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Pull and push tagged Docker Image
         run: | 
-          docker build -f Dockerfile-prd . --tag ghcr.io/cookify-webapp/cookify-frontend:prd --tag ghcr.io/cookify-webapp/cookify-frontend:${{needs.git-tag.outputs.tag-version}}
+          docker build . --tag ghcr.io/cookify-webapp/cookify-frontend:${{needs.git-tag.outputs.tag-version}}
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker push ghcr.io/cookify-webapp/cookify-frontend:prd
           docker push ghcr.io/cookify-webapp/cookify-frontend:${{needs.git-tag.outputs.tag-version}}
