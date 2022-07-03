@@ -1,0 +1,14 @@
+version: "3"
+services:
+  nextjs-prd:
+    image: ghcr.io/cookify-webapp/cookify-frontend:${FE_VERSION}
+    restart: unless-stopped
+    container_name: "nextjs-prd"
+    env_file:
+      - ./.env
+    ports:
+      - "3000:3000"
+networks:
+  default:
+    external:
+      name: cookify-devops_cookify-webapp

@@ -10,8 +10,8 @@ class FlashMessage {
   //-------------------
   constructor() {
     this.isShow = false
-    this.title = 'ลบสำเร็จ'
-    this.detail = 'ลบวัตถุดิบสำเร็จ'
+    this.title = ''
+    this.detail = ''
     makeAutoObservable(this);
   }
 

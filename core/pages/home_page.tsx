@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
-import { HomeLayout } from "@core/components/home_layout";
+import { HomeLayout } from "@core/components/layouts/home_layout";
 import { HomePageContext } from "core/context/home_page_context";
 import { AuthContext } from "core/context/auth_context";
 import { SearchBox } from "@core/components/input/search_box";
@@ -21,7 +21,6 @@ export default function HomePage() {
   const context = useContext(HomePageContext);
   const authContext = useContext(AuthContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
-
   const modalContext = useContext(ModalContext);
 
   //---------------------
@@ -32,15 +31,18 @@ export default function HomePage() {
   //---------------------
   //  EFFECT
   //---------------------
-  useEffect(() => {}, []);
+  useEffect(() => {
+    context.setValue("modalContext", modalContext);
+    context.prepareIngredient();
+  }, []);
 
   //---------------------
   //  FUNCTION
   //---------------------
   const checkIsBookmark = (recipeId) => {
     let isBookmark = false;
-    for (let i = 0; i < _.size(authContext.user.bookmark); i++) {
-      if (recipeId === authContext.user.bookmark[i]) {
+    for (let i = 0; i < _.size(authContext.user?.bookmark); i++) {
+      if (recipeId === authContext.user?.bookmark[i]) {
         isBookmark = true;
       }
     }
@@ -54,7 +56,7 @@ export default function HomePage() {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="xl:px-14 pb-8">
+          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -69,9 +71,13 @@ export default function HomePage() {
                     query: { searchWord: homeLayoutContext.searchWord },
                   });
                 }}
+                height="h-16"
               />
             </div>
-            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4">
+            <h2
+              className="px-5 2xl:px-0 headlineM sm:headlineL mt-8 xl:mt-4"
+              data-cy="new_recipes"
+            >
               สูตรอาหารใหม่ล่าสุด
               <Link href="/recipes" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -79,22 +85,24 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+            <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
               {_.map(context.recipes, (recipe) => (
                 <div
-                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
                   key={recipe.title}
                 >
                   <Recipe
-                    recipe={recipe}
-                    role={authContext.user.role}
-                    isBookmark={checkIsBookmark(recipe.id)}
-                    onClick={() => console.log("bookmark click")}
+                    id={recipe._id}
+                    author={recipe.author?.username}
+                    averageRating={recipe.averageRating}
+                    image={recipe.image}
+                    method={recipe.method?.name}
+                    name={recipe.name}
                   />
                 </div>
               ))}
             </div>
-            <div className="mt-8 px-5 xl:px-0">
+            <div className="mt-8 px-5 2xl:px-0">
               <div
                 className="flex items-center h-[200px] rounded-[12px]"
                 style={{
@@ -122,8 +130,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-
-            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
+            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               Snapshot ใหม่ล่าสุด
               <Link href="/snapshots" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -131,17 +138,17 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
+            <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
               {_.map(context.snapshots, (snapshot) => (
                 <div
-                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
                   key={`snapshot_${snapshot.id}`}
                 >
                   <Snapshot snapshot={snapshot} />
                 </div>
               ))}
             </div>
-            <h2 className="px-5 xl:px-0 headlineM sm:headlineL mt-8">
+            <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               วัตถุดิบใหม่ล่าสุด
               <Link href="/ingredients" passHref>
                 <a className="text-[14px] text-brown-10 cursor-pointer ml-4">
@@ -149,20 +156,22 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-6 mt-6">
-              {_.map(context.ingredients, (ingredient, index) => (
-                <div
-                  className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
-                  key={`${ingredient.name}_${index}`}
-                >
-                  <Link href={`/ingredients/${ingredient.id}`} passHref>
-                    <a>
-                      <Ingredient ingredient={ingredient} />
-                    </a>
-                  </Link>
-                </div>
-              ))}
-            </div>
+            {!context.loading && (
+              <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 mb-8">
+                {_.map(context.ingredients, (ingredient, index) => (
+                  <div
+                    className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
+                    key={`${ingredient.name}_${index}`}
+                  >
+                    <Link href={`/ingredients/${ingredient._id}`} passHref>
+                      <a>
+                        <Ingredient ingredient={ingredient} hasArrow/>
+                      </a>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </HomeLayout>
       )}

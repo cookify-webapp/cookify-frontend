@@ -12,6 +12,7 @@ export const SearchBox = ({
   isButton,
   buttonOnClick,
   isShowClearValue,
+  height
 }: searchBoxType) => {
   const [isShowClear, setIsShowClear] = useState(false);
   //---------------------
@@ -22,9 +23,9 @@ export const SearchBox = ({
       {() => (
         <div
           className={classNames(
-            `bg-white rounded-[12px] flex items-center justify-between bodyM px-4 w-full`,
-            { "card-shadow h-16": !isBorder },
-            { "border border-gray-40 h-12": isBorder }
+            `bg-white rounded-[12px] flex items-center justify-between bodyM px-4 w-full ${height}`,
+            { "card-shadow": !isBorder },
+            { "border border-gray-40": isBorder }
           )}
         >
           <div className="flex items-center">

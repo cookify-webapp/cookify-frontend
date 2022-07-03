@@ -3,12 +3,21 @@ import { Observer } from "mobx-react-lite";
 import { ImageWithFallback } from "./image_with_fallback";
 import { Rating } from "./rating";
 import { recipePropType } from "core/types/core_components_type";
-import dayjs from "dayjs";
-import "dayjs/locale/th";
 import _ from "lodash";
 import Link from "next/link";
 
-export const Recipe = ({ recipe, role, isBookmark, onClick }: recipePropType) => {
+import getConfig from "next/config";
+
+const { publicRuntimeConfig } = getConfig();
+
+export const Recipe = ({
+  id,
+  image,
+  author,
+  averageRating,
+  method,
+  name,
+}: recipePropType) => {
   //---------------------
   // RENDER
   //---------------------
@@ -16,67 +25,30 @@ export const Recipe = ({ recipe, role, isBookmark, onClick }: recipePropType) =>
     <Observer>
       {() => (
         <>
-        <Link href={`/recipes/${recipe.id}`} passHref>
-          <a>
-            <div className="rounded-[12px] card-shadow bg-white w-full">
-              <div>
-                <ImageWithFallback
-                  alt="recipe cover image"
-                  src={recipe.src}
-                  classStyle="rounded-t-[12px] h-[180px]"
-                />
-                {role && (
-                  <div 
-                    className="absolute top-0 right-0 mt-2 mr-2 w-9 h-9 p-[6px] bg-black bg-opacity-75 rounded-full text-center" 
-                    onClick={(e) => {
-                      e.preventDefault()
-                      onClick()
-                    }}>
-                    {!isBookmark && (
-                      <i className="far fa-bookmark w-6 h-6 text-white"></i>
-                    )}
-                    {isBookmark && (
-                      <i className="fas fa-bookmark w-6 h-6 text-white"></i>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="pt-2 px-4 py-4">
-                <div className="flex items-center w-auto">
-                  <div className="">
-                    <Rating
-                      height="h-4 leading-[16px]"
-                      width="w-4 bodyM"
-                      spaceX=""
-                      rating={recipe.rating}
-                    />
-                  </div>
-                  <p className="bodyXS text-gray-50 ml-2">{`(${recipe.rating} คะแนน, ${recipe.rating_count} โหวต)`}</p>
+          <Link href={`/recipes/${id}`} passHref>
+            <a>
+              <div className="rounded-[12px] bg-white w-full flex justify-center pr-4 space-x-4 h-[120px]">
+                <div className="w-[120px] h-[120px] rounded-l-[12px] border-r border-gray-30 shrink-0">
+                  <ImageWithFallback
+                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${image}`}
+                    alt="recipe image cover"
+                    className="w-full h-full object-cover rounded-l-[12px]"
+                  />
                 </div>
-                <p className="titleM line-clamp-1 mt-2">{recipe.title}</p>
-                <p className="bodyS text-gray-50">
-                  {`โดย ${recipe.created_by} • ${dayjs(recipe.created_at)
-                    .locale("th")
-                    .add(543, "year")
-                    .format("D MMM YY เวลา HH:mm น.")}`}
-                </p>
-                <p className="bodyXS line-clamp-2 mt-3">{recipe.description}</p>
-                <div className="mt-[14px] flex flex-wrap">
-                  {_.map(recipe.tags, (tag) => (
-                    <div
-                      key={`${recipe.title}_${tag}`}
-                      className="w-auto bodyXS py-[2px] px-[4px] rounded-full border border-beige-20 text-brown-10 mr-1 mt-2"
-                    >
-                      {tag}
-                    </div>
-                  ))}
+                <div className="flex flex-col justify-between py-2">
+                  <div>
+                    <Rating rating={averageRating} spaceX='space-x-2' />
+                    <p className="titleS mt-2 line-clamp-1">{name}</p>
+                    <p className="bodyS text-gray-50 line-clamp-1">{`โดย ${author}`}</p>
+                  </div>
+                  <div>
+                    <p className="bodyS text-gray-50">{`อาหารประเภท${method}`}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </a>
-        </Link>        
+            </a>
+          </Link>
         </>
-
       )}
     </Observer>
   );

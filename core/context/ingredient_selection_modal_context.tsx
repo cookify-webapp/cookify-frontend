@@ -1,19 +1,30 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
+import _ from "lodash";
+import { getIngredientsList, getIngredientTypes } from "@core/services/ingredients/get_ingredients";
 
 class ingredientSelectionModal {
   isOpen: boolean;
   searchWord: string;
   isShowClearValue: boolean;
-  hasIsCheckedAll: boolean;
-  checkAllValue: string;
+  page
+  perPage
 
   ingredients;
+  itemsToShow: any[];
+  selectedIngredients;
 
   onChange: Function;
+  onCancel: () => void
+  onSubmit: () => void
 
   activeTab: string;
-  formik;
+  totalCount
+  totalPages
+  modalContext
+  loading: boolean;
+  ingredientTypes: { name: any; value: any; }[];
+  typeSelected
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -21,136 +32,99 @@ class ingredientSelectionModal {
     this.activeTab = "เนื้อสัตว์";
     this.isOpen = false;
     this.searchWord = "";
+    this.selectedIngredients = []
+    this.itemsToShow = []
+    this.ingredients = []
+    this.page = 1
+    this.totalPages = 1
+    this.loading = true
+    this.perPage = 40
     makeAutoObservable(this);
   }
 
   //-------------------
   // ACTION
   //-------------------
-  openModal = (hasIsCheckAll, formik) => {
+  openModal = (onSubmit, onCancel) => {
     this.isOpen = true;
-    this.hasIsCheckedAll = hasIsCheckAll;
-    this.formik = formik;
+    this.onSubmit = onSubmit
+    this.onCancel = onCancel
+    this.prepareIngredientTypes()
+    this.prepareIngredient();
   };
 
-  closeModal = (clearFormik) => {
+  closeModal = () => {
     this.isOpen = false
-    this.hasIsCheckedAll = false
     this.searchWord = ''
-    if (clearFormik) {
-      this.formik?.setFieldValue('allergic', '')
-    }
+    this.activeTab = 'เนื้อสัตว์'
+    this.typeSelected = this.ingredientTypes[0].value
+    this.itemsToShow = []
+    this.ingredients = []
+    this.page = 1
   }
 
   setValue(key: string, value: any) {
     this[key] = value;
   }
 
-  prepareIngredient = () => {
-    if (this.activeTab === "เนื้อสัตว์") {
-      this.ingredients = [
-        {
-          id: "1",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "2",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "3",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "4",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "5",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "6",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "7",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "8",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "9",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "10",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "11",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "12",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "13",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "14",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "15",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-        {
-          id: "16",
-          name: "เนื้อหมู",
-          src: "/images/core/Item_Raw_Meat.png",
-          type: "เนื้อสัตว์",
-        },
-      ];
-    } else {
-      this.ingredients = []
+  prepareIngredientTypes = async () => {
+    try {
+      const resp = await getIngredientTypes();
+      if (resp.status === 200) {
+        this.ingredientTypes = _.map(resp.data?.ingredientTypes, (type) => ({
+          name: type.name,
+          value: type._id,
+        }));
+        this.typeSelected = this.ingredientTypes[0].value
+      }
+    } catch (error) {
+      this.modalContext.openModal(
+        "มีปัญหาในการดึงรายการประเภทวัตถุดิบ",
+        error.message,
+        () => this.modalContext.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
     }
   };
+
+  prepareIngredient = async () => {
+    try {
+      if (this.page === 1) {
+        this.loading = true
+      }
+      const resp = await getIngredientsList({
+        searchWord: this.searchWord,
+        typeId: this.typeSelected,
+        page: this.page,
+        perPage: this.perPage,
+      })
+      if (resp.status === 200) {
+        this.ingredients = resp.data?.ingredients
+        this.itemsToShow = [...this.itemsToShow, ...this.ingredients]
+        this.page = resp.data?.page
+        this.totalCount = resp.data?.totalCount
+        this.totalPages = resp.data?.totalPages
+      } else if (resp.status === 204) {
+        this.ingredients = []
+        this.page = 0
+      }
+    } catch (error) {
+      this.modalContext.openModal(
+        "มีปัญหาในการดึงรายการวัตถุดิบ",
+        error.message,
+        () => this.modalContext.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.loading = false
+    }
+  }
 }
 export const IngredientSelectionModalContext = createContext(
   new ingredientSelectionModal()
 );
+export const SubIngredientSelectionModalContext = createContext(
+  new ingredientSelectionModal()
+)

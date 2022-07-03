@@ -30,7 +30,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "สูตรอาหาร",
       icon: "fas fa-book",
-      link: ["/recipes"],
+      link: ["/recipes", "/recipes/[recipeId]", "/recipes/create", "/recipes/[recipeId]/edit"],
     },
     {
       title: "Snapshot",
@@ -45,7 +45,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "วัตถุดิบ",
       icon: "fas fa-egg",
-      link: ["/ingredients"],
+      link: ["/ingredients", "/ingredients/[ingredientId]"],
     },
   ];
 
@@ -91,7 +91,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
   return (
     <Observer>
       {() => (
-        <div className="fixed h-screen max-h-screen w-[254px] top-0 left-0 bg-gray-10 border-r border-beige-10 pt-6 flex flex-col justify-between">
+        <div className="fixed h-screen max-h-screen w-[254px] top-0 left-0 z-40 bg-gray-10 border-r border-beige-10 pt-6 flex flex-col justify-between">
           <div>
             <div className="px-6 mb-[32.24px]">
               <img

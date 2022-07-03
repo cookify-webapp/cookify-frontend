@@ -1,0 +1,11 @@
+{
+  "viewportWidth": 1920,
+  "viewportHeight": 1080,
+  "baseUrl": "http://localhost:3000",
+  "scrollBehavior": "center",
+  "chromeWebSecurity": false,
+  "video": false,
+  "testFiles": [
+    "sprint-5/*.spec.ts"
+  ]
+}
