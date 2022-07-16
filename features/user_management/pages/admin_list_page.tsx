@@ -52,12 +52,12 @@ export const AdminListPage = () => {
                 }}
               />
             </div>
-            <div className="px-5 mx-auto xl:max-w-6xl">
+            <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl">
               <h1 className="pt-8 lg:pt-2 headlineL">
                 จัดการบัญชีผู้ใช้
               </h1>
               <div className="rounded-[12px] bg-white p-6 mt-6">
-                <h3 className="headlineM">{`${context.totalCount || '0'} ผู้ดูแลระบบ`}</h3>
+                <h3 className="headlineM">{`ผู้ดูแลระบบ (${context.totalCount || '0'})`}</h3>
                 <div className="overflow-x-auto scrollbar-hide lg:overflow-x-visible lg:scrollbar-default mt-4">
                   <TabFilter 
                     tabs={['ผู้ดูแลระบบ', 'เพิ่มผู้ดูแล']} 
