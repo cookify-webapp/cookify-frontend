@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { getIngredientsList } from "@core/services/ingredients/get_ingredients";
+import { getRecipesList } from "@core/services/recipes/get_recipes";
 
 class HomePage {
   recipes;
@@ -11,11 +12,13 @@ class HomePage {
   modalContext: any;
 
   loading
+  loadingRecipe: boolean;
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.loading = true
+    this.loadingRecipe = false
     this.recipes = [
       {
         _id: "62a4a48b1ac09ddd225d611a",
@@ -220,6 +223,34 @@ class HomePage {
       );
     } finally {
       this.loading = false
+    }
+  }
+
+  prepareRecipesList = async () => {
+    try {
+      this.loadingRecipe = true
+      const resp = await getRecipesList({
+        searchWord: '',
+        methodId: '',
+        ingredientId: "",
+        page: 1,
+        perPage: 6
+      })
+      if (resp.status === 200) {
+        this.recipes = resp.data?.recipes
+      } else if (resp.status === 204) {
+        this.recipes = []
+      }
+    } catch (error) {
+      this.modalContext.openModal(
+        "มีปัญหาในการดึงรายการสูตรอาหาร",
+        error.message,
+        () => this.modalContext.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.loadingRecipe = false
     }
   }
 }

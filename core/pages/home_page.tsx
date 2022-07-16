@@ -34,20 +34,8 @@ export default function HomePage() {
   useEffect(() => {
     context.setValue("modalContext", modalContext);
     context.prepareIngredient();
+    context.prepareRecipesList();
   }, []);
-
-  //---------------------
-  //  FUNCTION
-  //---------------------
-  const checkIsBookmark = (recipeId) => {
-    let isBookmark = false;
-    for (let i = 0; i < _.size(authContext.user?.bookmark); i++) {
-      if (recipeId === authContext.user?.bookmark[i]) {
-        isBookmark = true;
-      }
-    }
-    return isBookmark;
-  };
 
   //---------------------
   //  RENDER
@@ -85,23 +73,25 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
-              {_.map(context.recipes, (recipe) => (
-                <div
-                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
-                  key={recipe.title}
-                >
-                  <Recipe
-                    id={recipe._id}
-                    author={recipe.author?.username}
-                    averageRating={recipe.averageRating}
-                    image={recipe.image}
-                    method={recipe.method?.name}
-                    name={recipe.name}
-                  />
-                </div>
-              ))}
-            </div>
+            {!context.loadingRecipe && (
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+                {_.map(context.recipes, (recipe) => (
+                  <div
+                    className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
+                    key={recipe.title}
+                  >
+                    <Recipe
+                      id={recipe._id}
+                      author={recipe.author?.username}
+                      averageRating={recipe.averageRating}
+                      image={recipe.image}
+                      method={recipe.method?.name}
+                      name={recipe.name}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="mt-8 px-5 2xl:px-0">
               <div
                 className="flex items-center h-[200px] rounded-[12px]"
@@ -165,7 +155,7 @@ export default function HomePage() {
                   >
                     <Link href={`/ingredients/${ingredient._id}`} passHref>
                       <a>
-                        <Ingredient ingredient={ingredient} hasArrow/>
+                        <Ingredient ingredient={ingredient} hasArrow />
                       </a>
                     </Link>
                   </div>
