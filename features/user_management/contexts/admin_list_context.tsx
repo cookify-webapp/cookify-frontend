@@ -14,6 +14,8 @@ class AdminList {
   searchWord
   activeTab
 
+  isShowClearValue: boolean
+
   loading: boolean
   modal
   //-------------------
@@ -26,6 +28,8 @@ class AdminList {
     this.perPage = 18
     this.activeTab = 'ผู้ดูแลระบบ'
     this.totalCount = 0
+    this.isShowClearValue = false
+    this.searchWord = ''
     makeAutoObservable(this);
   }
 
@@ -40,12 +44,12 @@ class AdminList {
     try {
       const token = Cookies.get("token");
       const resp = await getAdminList({
-        searchWord: this.searchWord,
         page: this.page,
-        perPage: this.perPage
+        perPage: this.perPage,
+        searchWord: this.searchWord
       }, token)
       if (resp.status === 200) {
-        this.adminList = resp.data?.accounts
+        this.adminList = [...this.adminList, ...resp.data?.accounts] 
         this.page = resp.data?.page
         this.perPage = resp.data?.perPage
         this.totalCount = resp.data?.totalCount
