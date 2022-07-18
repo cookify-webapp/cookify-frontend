@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import router from "next/router";
@@ -12,6 +18,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { adminListType } from "../types/admin_list_type";
 import { AdminBlock } from "../components/admin_block";
 import { AuthContext } from "core/context/auth_context";
+import { TextBox } from "@core/components/input/text_box";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { PrimaryButton } from "@core/components/button/primary_button";
+import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
 
 export const AdminListPage = () => {
   //---------------------
@@ -43,6 +54,28 @@ export const AdminListPage = () => {
   }, []);
 
   //---------------------
+  //  FORMIK
+  //---------------------
+  const formik = useFormik({
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: false,
+    validateOnMount: true,
+    validationSchema: () =>
+      Yup.object().shape({
+        email: Yup.string()
+          .email("กรุณากรอกอีเมลให้ถูกต้อง")
+          .required("กรุณากรอกอีเมล"),
+      }),
+    initialValues: context.initValue,
+    onSubmit: (value) => {
+      // isEdit
+      //   ? context.editRecipe(recipeId, value)
+      //   : context.addRecipe(value);
+    },
+  });
+
+  //---------------------
   // Handler
   //---------------------
   const handlerSearchAuto = useCallback(
@@ -65,6 +98,18 @@ export const AdminListPage = () => {
     context.setValue("page", context.page + 1);
     context.prepareAdminList();
     if (context.page === context.totalPages) {
+      setHasMore(false);
+    }
+  };
+
+  //---------------------
+  // HANDLER
+  //---------------------
+  const preparationPending = async () => {
+    setHasMore(true);
+    context.setValue("page", context.pagePending + 1);
+    context.preparePendingList();
+    if (context.pagePending === context.totalPagesPending) {
       setHasMore(false);
     }
   };
@@ -170,6 +215,94 @@ export const AdminListPage = () => {
                       </div>
                     )}
                   </>
+                )}
+                {context.activeTab === "เพิ่มผู้ดูแล" && (
+                  <div className="grid grid-cols-12 gap-4 mt-6">
+                    <div className="col-span-12 md:col-span-5 bg-white max-h-max">
+                      <div className="border border-gray-40 rounded-[12px] p-6">
+                        <h4 className="titleM mb-4">เพิ่มผู้ดูแล</h4>
+                        <p className="bodyM">กรุณากรอก E-mail เพื่อส่งคำเชิญ</p>
+                        <TextBox
+                          onChange={(e) => {
+                            formik.setFieldTouched("email");
+                            formik.setFieldValue("email", e.target.value);
+                          }}
+                          type="text"
+                          value={formik.values?.email}
+                          error={
+                            formik.errors?.email && formik.touched?.email
+                              ? formik.errors?.email
+                              : ""
+                          }
+                          placeholder="กรุณากรอกอีเมล"
+                        />
+                        <div className="w-[153px] mt-6 mx-auto">
+                          <PrimaryButton
+                            onClick={() => {
+                              formik.submitForm();
+                              formik.resetForm();
+                            }}
+                            title="ส่งคำเชิญ"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    {_.size(context.pendingList) > 0 &&
+                      !context.loadingPending && (
+                        <div className="col-span-12 md:col-span-7">
+                          <InfiniteScroll
+                            dataLength={context.pendingList.length}
+                            next={preparationPending}
+                            hasMore={hasMore}
+                            loader={""}
+                          >
+                            <div className="space-y-4">
+                              {_.map(
+                                context.pendingList,
+                                (pendingEmail, index) => (
+                                  <div
+                                    className="border border-gray40 rounded-[12px] bg-white p-4 flex space-x-3 items-center justify-between"
+                                    key={`pending_email_${index}`}
+                                  >
+                                    <p className="w-9/12 md:w-10/12 break-words">
+                                      {pendingEmail}
+                                    </p>
+                                    <SecondaryMiniButton
+                                      icon="fas fa-times"
+                                      onClick={() => {
+                                        modal.openModal(
+                                          "ยกเลิกคำเชิญ",
+                                          "เมื่อยกเลิก เจ้าของอีเมลดังกล่าวจะไม่สามารถใช้งานลิงก์ที่อยู่ในอีเมลคำเชิญได้อีกต่อไป",
+                                          () => null,
+                                          "ยกเลิก",
+                                          "ลบ"
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </InfiniteScroll>
+                        </div>
+                      )}
+                    {context.loadingPending && (
+                      <div className="col-span-7 py-10 flex items-center justify-center text-center text-gray-50">
+                        <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                      </div>
+                    )}
+                    {!context.loadingPending &&
+                      _.size(context.pendingList) === 0 && (
+                        <div className="col-span-7 py-10 flex items-center text-center text-gray-50">
+                          <div>
+                            <i className="fas fa-user text-[48px] w-12 h-12"></i>
+                            <p className="titleM mt-4">
+                              ไม่มีรายการผู้ดูแลระบบ
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                  </div>
                 )}
               </div>
             </div>
