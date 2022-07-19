@@ -50,7 +50,7 @@ export const AdminBlock = ({
   return (
     <Observer>
       {() => (
-        <Link href={`/users/${id}`} passHref>
+        <Link href={isMe ? '/me' : `/users/${id}`} passHref>
           <a>
             <div className="w-full border border-gray-40 rounded-[12px] bg-white p-4 flex justify-between space-x-3 cursor-pointer">
               <div className="flex space-x-3 items-center">
