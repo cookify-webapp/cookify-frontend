@@ -252,6 +252,7 @@ export const AdminListPage = () => {
                             }}
                             disabled={!formik.isValid}
                             title="ส่งคำเชิญ"
+                            loading={context.buttonLoading}
                           />
                         </div>
                       </div>
@@ -282,7 +283,7 @@ export const AdminListPage = () => {
                                         modal.openModal(
                                           "ยกเลิกคำเชิญ",
                                           "เมื่อยกเลิก เจ้าของอีเมลดังกล่าวจะไม่สามารถใช้งานลิงก์ที่อยู่ในอีเมลคำเชิญได้อีกต่อไป",
-                                          () => null,
+                                          () => context.deletePending(pendingEmail.email),
                                           "ยกเลิก",
                                           "ลบ"
                                         );

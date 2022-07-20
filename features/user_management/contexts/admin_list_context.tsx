@@ -5,7 +5,7 @@ import { getAdminList, getPendingList } from "@core/services/user_management/get
 import Cookies from "js-cookie";
 import _ from "lodash";
 import { inviteAdmin } from "@core/services/user_management/post_admin";
-import { deleteAdmin } from "@core/services/user_management/delete_admin";
+import { deleteAdmin, deletePending } from "@core/services/user_management/delete_admin";
 
 class AdminList {
   adminList: adminListType[];
@@ -34,6 +34,8 @@ class AdminList {
   flashMessageContext
   formik
 
+  buttonLoading: boolean
+
   initValue: {
     email: string
   }
@@ -58,6 +60,7 @@ class AdminList {
     this.perPagePending = 10
     this.totalCountPending = 10
     this.totalPagesPending = 4
+    this.buttonLoading = false
     makeAutoObservable(this);
   }
 
@@ -141,6 +144,7 @@ class AdminList {
 
   inviteAdmin = async (value) => {
     try {
+      this.buttonLoading = true
       const token = Cookies.get("token");
       const data = {
         data: {
@@ -164,6 +168,8 @@ class AdminList {
         "ปิด",
         "ตกลง"
       );
+    } finally {
+      this.buttonLoading = false
     }
   }
 
@@ -172,15 +178,43 @@ class AdminList {
       const token = Cookies.get("token");
       const resp = await deleteAdmin(id, token)
       if (resp.status === 200) {
+        this.modal.closeModal()
         this.flashMessageContext.handleShow(
           "ลบสำเร็จ",
           "ลบผู้ดูแลระบบสำเร็จ"
         );
+        this.loading = true
+        this.adminList = []
         this.prepareAdminList()
       }
     } catch (error) {
       this.modal.openModal(
         "มีปัญหาในการลบผู้ดูแลระบบ",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  }
+
+  deletePending = async (email) => {
+    try {
+      const token = Cookies.get("token");
+      const resp = await deletePending(email, token)
+      if (resp.status === 200) {
+        this.modal.closeModal()
+        this.flashMessageContext.handleShow(
+          "ยกเลิกสำเร็จ",
+          "ยกเลิกคำเชิญผู้ดูแลระบบสำเร็จ"
+        );
+        this.loadingPending = true
+        this.pendingList = []
+        this.preparePendingList()
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการยกเลิกคำเชิญผู้ดูแลระบบ",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",
