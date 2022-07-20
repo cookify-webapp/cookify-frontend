@@ -9,6 +9,7 @@ class Register {
   initValue
   isAllergic
   modalContext
+  uniqueKey
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -24,6 +25,7 @@ class Register {
       ingredients: [],
       stepForm: 1
     }
+    this.uniqueKey = ''
     makeAutoObservable(this);
   }
 
@@ -39,7 +41,7 @@ class Register {
       let allergy = []
       if (_.size(value.allergic) > 0) {
         _.forEach(value.ingredients, (item) => {
-          allergy.push(item.name)
+          allergy.push(item._id)
         })        
       }
 

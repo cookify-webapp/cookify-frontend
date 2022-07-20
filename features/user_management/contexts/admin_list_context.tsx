@@ -1,9 +1,10 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { adminListType } from "../types/admin_list_type";
-import { getAdminList } from "@core/services/user_management/get_admin";
+import { getAdminList, getPendingList } from "@core/services/user_management/get_admin";
 import Cookies from "js-cookie";
 import _ from "lodash";
+import { inviteAdmin } from "@core/services/user_management/post_admin";
 
 class AdminList {
   adminList: adminListType[];
@@ -12,7 +13,10 @@ class AdminList {
   totalCount: number;
   totalPages: number;
 
-  pendingList: string[];
+  pendingList: {
+    uniqueKey: string
+    email: string
+  }[];
   pagePending: number;
   perPagePending: number;
   totalCountPending: number;
@@ -26,8 +30,12 @@ class AdminList {
   loading: boolean;
   loadingPending: boolean
   modal;
+  flashMessageContext
+  formik
 
-  initValue
+  initValue: {
+    email: string
+  }
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -44,18 +52,7 @@ class AdminList {
     this.totalCount = 0;
     this.isShowClearValue = false;
     this.searchWord = "";
-    this.pendingList = [
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-      "zenos.ayumu@gmail.com",
-    ];
+    this.pendingList = [];
     this.pagePending = 1
     this.perPagePending = 10
     this.totalCountPending = 10
@@ -72,6 +69,9 @@ class AdminList {
 
   prepareAdminList = async () => {
     try {
+      if (this.page === 1) {
+        this.loading = true
+      }
       const token = Cookies.get("token");
       const resp = await getAdminList(
         {
@@ -103,9 +103,66 @@ class AdminList {
     }
   };
 
-  preparePendingList = () => {
-    for (let index = 0; index < 10; index++) {
-      this.pendingList.push('zenos.ayumu@gmail.com')
+  preparePendingList = async () => {
+    try {
+      if (this.page === 1) {
+        this.loadingPending = true
+      }
+      const token = Cookies.get("token");
+      const resp = await getPendingList(
+        {
+          page: this.page,
+          perPage: this.perPage,
+        },
+        token
+      );
+      if (resp.status === 200) {
+        this.pendingList = [...this.pendingList, ...resp.data?.accounts];
+        this.pagePending = resp.data?.page;
+        this.perPagePending = resp.data?.perPage;
+        this.totalCountPending = resp.data?.totalCount;
+        this.totalPagesPending = resp.data?.totalPages;
+      } else if (resp.status === 204) {
+        this.adminList = [];
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการดึงรายการผู้ดูแลระบบที่อยู่ระหว่างการเชิญ",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.loadingPending = false;
+    }
+  }
+
+  inviteAdmin = async (value) => {
+    try {
+      const token = Cookies.get("token");
+      const data = {
+        data: {
+          email: value.email
+        }
+      }
+      const resp = await inviteAdmin(JSON.stringify(data), token)
+      if (resp.status === 200) {
+        this.formik.resetForm()
+        this.flashMessageContext.handleShow(
+          "ส่งสำเร็จ",
+          "ส่งคำเชิญสำเร็จ"
+        );
+        this.preparePendingList()
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการส่งอีเมลคำเชิญ",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
     }
   }
 }

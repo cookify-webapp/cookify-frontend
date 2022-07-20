@@ -8,6 +8,7 @@ import { RegisterValidateSchema } from "../forms/register_form";
 import { RegisterLoginBgCard } from "@core/components/register_login_bg_card/register_login_bg_card";
 import { RegisterFormStep2 } from "../components/register_form_step_2";
 import { ModalContext } from "core/context/modal_context";
+import { useRouter } from "next/router";
 
 export const RegisterPage = () => {
   //---------------------
@@ -16,13 +17,20 @@ export const RegisterPage = () => {
   const context = useContext(RegisterContext);
   const modalContext = useContext(ModalContext)
 
+  const router = useRouter()
+  const { uk } = router.query
+
   //---------------------
   // EFFECT
   //---------------------
   useEffect(() => {
     context.setValue('modalContext', modalContext)
+    if (uk) {
+      context.setValue('uniqueKey', uk)
+    }
     return () => {
       context.setValue("stepForm", 1);
+      context.setValue('uniqueKey', '')
       formik.resetForm();
     };
   }, []);

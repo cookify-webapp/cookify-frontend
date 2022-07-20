@@ -23,6 +23,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
+import { FlashMessageContext } from "core/context/flash_message_context";
 
 export const AdminListPage = () => {
   //---------------------
@@ -37,12 +38,15 @@ export const AdminListPage = () => {
   const context = useContext(AdminListContext);
   const modal = useContext(ModalContext);
   const authContext = useContext(AuthContext);
+  const flashMessageContext = useContext(FlashMessageContext)
 
   //---------------------
   // EFFECT
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue('flashMessageContext', flashMessageContext)
+    context.setValue('formik', formik)
     context.prepareAdminList();
 
     return () => {
@@ -69,9 +73,7 @@ export const AdminListPage = () => {
       }),
     initialValues: context.initValue,
     onSubmit: (value) => {
-      // isEdit
-      //   ? context.editRecipe(recipeId, value)
-      //   : context.addRecipe(value);
+      context.inviteAdmin(value)
     },
   });
 
@@ -148,6 +150,11 @@ export const AdminListPage = () => {
                     activeTab={context.activeTab}
                     onClick={(value) => {
                       context.setValue("activeTab", value);
+                      if (context.activeTab === 'เพิ่มผู้ดูแล') {
+                        context.preparePendingList()
+                      } else {
+                        context.prepareAdminList()
+                      }
                     }}
                   />
                   <div className="border-t-[1px] border-gray-30" />
@@ -223,9 +230,9 @@ export const AdminListPage = () => {
                         <h4 className="titleM mb-4">เพิ่มผู้ดูแล</h4>
                         <p className="bodyM">กรุณากรอก E-mail เพื่อส่งคำเชิญ</p>
                         <TextBox
-                          onChange={(e) => {
+                          onChange={async (e) => {
                             formik.setFieldTouched("email");
-                            formik.setFieldValue("email", e.target.value);
+                            await formik.setFieldValue("email", e.target.value);
                           }}
                           type="text"
                           value={formik.values?.email}
@@ -240,8 +247,8 @@ export const AdminListPage = () => {
                           <PrimaryButton
                             onClick={() => {
                               formik.submitForm();
-                              formik.resetForm();
                             }}
+                            disabled={!formik.isValid}
                             title="ส่งคำเชิญ"
                           />
                         </div>
@@ -261,11 +268,11 @@ export const AdminListPage = () => {
                                 context.pendingList,
                                 (pendingEmail, index) => (
                                   <div
-                                    className="border border-gray40 rounded-[12px] bg-white p-4 flex space-x-3 items-center justify-between"
+                                    className="border border-gray-40 rounded-[12px] bg-white p-4 flex space-x-3 items-center justify-between"
                                     key={`pending_email_${index}`}
                                   >
                                     <p className="w-9/12 md:w-10/12 break-words">
-                                      {pendingEmail}
+                                      {pendingEmail.email}
                                     </p>
                                     <SecondaryMiniButton
                                       icon="fas fa-times"

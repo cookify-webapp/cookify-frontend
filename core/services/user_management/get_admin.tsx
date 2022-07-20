@@ -13,3 +13,13 @@ export const getAdminList = (params, token) => {
     },
   });
 };
+
+export const getPendingList = (params, token) => {
+  const query = querystring.stringify(params)
+  return axios.get(`${publicRuntimeConfig.CKF_ACCOUNT_API}/admin/pending/list?${query}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  });
+};
