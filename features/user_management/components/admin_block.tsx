@@ -5,6 +5,7 @@ import getConfig from "next/config";
 import Link from "next/link";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import { ModalContext } from "core/context/modal_context";
+import { AdminListContext } from "../contexts/admin_list_context";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -32,6 +33,7 @@ export const AdminBlock = ({
   // CONTEXT
   //---------------------
   const modal = useContext(ModalContext);
+  const context = useContext(AdminListContext)
 
   //---------------------
   //   REF
@@ -88,7 +90,7 @@ export const AdminBlock = ({
                             modal.openModal(
                               "ลบผู้ดูแลระบบ",
                               "เมื่อลบผู้ดูแลระบบรายนี้ บัญชีของผู้ดูแลระบบรายนี้จะไม่สามารถใช้งานได้อีก และระบบจะส่งอีเมลเพื่อแจ้งเรื่องการถอดถอนสิทธิ์ผู้ดูแลระบบ",
-                              () => null,
+                              () => context.deleteAdmin(id),
                               "ยกเลิก",
                               "ลบ"
                             );

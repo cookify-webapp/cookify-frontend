@@ -152,8 +152,10 @@ export const AdminListPage = () => {
                       context.setValue("activeTab", value);
                       if (context.activeTab === 'เพิ่มผู้ดูแล') {
                         context.preparePendingList()
+                        context.setValue('adminList', [])
                       } else {
                         context.prepareAdminList()
+                        context.setValue('pendingList', [])
                       }
                     }}
                   />

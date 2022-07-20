@@ -5,6 +5,7 @@ import { getAdminList, getPendingList } from "@core/services/user_management/get
 import Cookies from "js-cookie";
 import _ from "lodash";
 import { inviteAdmin } from "@core/services/user_management/post_admin";
+import { deleteAdmin } from "@core/services/user_management/delete_admin";
 
 class AdminList {
   adminList: adminListType[];
@@ -158,6 +159,28 @@ class AdminList {
     } catch (error) {
       this.modal.openModal(
         "มีปัญหาในการส่งอีเมลคำเชิญ",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  }
+
+  deleteAdmin = async (id) => {
+    try {
+      const token = Cookies.get("token");
+      const resp = await deleteAdmin(id, token)
+      if (resp.status === 200) {
+        this.flashMessageContext.handleShow(
+          "ลบสำเร็จ",
+          "ลบผู้ดูแลระบบสำเร็จ"
+        );
+        this.prepareAdminList()
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการลบผู้ดูแลระบบ",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",
