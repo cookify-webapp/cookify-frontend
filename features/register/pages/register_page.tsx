@@ -27,6 +27,7 @@ export const RegisterPage = () => {
     context.setValue('modalContext', modalContext)
     if (uk) {
       context.setValue('uniqueKey', uk)
+      context.checkUniqueKeyValidation(uk)
     }
     return () => {
       context.setValue("stepForm", 1);
