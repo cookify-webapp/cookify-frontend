@@ -10,6 +10,9 @@ class UserProfile {
   followingList: userType[]
   followerList: userType[]
 
+  recipesList
+  snapshotsList
+
   followingCount: number
   followerCount: number
   isFollowing: boolean
@@ -23,6 +26,18 @@ class UserProfile {
   totalPages: number
 
   followLoading: boolean
+
+  recipeLoading: boolean
+  pageRecipe: number
+  perPageRecipe: number
+  totalCountRecipe: number
+  totalPagesRecipe: number
+
+  snapshotLoading: boolean
+  pageSnapshot: number
+  perPageSnapshot: number
+  totalCountSnapshot: number
+  totalPagesSnapshot: number
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -37,6 +52,14 @@ class UserProfile {
     this.perPage = 10
     this.followerList = []
     this.followingList = []
+    this.recipeLoading = false
+    this.pageRecipe = 1
+    this.perPageRecipe = 18
+    this.snapshotLoading = false
+    this.pageSnapshot = 1
+    this.perPageSnapshot = 18
+    this.recipesList = []
+    this.snapshotsList = []
     makeAutoObservable(this);
   }
 
