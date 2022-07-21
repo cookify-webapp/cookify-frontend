@@ -11,6 +11,8 @@ import getConfig from "next/config";
 import classNames from "classnames";
 import { FollowModal } from "../components/follow_modal";
 import { ModalContext } from "core/context/modal_context";
+import { AuthContext } from "core/context/auth_context";
+import _ from "lodash";
 const { publicRuntimeConfig } = getConfig();
 
 export const UserProfilePage = () => {
@@ -25,7 +27,8 @@ export const UserProfilePage = () => {
   //---------------------
   const homeLayoutContext = useContext(HomeLayoutContext);
   const context = useContext(UserProfileContext);
-  const modal = useContext(ModalContext)
+  const modal = useContext(ModalContext);
+  const auth = useContext(AuthContext);
 
   const router = useRouter();
   const { user_id } = router.query;
@@ -36,7 +39,7 @@ export const UserProfilePage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
-    context.setValue('modal', modal)
+    context.setValue("modal", modal);
     if (isMe) {
       context.prepareMyDetail();
     } else {
@@ -45,7 +48,7 @@ export const UserProfilePage = () => {
 
     return () => {
       context.setValue("userDetail", null);
-      setIsOpen(false)
+      setIsOpen(false);
     };
   }, [user_id]);
 
@@ -56,15 +59,13 @@ export const UserProfilePage = () => {
     <Observer>
       {() => (
         <>
-          {
-            isOpen && (
-              <FollowModal
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                title={isFollowerClick ? 'ผู้ติดตาม' : 'กำลังติดตาม'}
-              />
-            )
-          }
+          {isOpen && (
+            <FollowModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              title={isFollowerClick ? "ผู้ติดตาม" : "กำลังติดตาม"}
+            />
+          )}
           <HomeLayout>
             <div className="mx-auto xl:max-w-6xl">
               <div className="px-5 w-full block xl:hidden mt-2">
@@ -122,7 +123,7 @@ export const UserProfilePage = () => {
                           </p>
                         </div>
                       </div>
-                      {!isMe && (
+                      {!isMe && auth.user && (
                         <div
                           className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75 ml-3"
                           onClick={() => alert("follow")}
@@ -141,8 +142,8 @@ export const UserProfilePage = () => {
                       className="p-4 lg:p-6 bg-white rounded-[12px] col-span-6 md:col-span-2 text-center flex items-center cursor-pointer"
                       onClick={() => {
                         setIsOpen(!isOpen);
-                        setIsFollowerClick(true)
-                        context.prepareFollowerList(context.userDetail?._id)
+                        setIsFollowerClick(true);
+                        context.prepareFollowerList(context.userDetail?._id);
                       }}
                     >
                       <div>
@@ -158,8 +159,8 @@ export const UserProfilePage = () => {
                       className="p-4 lg:p-6 bg-white rounded-[12px] col-span-6 md:col-span-2 text-center flex items-center cursor-pointer"
                       onClick={() => {
                         setIsOpen(!isOpen);
-                        setIsFollowerClick(false)
-                        context.prepareFollowingList(context.userDetail?._id)
+                        setIsFollowerClick(false);
+                        context.prepareFollowingList(context.userDetail?._id);
                       }}
                     >
                       <div>
@@ -171,6 +172,33 @@ export const UserProfilePage = () => {
                         </p>
                       </div>
                     </div>
+                  </div>
+                  <div className="grid grid-cols-12 gap-4 mt-6">
+                    {isMe && (
+                      <div className="col-span-4 bg-white rounded-[12px] p-4 md:py-6">
+                        <h3 className="headlineM">ข้อมูลการแพ้วัตถุดิบ</h3>
+                        {_.size(context.userDetail?.allergy) > 0 && (
+                          <div className="flex flex-wrap space-x-4 space-y-4 mt-4">
+                            {_.map(
+                              context.userDetail?.allergy,
+                              (item, index) => (
+                                <div
+                                  className="rounded-full bg-beige-20 px-3 py-1 max-w-min text-brown-10 text-center bodyM"
+                                  key={`allergy_${index}`}
+                                >
+                                  {item}
+                                </div>
+                              )
+                            )}
+                          </div>
+                        )}
+                        {
+                          _.size(context.userDetail?.allergy) === 0 && (
+                            <p className="mt-4 bodyM text-gray-50">ไม่มีวัตถุดิบที่แพ้</p>
+                          )
+                        }
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
