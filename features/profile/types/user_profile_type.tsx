@@ -7,3 +7,10 @@ export type userDetailType = {
   allergy: string[]
   bookmark: []
 }
+
+export type userType = {
+  _id: string
+  username: string
+  email: string
+  image: string
+}

@@ -1,11 +1,14 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import Cookies from 'js-cookie'
-import { getMe, getUserDetail } from "@core/services/profile/get_profile";
-import { userDetailType } from "../types/user_profile_type";
+import { getFollowerList, getFollowingList, getMe, getUserDetail } from "@core/services/profile/get_profile";
+import { userDetailType, userType } from "../types/user_profile_type";
 
 class UserProfile {
   userDetail: userDetailType
+
+  followingList: userType[]
+  followerList: userType[]
 
   followingCount: number
   followerCount: number
@@ -13,15 +16,27 @@ class UserProfile {
 
   loading: boolean
   modal
+
+  page: number
+  perPage: number
+  totalCount: number
+  totalPages: number
+
+  followLoading: boolean
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.userDetail = null
     this.loading = true
+    this.followLoading = true
     this.followerCount = 0
     this.followingCount = 0
     this.isFollowing = false
+    this.page = 1
+    this.perPage = 10
+    this.followerList = []
+    this.followingList = []
     makeAutoObservable(this);
   }
 
@@ -75,6 +90,68 @@ class UserProfile {
       )
     } finally {
       this.loading = false
+    }
+  }
+
+  prepareFollowingList = async (id) => {
+    try {
+      if (this.page === 1) {
+        this.followLoading = true
+      }
+      const resp = await getFollowingList({
+        page: this.page,
+        perPage: this.perPage
+      }, id)
+      if (resp.status === 200) {
+        this.followingList = [...this.followingList, ...resp.data?.following]
+        this.page = resp.data?.page
+        this.perPage = resp.data?.perPage
+        this.totalCount = resp.data?.totalCount
+        this.totalPages = resp.data?.totalPages
+      } else if (resp.status === 204) {
+        this.followerList = []
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการดึงรายการผู้ใช้ที่กำลังติดตาม",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      )
+    } finally {
+      this.followLoading = false
+    }
+  }
+
+  prepareFollowerList = async (id) => {
+    try {
+      if (this.page === 1) {
+        this.followLoading = true
+      }
+      const resp = await getFollowerList({
+        page: this.page,
+        perPage: this.perPage
+      }, id)
+      if (resp.status === 200) {
+        this.followerList = [...this.followerList, ...resp.data?.follower]
+        this.page = resp.data?.page
+        this.perPage = resp.data?.perPage
+        this.totalCount = resp.data?.totalCount
+        this.totalPages = resp.data?.totalPages
+      } else if (resp.status === 204) {
+        this.followerList = []
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการดึงรายการผู้ใช้ที่กำลังติดตาม",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      )
+    } finally {
+      this.followLoading = false
     }
   }
 }
