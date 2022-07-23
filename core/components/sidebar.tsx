@@ -53,7 +53,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "ข้อมูลบัญชีผู้ใช้",
       icon: "fas fa-user",
-      link: ["/profile"],
+      link: ["/me"],
     },
     {
       title: "การติดตามของฉัน",
@@ -79,9 +79,9 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
       link: ["/complaints"],
     },
     {
-      title: "จัดการบัญชีผู้ใช้",
+      title: "จัดการผู้ดูแลระบบ",
       icon: "fas fa-user-cog",
-      link: ["/users"],
+      link: ["/admins"],
     },
   ];
 

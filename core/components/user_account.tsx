@@ -89,7 +89,7 @@ export const UserAccount = ({ src, userName, role }: userAccountType) => {
           {isShowDropdown && (
             <>
               <div className="bg-white mt-2 sm:mt-3 w-[201px] h-[52px] sm:w-[250px] sm:h-[64px] rounded-[12px] card-shadow cursor-pointer bodyM absolute z-10">
-                <Link href={"/profile"}>
+                <Link href={"/me"}>
                   <a className="bg-white hover:bg-gray-20 border-b border-b-gray-30 rounded-t-[12px] flex items-center p-3 sm:p-4">
                     <i className="fas fa-user w-3 h-3 sm:w-4 sm:h-4"></i>
                     <p className="ml-4 bodyS sm:bodyM">ข้อมูลบัญชีผู้ใช้</p>

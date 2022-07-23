@@ -81,7 +81,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                   .add(543, "year")
                   .format("D MMM YY เวลา HH:mm น.")}`}</p>
               </div>
-              {((authContext.user?.username !== comment?.author?.username) || isShowKebab) && (
+              {(((authContext.user?.username !== comment?.author?.username) && authContext.user) || isShowKebab) && (
                 <div className="relative w-auto">
                   <div
                     ref={ref}

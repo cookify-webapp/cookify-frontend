@@ -7,6 +7,7 @@ import _ from "lodash";
 import Link from "next/link";
 
 import getConfig from "next/config";
+import classNames from "classnames";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -17,6 +18,7 @@ export const Recipe = ({
   averageRating,
   method,
   name,
+  isBorder
 }: recipePropType) => {
   //---------------------
   // RENDER
@@ -27,7 +29,7 @@ export const Recipe = ({
         <>
           <Link href={`/recipes/${id}`} passHref>
             <a>
-              <div className="rounded-[12px] bg-white w-full flex justify-center pr-4 space-x-4 h-[120px]">
+              <div className={classNames("rounded-[12px] bg-white w-full flex justify-center pr-4 space-x-4 h-[120px]", {'ring-1 ring-gray-30 my-[1px]': isBorder})}>
                 <div className="w-[120px] h-[120px] rounded-l-[12px] border-r border-gray-30 shrink-0">
                   <ImageWithFallback
                     src={`${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${image}`}
