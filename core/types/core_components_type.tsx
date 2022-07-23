@@ -44,7 +44,7 @@ export type sidebarType = {
 export type userAccountType = {
   src: string;
   userName: string;
-  role: "user" | "admin";
+  role: "user" | "admin" | '';
 };
 
 export type searchBoxType = {
