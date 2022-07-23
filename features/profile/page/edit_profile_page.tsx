@@ -11,7 +11,10 @@ import { readImageFile } from "core/utils/util_function";
 import { ModalContext } from "core/context/modal_context";
 import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
 import { FlashMessageContext } from "core/context/flash_message_context";
-import _ from 'lodash'
+import _ from "lodash";
+import getConfig from "next/config";
+import { SecondaryButton } from "@core/components/button/secondary_button";
+const { publicRuntimeConfig } = getConfig();
 
 export const EditProfilePage = () => {
   //---------------------
@@ -28,16 +31,14 @@ export const EditProfilePage = () => {
   const context = useContext(EditProfileContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
   const modal = useContext(ModalContext);
-  const ingredientSelectedModal = useContext(
-    IngredientSelectionModalContext
-  );
-  const flashMessageContext = useContext(FlashMessageContext)
+  const ingredientSelectedModal = useContext(IngredientSelectionModalContext);
+  const flashMessageContext = useContext(FlashMessageContext);
 
   //---------------------
   // ROUTER
   //---------------------
-  const router = useRouter()
-  
+  const router = useRouter();
+
   //---------------------
   //  FORMIK
   //---------------------
@@ -58,21 +59,21 @@ export const EditProfilePage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
-    context.setValue('formik', formik)
-    context.setValue('router', router)
-    context.setValue('flashMessageContext', flashMessageContext)
-    context.prepareMyProfile()
+    context.setValue("formik", formik);
+    context.setValue("router", router);
+    context.setValue("flashMessageContext", flashMessageContext);
+    context.prepareMyProfile();
 
     return () => {
-      formik.resetForm()
+      formik.resetForm();
       setCover({
         file: null,
         original_filename: "",
-      })
+      });
       context.setValue("selectedIngredient", []);
       ingredientSelectedModal.setValue("selectedIngredients", []);
-      context.setValue('userDetail', null)
-    }
+      context.setValue("userDetail", null);
+    };
   }, []);
 
   //------------------
@@ -130,7 +131,44 @@ export const EditProfilePage = () => {
           </div>
           {!context.loading && (
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl mb-8 mt-6">
-
+              <h1 className="headlineL">แก้ไขข้อมูลบัญชีผู้ใช้</h1>
+              <div className="bg-white mt-6 rounded-[12px] flex justify-center p-6">
+                <div>
+                  <div className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] rounded-full border border-gray-30 mx-auto overflow-hidden">
+                    {cover?.file || formik.values?.imageFileName ? (
+                      <img
+                        id="profileImage"
+                        src={
+                          cover?.file ||
+                          `${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${formik.values?.imageFileName}`
+                        }
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src="/images/core/default.png"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </div>
+                  <div className="w-[125px] mt-6 mx-auto">
+                    <SecondaryButton
+                      title="อัปโหลด"
+                      onClick={() => imgRef.current?.click()}
+                    />
+                    <input
+                      ref={imgRef}
+                      type="file"
+                      onChange={(e) => {
+                        onFileChange(e);
+                        e.target.value = null;
+                      }}
+                      accept="image/png, image/jpeg"
+                      hidden
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </HomeLayout>

@@ -196,7 +196,7 @@ export const UserProfilePage = () => {
                   </div>
                   <div className="grid grid-cols-12 gap-4 mt-6">
                     {isMe && (
-                      <div className="col-span-12 md:col-span-4 bg-white rounded-[12px] p-4 md:py-6">
+                      <div className="col-span-12 lg:col-span-4 bg-white rounded-[12px] p-4 md:py-6">
                         <h3 className="headlineM">ข้อมูลการแพ้วัตถุดิบ</h3>
                         {_.size(context.userDetail?.allergy) > 0 && (
                           <div className="flex flex-wrap space-x-4 space-y-4 mt-4">
