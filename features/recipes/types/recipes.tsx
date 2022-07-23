@@ -26,7 +26,7 @@ export type unitType = {
 export type ingredientType = {
   _id: string
   name: string
-  unit: unitType
+  unit?: unitType
   type: {
     _id: string
     name: string

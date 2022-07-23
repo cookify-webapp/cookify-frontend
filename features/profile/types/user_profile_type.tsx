@@ -1,10 +1,12 @@
+import { ingredientType } from "@features/recipes/types/recipes"
+
 export type userDetailType = {
   _id: string
   username: string
   email: string
   accountType: 'user' | 'admin'
   image: string
-  allergy: string[]
+  allergy: ingredientType[]
   bookmark: []
 }
 
