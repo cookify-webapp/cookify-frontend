@@ -297,13 +297,13 @@ export const AdminListPage = () => {
                         </div>
                       )}
                     {context.loadingPending && (
-                      <div className="col-span-7 py-10 flex items-center justify-center text-center text-gray-50">
+                      <div className="col-span-12 lg:col-span-7 py-10 flex items-center justify-center text-center text-gray-50">
                         <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
                       </div>
                     )}
                     {!context.loadingPending &&
                       _.size(context.pendingList) === 0 && (
-                        <div className="col-span-7 py-10 flex items-center text-center text-gray-50">
+                        <div className="col-span-12 lg:col-span-7 py-10 flex items-center text-center text-gray-50">
                           <div>
                             <i className="fas fa-user text-[48px] w-12 h-12"></i>
                             <p className="titleM mt-4">

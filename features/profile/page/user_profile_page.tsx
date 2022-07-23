@@ -13,6 +13,9 @@ import { FollowModal } from "../components/follow_modal";
 import { ModalContext } from "core/context/modal_context";
 import { AuthContext } from "core/context/auth_context";
 import _ from "lodash";
+import { TabFilter } from "@core/components/tab_filter";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Recipe } from "@core/components/recipe";
 const { publicRuntimeConfig } = getConfig();
 
 export const UserProfilePage = () => {
@@ -21,6 +24,7 @@ export const UserProfilePage = () => {
   //---------------------
   const [isOpen, setIsOpen] = useState(false);
   const [isFollowerClick, setIsFollowerClick] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   //---------------------
   // CONTEXT
@@ -49,8 +53,25 @@ export const UserProfilePage = () => {
     return () => {
       context.setValue("userDetail", null);
       setIsOpen(false);
+      context.setValue('activeTab', 'สูตรอาหาร');
+      context.setValue("page", 1);
+      context.setValue("pageRecipe", 1);
+      context.setValue("pageSnapshot", 1);
+      context.setValue("recipesList", []);
     };
   }, [user_id]);
+
+  //---------------------
+  // HANDLER
+  //---------------------
+  const preparationRecipe = async () => {
+    setHasMore(true);
+    context.setValue("page", context.pageRecipe + 1);
+    context.prepareUserRecipe(context.userDetail?.username);
+    if (context.pageRecipe === context.totalPagesRecipe) {
+      setHasMore(false);
+    }
+  };
 
   //---------------------
   // RENDER
@@ -175,7 +196,7 @@ export const UserProfilePage = () => {
                   </div>
                   <div className="grid grid-cols-12 gap-4 mt-6">
                     {isMe && (
-                      <div className="col-span-4 bg-white rounded-[12px] p-4 md:py-6">
+                      <div className="col-span-12 md:col-span-4 bg-white rounded-[12px] p-4 md:py-6">
                         <h3 className="headlineM">ข้อมูลการแพ้วัตถุดิบ</h3>
                         {_.size(context.userDetail?.allergy) > 0 && (
                           <div className="flex flex-wrap space-x-4 space-y-4 mt-4">
@@ -192,13 +213,98 @@ export const UserProfilePage = () => {
                             )}
                           </div>
                         )}
-                        {
-                          _.size(context.userDetail?.allergy) === 0 && (
-                            <p className="mt-4 bodyM text-gray-50">ไม่มีวัตถุดิบที่แพ้</p>
-                          )
-                        }
+                        {_.size(context.userDetail?.allergy) === 0 && (
+                          <p className="mt-4 bodyM text-gray-50">
+                            ไม่มีวัตถุดิบที่แพ้
+                          </p>
+                        )}
                       </div>
                     )}
+                    <div
+                      className={classNames(
+                        "p-4 md:p-6 col-span-12 bg-white rounded-[12px] mt-2 lg:mt-0",
+                        { "lg:col-span-8": isMe }
+                      )}
+                    >
+                      <div className="overflow-x-auto scrollbar-hide lg:overflow-x-visible lg:scrollbar-default">
+                        <TabFilter
+                          tabs={['สูตรอาหาร', 'Snapshot']}
+                          activeTab={context.activeTab}
+                          onClick={(value) => {
+                            context.setValue("activeTab", value);
+                            if (context.activeTab.includes("สูตรอาหาร")) {
+                              context.prepareUserRecipe(
+                                context.userDetail?.username
+                              );
+                              context.setValue("pageSnapshot", 1);
+                              context.setValue("snapshotsList", []);
+                            } else {
+                              context.prepareUserSnapshot();
+                              context.setValue("pageRecipe", 1);
+                              context.setValue("recipesList", []);
+                            }
+                          }}
+                        />
+                      </div>
+                      <div className="border-t-[1px] border-gray-30 pb-6" />
+                      {context.activeTab === "สูตรอาหาร" && (
+                        <>
+                          {_.size(context.recipesList) > 0 &&
+                            !context.recipeLoading && (
+                              <InfiniteScroll
+                                dataLength={context.recipesList.length}
+                                next={preparationRecipe}
+                                hasMore={hasMore}
+                                loader={""}
+                              >
+                                <div className="grid grid-cols-12 gap-4">
+                                  {_.map(
+                                    context.recipesList,
+                                    (recipe, index) => (
+                                      <div
+                                        className={classNames(
+                                          "col-span-12 md:col-span-6",
+                                          { "xl:col-span-4": !isMe }
+                                        )}
+                                        key={`recipe_${index}`}
+                                      >
+                                        <Recipe
+                                          author={recipe.author?.username}
+                                          averageRating={recipe.averageRating}
+                                          id={recipe._id}
+                                          image={recipe.image}
+                                          method={recipe.method?.name}
+                                          name={recipe.name}
+                                          isBorder
+                                        />
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </InfiniteScroll>
+                            )}
+                          {context.recipeLoading && (
+                            <div className="py-10 flex items-center justify-center text-center text-gray-50">
+                              <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                            </div>
+                          )}
+                          {!context.recipeLoading &&
+                            _.size(context.recipesList) === 0 && (
+                              <div className="py-10 flex items-center text-center text-gray-50">
+                                <div>
+                                  <i className="fas fa-user text-[48px] w-12 h-12"></i>
+                                  <p className="titleM mt-4">
+                                    ไม่มีรายการผู้ดูแลระบบ
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+                        </>
+                      )}
+                      {context.activeTab === 'Snapshot' && (
+                        <p>Snapshot here</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

@@ -65,6 +65,7 @@ export type recipePropType = {
   image: string
   author: string
   averageRating: number
+  isBorder?: boolean
 };
 
 export type ingredientPropType = {

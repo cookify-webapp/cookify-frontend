@@ -14,3 +14,19 @@ export type userType = {
   email: string
   image: string
 }
+
+export type recipesListType = {
+  _id: string
+  name: string
+  method: {
+    _id: string
+    name: string
+  }
+  image: string
+  author: {
+    _id: string
+    name: string
+  }
+  createdAt: string
+  averageRating: number
+}
