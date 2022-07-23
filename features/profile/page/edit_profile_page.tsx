@@ -14,6 +14,9 @@ import { FlashMessageContext } from "core/context/flash_message_context";
 import _ from "lodash";
 import getConfig from "next/config";
 import { SecondaryButton } from "@core/components/button/secondary_button";
+import { TextBox } from "@core/components/input/text_box";
+import { PrimaryButton } from "@core/components/button/primary_button";
+import { Tag } from "@core/components/tag";
 const { publicRuntimeConfig } = getConfig();
 
 export const EditProfilePage = () => {
@@ -70,7 +73,6 @@ export const EditProfilePage = () => {
         file: null,
         original_filename: "",
       });
-      context.setValue("selectedIngredient", []);
       ingredientSelectedModal.setValue("selectedIngredients", []);
       context.setValue("userDetail", null);
     };
@@ -166,6 +168,97 @@ export const EditProfilePage = () => {
                       accept="image/png, image/jpeg"
                       hidden
                     />
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-12 gap-4 bg-white rounded-[12px] p-6 mt-4 md:mt-6">
+                <div className="col-span-12 md:col-span-4">
+                  <p className="text-[18px]">ชื่อผู้ใช้งาน</p>
+                  <p className="mt-2 text-[20px] font-semibold">
+                    {context.userDetail?.username}
+                  </p>
+                </div>
+                <div className="col-span-12 md:col-span-4">
+                  <p className="text-[18px]">อีเมล *</p>
+                  <div className="mt-2">
+                    <TextBox
+                      onChange={(e) => {
+                        formik.setFieldTouched("email");
+                        formik.setFieldValue("email", e.target.value);
+                      }}
+                      type="text"
+                      value={formik.values?.email}
+                      error={
+                        formik.errors?.email && formik.touched?.email
+                          ? formik.errors?.email
+                          : ""
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="col-span-12 md:col-span-4">
+                  <p className="text-[18px]">ระดับบัญชี</p>
+                  <p className="mt-2 text-[20px] font-semibold">
+                    {context.userDetail?.accountType === "admin"
+                      ? "ผู้ดูแลระบบ"
+                      : "ผู้ใช้ทั่วไป"}
+                  </p>
+                </div>
+              </div>
+              <div className="bg-white rounded-[12px] py-6 grid grid-cols-12 gap-x-4 mt-4 md:mt-6">
+                <div className="px-6 col-span-12 md:col-span-5 xl:col-span-4">
+                  <p className="titleM">เลือกวัตถุดิบที่แพ้</p>
+                  <div className="w-full mt-6">
+                    <PrimaryButton
+                      title="เลือกวัตถุดิบ"
+                      onClick={() => {
+                        const tempSelectedIngredients = _.cloneDeep(
+                          formik.values?.allergy
+                        );
+                        ingredientSelectedModal.openModal(
+                          () => {
+                            formik.setFieldValue(
+                              "allergy",
+                              ingredientSelectedModal.selectedIngredients
+                            );
+                          },
+                          () => {
+                            ingredientSelectedModal.setValue(
+                              "selectedIngredients",
+                              tempSelectedIngredients
+                            );
+                          }
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="md:border-l md:border-gray-30 col-span-12 md:col-span-7 xl:col-span-8 pr-6 pl-6 md:pl-0 pt-6 md:pt-0">
+                  <p className="bodyM pb-4 md:pl-6">วัตถุดิบที่เลือก</p>
+                  <div className="md:pl-6 flex flex-wrap space-x-2 mr-2">
+                    {_.size(formik.values?.allergy) > 0 && (
+                      <>
+                        {_.map(
+                          formik.values?.allergy,
+                          (ingredient, index) => (
+                            <div
+                              key={`${ingredient.name}_${index}`}
+                              className="w-auto"
+                            >
+                              <Tag
+                                label={ingredient.name}
+                                onDeleteTag={() => handleRemoveTag(ingredient)}
+                              />
+                            </div>
+                          )
+                        )}
+                      </>
+                    )}
+                    {_.size(formik.values?.allergy) === 0 && (
+                      <p className="bodyM text-gray-50">
+                        ไม่มีรายการวัตถุดิบที่เลือก
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

@@ -18,7 +18,6 @@ class EditProfile {
   }
   router
   flashMessageContext
-  selectedIngredient
   //-------------------
   // CONSTUCTOR
   //-------------------
