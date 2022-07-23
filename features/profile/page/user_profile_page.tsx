@@ -292,9 +292,9 @@ export const UserProfilePage = () => {
                             _.size(context.recipesList) === 0 && (
                               <div className="py-10 flex items-center text-center text-gray-50">
                                 <div>
-                                  <i className="fas fa-user text-[48px] w-12 h-12"></i>
+                                  <i className="fas fa-book text-[48px] w-12 h-12"></i>
                                   <p className="titleM mt-4">
-                                    ไม่มีรายการผู้ดูแลระบบ
+                                    ไม่มีรายการสูตรอาหาร
                                   </p>
                                 </div>
                               </div>
