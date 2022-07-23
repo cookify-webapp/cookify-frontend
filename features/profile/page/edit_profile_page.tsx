@@ -53,7 +53,7 @@ export const EditProfilePage = () => {
     validationSchema: () => profileValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      console.log("");
+      context.editProfile(value)
     },
   });
 
@@ -260,6 +260,47 @@ export const EditProfilePage = () => {
                       </p>
                     )}
                   </div>
+                </div>
+              </div>
+              <div className="flex justify-center space-x-4 mt-8 items-center">
+                <div className="w-full md:w-[150px]">
+                  <SecondaryButton
+                    title="ยกเลิก"
+                    onClick={() => {
+                      if (formik.dirty) {
+                        modal.openModal(
+                          'ต้องการยกเลิกใช่ไหม ?',
+                          'หากยกเลิก ระบบจะไม่บันทึกข้อมูลที่ได้ทำการเปลี่ยนแปลง',
+                          () => {
+                            modal.closeModal()
+                            router.push('/me')
+                            formik.resetForm()
+                            setCover({
+                              file: null,
+                              original_filename: "",
+                            })
+                          },
+                          'ไม่',
+                          'ต้องการยกเลิก'
+                        )
+                      } else {
+                        router.push('/me')
+                        formik.resetForm()
+                        setCover({
+                          file: null,
+                          original_filename: "",
+                        })
+                      }
+                    }}
+                  />
+                </div>
+                <div className="w-full md:w-[150px]">
+                  <PrimaryButton
+                    title={'บันทึก'}
+                    onClick={() => formik.submitForm()}
+                    disabled={!formik.dirty || !formik.isValid}
+                    loading={context.editProfileLoading}
+                  />
                 </div>
               </div>
             </div>

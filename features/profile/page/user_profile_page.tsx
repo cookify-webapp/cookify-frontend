@@ -53,7 +53,7 @@ export const UserProfilePage = () => {
     return () => {
       context.setValue("userDetail", null);
       setIsOpen(false);
-      context.setValue('activeTab', 'สูตรอาหาร');
+      context.setValue("activeTab", "สูตรอาหาร");
       context.setValue("page", 1);
       context.setValue("pageRecipe", 1);
       context.setValue("pageSnapshot", 1);
@@ -196,28 +196,30 @@ export const UserProfilePage = () => {
                   </div>
                   <div className="grid grid-cols-12 gap-4 mt-6">
                     {isMe && (
-                      <div className="col-span-12 lg:col-span-4 bg-white rounded-[12px] p-4 md:py-6">
-                        <h3 className="headlineM">ข้อมูลการแพ้วัตถุดิบ</h3>
-                        {_.size(context.userDetail?.allergy) > 0 && (
-                          <div className="flex flex-wrap space-x-4 space-y-4 mt-4">
-                            {_.map(
-                              context.userDetail?.allergy,
-                              (item, index) => (
-                                <div
-                                  className="rounded-full bg-beige-20 px-3 py-1 max-w-min text-brown-10 text-center bodyM"
-                                  key={`allergy_${index}`}
-                                >
-                                  {item}
-                                </div>
-                              )
-                            )}
-                          </div>
-                        )}
-                        {_.size(context.userDetail?.allergy) === 0 && (
-                          <p className="mt-4 bodyM text-gray-50">
-                            ไม่มีวัตถุดิบที่แพ้
-                          </p>
-                        )}
+                      <div className="col-span-12 lg:col-span-4">
+                        <div className="bg-white rounded-[12px] p-4 md:py-6">
+                          <h3 className="headlineM">ข้อมูลการแพ้วัตถุดิบ</h3>
+                          {_.size(context.userDetail?.allergy) > 0 && (
+                            <div className="flex flex-wrap space-x-4 space-y-4 mt-4">
+                              {_.map(
+                                context.userDetail?.allergy,
+                                (item, index) => (
+                                  <div
+                                    className="rounded-full bg-beige-20 px-3 py-1 w-auto text-brown-10 text-center bodyM"
+                                    key={`allergy_${index}`}
+                                  >
+                                    {item.name}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          )}
+                          {_.size(context.userDetail?.allergy) === 0 && (
+                            <p className="mt-4 bodyM text-gray-50">
+                              ไม่มีวัตถุดิบที่แพ้
+                            </p>
+                          )}
+                        </div>
                       </div>
                     )}
                     <div
@@ -228,7 +230,7 @@ export const UserProfilePage = () => {
                     >
                       <div className="overflow-x-auto scrollbar-hide lg:overflow-x-visible lg:scrollbar-default">
                         <TabFilter
-                          tabs={['สูตรอาหาร', 'Snapshot']}
+                          tabs={["สูตรอาหาร", "Snapshot"]}
                           activeTab={context.activeTab}
                           onClick={(value) => {
                             context.setValue("activeTab", value);
@@ -301,9 +303,7 @@ export const UserProfilePage = () => {
                             )}
                         </>
                       )}
-                      {context.activeTab === 'Snapshot' && (
-                        <p>Snapshot here</p>
-                      )}
+                      {context.activeTab === "Snapshot" && <p>Snapshot here</p>}
                     </div>
                   </div>
                 </div>

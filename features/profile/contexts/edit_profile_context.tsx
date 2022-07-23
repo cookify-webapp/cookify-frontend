@@ -4,6 +4,8 @@ import Cookies from 'js-cookie'
 import { getMe } from "@core/services/profile/get_profile";
 import { userDetailType } from "../types/user_profile_type";
 import { ingredientType } from "@features/recipes/types/recipes";
+import { createProfileFormData } from "../forms/edit_profile_form";
+import { editProfile } from "@core/services/profile/put_profile";
 
 class EditProfile {
   userDetail: userDetailType
@@ -18,11 +20,13 @@ class EditProfile {
   }
   router
   flashMessageContext
+  editProfileLoading
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.loading = true
+    this.editProfileLoading = false
     makeAutoObservable(this);
   }
 
@@ -58,6 +62,33 @@ class EditProfile {
       )
     } finally {
       this.loading = false
+    }
+  }
+
+  editProfile = async (value) => {
+    try {
+      this.editProfileLoading = true
+      const formData = createProfileFormData(value);
+      const token = Cookies.get("token");
+      const resp = await editProfile(formData, token);
+      if (resp.status === 200) {
+        this.formik?.resetForm()
+        this.router.push(`/me`);
+        this.flashMessageContext.handleShow(
+          "แก้ไขสำเร็จ",
+          "แก้ไขข้อมูลผู้ใช้งานสำเร็จ"
+        );
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการแก้ไขข้อมูลผู้ใช้งาน",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      )
+    } finally {
+      this.editProfileLoading = false
     }
   }
 }
