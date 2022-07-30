@@ -35,7 +35,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "Snapshot",
       icon: "fas fa-camera",
-      link: ["/shapshots"],
+      link: ["/snapshots"],
     },
     {
       title: "สุ่มสูตรอาหาร",
