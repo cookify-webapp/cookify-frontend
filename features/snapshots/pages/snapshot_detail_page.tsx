@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { createRef, Fragment, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -13,6 +13,10 @@ import Link from "next/link";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import dayjs from "dayjs";
 import "dayjs/locale/th";
+import _ from 'lodash'
+import InfiniteScroll from "react-infinite-scroll-component";
+import { CommentBlock } from "../components/comment_block";
+import { commentListType } from "../types/snapshot_detail_type";
 const { publicRuntimeConfig } = getConfig();
 
 export const SnapshotDetailPage = () => {
@@ -20,6 +24,7 @@ export const SnapshotDetailPage = () => {
   // STATE
   //---------------------
   const [open, setOpen] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   //---------------------
   // CONTEXT
@@ -45,6 +50,22 @@ export const SnapshotDetailPage = () => {
   }, []);
 
   //---------------------
+  //   HANDLER
+  //---------------------
+  const preparation = async () => {
+    setHasMore(true);
+    context.setValue("page", context.page + 1);
+    if (authContext.user) {
+      context.prepareSnapshotCommentsList(snapshotId, true);
+    } else {
+      context.prepareSnapshotCommentsList(snapshotId, false);
+    }
+    if (context.page === context.totalPages) {
+      setHasMore(false);
+    }
+  };
+
+  //---------------------
   //   REF
   //---------------------
   const ref: any = createRef();
@@ -54,6 +75,7 @@ export const SnapshotDetailPage = () => {
   useOnClickOutside(ref, () => {
     setOpen(false);
   });
+
   //---------------------
   // RENDER
   //---------------------
@@ -206,6 +228,67 @@ export const SnapshotDetailPage = () => {
                           .add(543, "year")
                           .format("D MMM YY เวลา HH:mm น.")}`}</p>
                       </div>
+                    </div>
+                  </div>
+                  <div className="col-span-12 md:col-span-7 lg:col-span-8">
+                    <div className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default">
+                      {!authContext.user && (
+                        <p className="bodyL mt-4 text-center">
+                          อยากร่วมแสดงความคิดเห็นกับเราไหม ?
+                          <br className="md:hidden" />
+                          <Link href="/login" passHref>
+                            <a className="underline text-brown-10">
+                              ลงชื่อเข้าสู่ระบบ
+                            </a>
+                          </Link>
+                          <br className="md:hidden" />
+                          {` เพื่อแสดงความคิดเห็นเลย`}
+                        </p>
+                      )}
+                      {_.size(context.commentList) > 0 &&
+                        !context.loading && (
+                          <div
+                            id="scrollableComments"
+                            className="max-h-[500px] overflow-y-auto scrollbar-hide pb-6"
+                          >
+                            <InfiniteScroll
+                              dataLength={
+                                context.commentList.length
+                              }
+                              next={preparation}
+                              hasMore={hasMore}
+                              loader=""
+                              scrollableTarget="scrollableComments"
+                            >
+                              <div className="space-y-6">
+                                {_.map(
+                                  context.commentList,
+                                  (comment: commentListType, index) => (
+                                    <Fragment key={`comment_${index}`}>
+                                      <CommentBlock comment={comment}/>
+                                    </Fragment>
+                                  )
+                                )}
+                              </div>
+                            </InfiniteScroll>
+                          </div>
+                        )}
+                      {_.size(context.commentList) === 0 &&
+                        !context.loading && (
+                          <div className="flex items-center text-center text-gray-50 h-[420px]">
+                            <div>
+                              <i className="fas fa-comment text-[48px] w-12 h-12"></i>
+                              <p className="titleM mt-4">
+                                ไม่มีรายการความคิดเห็น
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      {context.loading && (
+                        <div className="flex items-center justify-center text-center text-gray-50 h-[420px]">
+                          <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
