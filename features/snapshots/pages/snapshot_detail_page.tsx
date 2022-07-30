@@ -11,6 +11,8 @@ import getConfig from "next/config";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
 import Link from "next/link";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
+import dayjs from "dayjs";
+import "dayjs/locale/th";
 const { publicRuntimeConfig } = getConfig();
 
 export const SnapshotDetailPage = () => {
@@ -51,7 +53,6 @@ export const SnapshotDetailPage = () => {
   useOnClickOutside(ref, () => {
     setOpen(false);
   });
-
   //---------------------
   // RENDER
   //---------------------
@@ -78,7 +79,10 @@ export const SnapshotDetailPage = () => {
               <h1 className="pt-8 lg:pt-2 headlineL">Snapshot</h1>
               {!context.loadingDetail && (
                 <div className="mt-6 grid grid-cols-12 gap-4">
-                  <div className="col-span-12 md:col-span-5 lg:col-span-4">
+                  <div
+                    className="col-span-12 md:col-span-5 lg:col-span-4"
+                    id="snapshotDetail"
+                  >
                     <div className="bg-white rounded-[12px]">
                       <div className="flex items-center justify-between py-2 px-4 space-x-6">
                         <Link
@@ -96,7 +100,7 @@ export const SnapshotDetailPage = () => {
                                 <ImageWithFallback
                                   alt="snapshot cover image"
                                   className="w-full h-full object-cover"
-                                  src={`${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${context.snapshotDetail?.image}`}
+                                  src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${context.snapshotDetail?.author?.image}`}
                                 />
                               </div>
                               <p className="titleS">
@@ -120,7 +124,11 @@ export const SnapshotDetailPage = () => {
                                   <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                                     <div
                                       className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() => router.push(`/snapshots/${snapshotId}/edit`)}
+                                      onClick={() =>
+                                        router.push(
+                                          `/snapshots/${snapshotId}/edit`
+                                        )
+                                      }
                                     >
                                       <i className="fas fa-pen w-auto"></i>
                                       <p className="ml-3 w-auto">
@@ -132,9 +140,13 @@ export const SnapshotDetailPage = () => {
                                       onClick={() => {
                                         modal.openModal(
                                           "ลบ Snapshot นี้หรือไม่",
-                                          <p>เมื่อทำการลบ Snapshot แล้ว จะไม่สามารถกู้คืนได้อีก ท่านยืนยันที่จะลบหรือไม่ ?</p>,
+                                          <p>
+                                            เมื่อทำการลบ Snapshot แล้ว
+                                            จะไม่สามารถกู้คืนได้อีก
+                                            ท่านยืนยันที่จะลบหรือไม่ ?
+                                          </p>,
                                           () => {
-                                            null
+                                            null;
                                           },
                                           "ยกเลิก",
                                           "ลบ"
@@ -142,9 +154,7 @@ export const SnapshotDetailPage = () => {
                                       }}
                                     >
                                       <i className="fas fa-trash w-auto"></i>
-                                      <p className="ml-3 w-auto">
-                                        ลบ Snapshot
-                                      </p>
+                                      <p className="ml-3 w-auto">ลบ Snapshot</p>
                                     </div>
                                   </div>
                                 )}
@@ -163,6 +173,37 @@ export const SnapshotDetailPage = () => {
                             )}
                           </div>
                         )}
+                      </div>
+                      <div className="h-[347px] max-h-[347px]">
+                        <ImageWithFallback
+                          alt="snapshot cover image"
+                          className="w-full h-full object-cover"
+                          src={`${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${context.snapshotDetail?.image}`}
+                        />
+                      </div>
+                      <div className="py-3 px-4">
+                        <Link
+                          href={`/recipes/${context.snapshotDetail?.recipe?._id}`}
+                          passHref
+                        >
+                          <a>
+                            <div className="flex space-x-2 items-center py-[5px] px-3 max-w-max bg-beige-20 rounded-[5px]">
+                              <i className="fas fa-book text-[14px] leading-[14px] text-brown-10 w-auto" />
+                              <p className="line-clamp-1 w-auto">
+                                {context.snapshotDetail?.recipe?.name}
+                              </p>
+                            </div>
+                          </a>
+                        </Link>
+                        <p className="my-2 bodyM">
+                          {context.snapshotDetail?.caption}
+                        </p>
+                        <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
+                          context.snapshotDetail?.createdAt
+                        )
+                          .locale("th")
+                          .add(543, "year")
+                          .format("D MMM YY เวลา HH:mm น.")}`}</p>
                       </div>
                     </div>
                   </div>

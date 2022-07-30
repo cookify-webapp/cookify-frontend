@@ -165,7 +165,7 @@ export const RecipeDetailPage = () => {
                           <h3 className="headlineL">
                             {context.recipeDetail?.name}
                           </h3>
-                          <p className="bodyM text-gray-50">{`โดย ${dayjs(
+                          <p className="bodyM text-gray-50">{`โดย ${context.recipeDetail?.author?.username} เมื่อ ${dayjs(
                             context.recipeDetail?.createdAt
                           )
                             .locale("th")

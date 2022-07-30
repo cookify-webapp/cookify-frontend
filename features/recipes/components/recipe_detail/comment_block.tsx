@@ -74,7 +74,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                     <p className="ml-2">{comment?.rating.toFixed(1)}</p>
                   </div>
                 </div>
-                <p className="bodyM text-gray-50">{`โดย ${dayjs(
+                <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
                   comment?.createdAt
                 )
                   .locale("th")
