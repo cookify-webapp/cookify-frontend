@@ -251,8 +251,7 @@ export const RecipeDetailPage = () => {
                         <div className="flex items-center w-auto">
                           <div>
                             <Rating
-                              rating={context.recipeDetail?.averageRating}
-                              spaceX="space-x-2"
+                              rating={4.5}
                             />
                           </div>
                           <p className="ml-2">

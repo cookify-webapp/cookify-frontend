@@ -68,6 +68,10 @@ class RecipeComment {
         this.myComment = null;
         this.isAlreadyComment = false;
         this.formik?.resetForm()
+        this.initValue = {
+          rating: 0,
+          comment: ''
+        }
       }
     } catch (error) {
       this.modal.openModal(
