@@ -69,7 +69,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                   <p className="titleS w-auto">{comment?.author?.username}</p>
                   <div className="flex items-center w-auto md:ml-4">
                     <div className="w-auto">
-                      <Rating rating={comment?.rating} spaceX="space-x-2" />
+                      <Rating rating={comment?.rating} />
                     </div>
                     <p className="ml-2">{comment?.rating.toFixed(1)}</p>
                   </div>
