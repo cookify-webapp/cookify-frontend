@@ -41,6 +41,7 @@ export const SnapshotDetailPage = () => {
   useEffect(() => {
     context.setValue("modal", modal);
     context.prepareSnapshotDetail(snapshotId, authContext.user !== null);
+    context.prepareSnapshotCommentsList(snapshotId, authContext.user !== null);
   }, []);
 
   //---------------------

@@ -40,7 +40,7 @@ class SnapshotList {
         perPage: this.perPage
       })
       if (resp.status === 200) {
-        this.snapshotsList = resp.data?.snapshots
+        this.snapshotsList = [...this.snapshotsList, ...resp.data?.snapshots]
         this.page = resp.data?.page
         this.perPage = resp.data?.perPage
         this.totalCount = resp.data?.totalCount

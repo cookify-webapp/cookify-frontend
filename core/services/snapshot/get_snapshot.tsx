@@ -38,3 +38,21 @@ export const getSnapshotDetail = (id, token?) => {
     });
   }
 };
+
+export const getSnapshotCommentsList = (params, id, token?) => {
+  const query = querystring.stringify(params);
+  if (token) {
+    return axios.get(`${publicRuntimeConfig.CKF_COMMENT_API}/snapshot/${id}/list?${query}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+    });
+  } else {
+    return axios.get(`${publicRuntimeConfig.CKF_COMMENT_API}/snapshot/${id}/list?${query}`, {
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  }
+};
