@@ -140,6 +140,9 @@ export const CommentBlock = ({comment}: commentBlockPropType) => {
                 </div>
               )}
             </div>
+            <p className="mt-2 pl-[60px] text-[14px]">
+              {comment.comment}
+            </p>
           </div>
         </div>
       )}

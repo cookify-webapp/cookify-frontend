@@ -260,7 +260,7 @@ export const SnapshotDetailPage = () => {
                               loader=""
                               scrollableTarget="scrollableComments"
                             >
-                              <div className="space-y-6">
+                              <div className="space-y-4">
                                 {_.map(
                                   context.commentList,
                                   (comment: commentListType, index) => (
