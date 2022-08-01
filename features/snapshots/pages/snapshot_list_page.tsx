@@ -89,7 +89,7 @@ export const SnapshotListPage = () => {
                       <div className="grid grid-cols-12 gap-4">
                         {authContext.isLogIn && (
                           <div
-                            className="text-white h-[120px] text-center flex items-center cursor-pointer rounded-[12px] col-span-12 md:col-span-6 xl:col-span-4"
+                            className="text-white h-[120px] text-center flex items-center cursor-pointer rounded-[12px] col-span-12 md:col-span-6"
                             style={{
                               background: `url(/images/snapshots/add_snapshot.svg) no-repeat center`,
                               backgroundSize: "cover",
