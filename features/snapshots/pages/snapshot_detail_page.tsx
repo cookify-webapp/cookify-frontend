@@ -1,4 +1,10 @@
-import React, { createRef, Fragment, useContext, useEffect, useState } from "react";
+import React, {
+  createRef,
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
 import { SearchBox } from "@core/components/input/search_box";
@@ -13,10 +19,16 @@ import Link from "next/link";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import dayjs from "dayjs";
 import "dayjs/locale/th";
-import _ from 'lodash'
+import _ from "lodash";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CommentBlock } from "../components/comment_block";
 import { commentListType } from "../types/snapshot_detail_type";
+import { TextAreaInput } from "@core/components/input/text_area_input";
+import { useFormik } from "formik";
+import { commentValidateSchema } from "../forms/comment_form";
+import { SecondaryButton } from "@core/components/button/secondary_button";
+import { PrimaryButton } from "@core/components/button/primary_button";
+import { FlashMessageContext } from "core/context/flash_message_context";
 const { publicRuntimeConfig } = getConfig();
 
 export const SnapshotDetailPage = () => {
@@ -33,6 +45,7 @@ export const SnapshotDetailPage = () => {
   const modal = useContext(ModalContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
+  const flashMessageContext = useContext(FlashMessageContext)
 
   //---------------------
   //  ROUTER
@@ -41,12 +54,38 @@ export const SnapshotDetailPage = () => {
   const { snapshotId } = router.query;
 
   //---------------------
+  //  FORMIK
+  //---------------------
+  const formik = useFormik({
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: false,
+    validateOnMount: true,
+    validationSchema: () => commentValidateSchema,
+    initialValues: context.initValue,
+    onSubmit: (value) => {
+      context.isEditIndex !== -1 ?
+      null
+      :
+      context.addComment(snapshotId, value)
+    },
+  });
+
+  //---------------------
   // EFFECT
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue('formik', formik)
+    context.setValue('flashMessageContext', flashMessageContext)
     context.prepareSnapshotDetail(snapshotId, authContext.user !== null);
     context.prepareSnapshotCommentsList(snapshotId, authContext.user !== null);
+
+    return () => {
+      context.setValue('initValue', { comment: ''})
+      formik.resetForm()
+      context.setValue('commentList', [])
+    }
   }, []);
 
   //---------------------
@@ -230,66 +269,97 @@ export const SnapshotDetailPage = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-12 md:col-span-7 lg:col-span-8">
+                  <div className="col-span-12 md:col-span-7 lg:col-span-8 bg-white rounded-[12px]">
                     <div className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default">
-                      {!authContext.user && (
-                        <p className="bodyL mt-4 text-center">
-                          อยากร่วมแสดงความคิดเห็นกับเราไหม ?
-                          <br className="md:hidden" />
-                          <Link href="/login" passHref>
-                            <a className="underline text-brown-10">
-                              ลงชื่อเข้าสู่ระบบ
-                            </a>
-                          </Link>
-                          <br className="md:hidden" />
-                          {` เพื่อแสดงความคิดเห็นเลย`}
-                        </p>
-                      )}
-                      {_.size(context.commentList) > 0 &&
-                        !context.loading && (
-                          <div
-                            id="scrollableComments"
-                            className="max-h-[500px] overflow-y-auto scrollbar-hide pb-6"
+                      {_.size(context.commentList) > 0 && !context.loading && (
+                        <div
+                          id="scrollableComments"
+                        >
+                          <InfiniteScroll
+                            dataLength={context.commentList.length}
+                            next={preparation}
+                            hasMore={hasMore}
+                            loader=""
+                            scrollableTarget="scrollableComments"
                           >
-                            <InfiniteScroll
-                              dataLength={
-                                context.commentList.length
-                              }
-                              next={preparation}
-                              hasMore={hasMore}
-                              loader=""
-                              scrollableTarget="scrollableComments"
-                            >
-                              <div className="space-y-4">
-                                {_.map(
-                                  context.commentList,
-                                  (comment: commentListType, index) => (
-                                    <Fragment key={`comment_${index}`}>
-                                      <CommentBlock comment={comment}/>
-                                    </Fragment>
-                                  )
-                                )}
-                              </div>
-                            </InfiniteScroll>
-                          </div>
-                        )}
-                      {_.size(context.commentList) === 0 &&
-                        !context.loading && (
-                          <div className="flex items-center text-center text-gray-50 h-[420px]">
-                            <div>
-                              <i className="fas fa-comment text-[48px] w-12 h-12"></i>
-                              <p className="titleM mt-4">
-                                ไม่มีรายการความคิดเห็น
-                              </p>
+                            <div className="space-y-4">
+                              {_.map(
+                                context.commentList,
+                                (comment: commentListType, index) => (
+                                  <Fragment key={`comment_${index}`}>
+                                    <CommentBlock comment={comment} isEdit={context.isEditIndex === index} index={index} />
+                                  </Fragment>
+                                )
+                              )}
                             </div>
+                          </InfiniteScroll>
+                        </div>
+                      )}
+                      {_.size(context.commentList) === 0 && !context.loading && (
+                        <div className="flex items-center text-center text-gray-50 h-[420px]">
+                          <div>
+                            <i className="fas fa-comment text-[48px] w-12 h-12"></i>
+                            <p className="titleM mt-4">
+                              ไม่มีรายการความคิดเห็น
+                            </p>
                           </div>
-                        )}
+                        </div>
+                      )}
                       {context.loading && (
                         <div className="flex items-center justify-center text-center text-gray-50 h-[420px]">
                           <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
                         </div>
                       )}
                     </div>
+                    <div className="border-t border-gray-40 my-4 " />
+                    {!authContext.user && (
+                      <div className="bg-white rounded-[12px] pb-4">
+                        <p className="bodyL text-center">
+                          อยากร่วมแสดงความคิดเห็นกับเราไหม ?
+                          <br />
+                          <Link href="/login" passHref>
+                            <a className="underline text-brown-10">
+                              ลงชื่อเข้าสู่ระบบ
+                            </a>
+                          </Link>
+                          <br />
+                          {` เพื่อแสดงความคิดเห็นเลย`}
+                        </p>
+                      </div>
+                    )}
+                    {authContext.user && (
+                      <div className="my-6 px-4">
+                        <TextAreaInput
+                          onChange={(e) => {
+                            formik.setFieldValue("comment", e.target.value);
+                          }}
+                          value={formik.values?.comment}
+                          placeholder="แสดงความคิดเห็นที่นี่..."
+                          height={100}
+                        />
+                        <div className="flex space-x-4 md:justify-end mt-3">
+                          {context.isEditIndex !== -1 && (
+                            <div className="w-full md:w-[120px]">
+                              <SecondaryButton
+                                onClick={() => {
+                                  context.setValue("isEditIndex", -1);
+                                }}
+                                title="ยกเลิก"
+                              />
+                            </div>
+                          )}
+                          <div className="w-full md:w-[120px]">
+                            <PrimaryButton
+                              onClick={() => {
+                                formik.submitForm();
+                              }}
+                              disabled={!formik.dirty || !formik.isValid}
+                              title={context.isEditIndex !== -1 ? "บันทึก" : "ส่ง"}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

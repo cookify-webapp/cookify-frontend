@@ -9,6 +9,7 @@ import {
   getSnapshotDetail,
 } from "@core/services/snapshot/get_snapshot";
 import Cookies from "js-cookie";
+import { addSnapshotComment } from "@core/services/snapshot/post_snapshot";
 
 class SnapshotDetail {
   snapshotDetail: snapshotDetailType;
@@ -16,21 +17,34 @@ class SnapshotDetail {
 
   commentList: commentListType[];
 
+  initValue: {
+    comment: string
+  }
+
+  isEditIndex: number
+
   modal;
   page: number;
   loading: boolean;
   perPage: number;
   totalCount: number;
   totalPages: number;
+  formik: any;
+  flashMessageContext: any;
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
+    this.initValue = {
+      comment: ''
+    }
     this.snapshotDetail = null;
     this.loadingDetail = false;
     this.commentList = [];
     this.page = 1
     this.perPage = 5
+    this.loading = true
+    this.isEditIndex = -1
     makeAutoObservable(this);
   }
 
@@ -120,6 +134,41 @@ class SnapshotDetail {
       );
     } finally {
       this.loading = false;
+    }
+  };
+
+  addComment = async (snapshotId, value) => {
+    try {
+      const data = {
+        comment: value.comment,
+        rating: 0,
+      };
+      const comment = {
+        data: data,
+      };
+      const token = Cookies.get("token");
+      const resp = await addSnapshotComment(
+        snapshotId,
+        JSON.stringify(comment),
+        token
+      );
+      if (resp.status === 200) {
+        this.formik?.resetForm();
+        this.commentList = []
+        this.prepareSnapshotCommentsList(snapshotId, true)
+        this.flashMessageContext.handleShow(
+          "เพิ่มสำเร็จ",
+          "เพิ่มความคิดเห็นสำเร็จ"
+        );
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการเพิ่มความคิดเห็น",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
     }
   };
 }
