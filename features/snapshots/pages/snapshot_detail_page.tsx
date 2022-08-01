@@ -65,7 +65,7 @@ export const SnapshotDetailPage = () => {
     initialValues: context.initValue,
     onSubmit: (value) => {
       context.isEditIndex !== -1 ?
-      null
+      context.editComment(snapshotId, context.commentList[context.isEditIndex]._id, value)
       :
       context.addComment(snapshotId, value)
     },
@@ -287,7 +287,7 @@ export const SnapshotDetailPage = () => {
                                 context.commentList,
                                 (comment: commentListType, index) => (
                                   <Fragment key={`comment_${index}`}>
-                                    <CommentBlock comment={comment} isEdit={context.isEditIndex === index} index={index} />
+                                    <CommentBlock comment={comment} isEdit={context.isEditIndex === index} index={index} formik={formik}/>
                                   </Fragment>
                                 )
                               )}

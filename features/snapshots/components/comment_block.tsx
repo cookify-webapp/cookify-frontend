@@ -18,12 +18,14 @@ interface commentBlockPropType {
   comment: commentListType;
   isEdit: boolean;
   index: number;
+  formik: any
 }
 
 export const CommentBlock = ({
   comment,
   isEdit,
   index,
+  formik
 }: commentBlockPropType) => {
   //---------------------
   // STATE
@@ -36,17 +38,6 @@ export const CommentBlock = ({
   const authContext = useContext(AuthContext);
   const modal = useContext(ModalContext);
   const context = useContext(SnapshotDetailContext);
-
-  //---------------------
-  // EFFECT
-  //---------------------
-  useEffect(() => {}, []);
-
-  //---------------------
-  //  ROUTER
-  //---------------------
-  const router = useRouter();
-  const { snapshotId } = router.query;
 
   //---------------------
   //   REF
@@ -112,6 +103,7 @@ export const CommentBlock = ({
                           className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
                           onClick={() => {
                             context.setValue("isEditIndex", index);
+                            formik.setFieldValue('comment', comment.comment)
                           }}
                         >
                           <i className="fas fa-pen w-auto"></i>
