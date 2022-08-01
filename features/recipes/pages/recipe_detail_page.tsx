@@ -165,12 +165,27 @@ export const RecipeDetailPage = () => {
                           <h3 className="headlineL">
                             {context.recipeDetail?.name}
                           </h3>
-                          <p className="bodyM text-gray-50">{`โดย ${context.recipeDetail?.author?.username} เมื่อ ${dayjs(
-                            context.recipeDetail?.createdAt
-                          )
-                            .locale("th")
-                            .add(543, "year")
-                            .format("D MMM YY เวลา HH:mm น.")}`}</p>
+                          <p className="bodyM text-gray-50">
+                            โดย{" "}
+                            <span className="underline cursor-pointer">
+                              {" "}
+                              <Link
+                                href={
+                                  authContext.user?.username ===
+                                  context.recipeDetail?.author?.username
+                                    ? "/me"
+                                    : `/users/${context.recipeDetail?.author?._id}`
+                                }
+                                passHref
+                              >
+                                <a>{context.recipeDetail?.author?.username}</a>
+                              </Link>
+                            </span>
+                            {` เมื่อ ${dayjs(context.recipeDetail?.createdAt)
+                              .locale("th")
+                              .add(543, "year")
+                              .format("D MMM YY เวลา HH:mm น.")}`}
+                          </p>
                         </div>
                         <div className="w-auto flex space-x-2">
                           {authContext.user && (
@@ -250,9 +265,7 @@ export const RecipeDetailPage = () => {
                         <p className="bodyM mr-4 w-auto">{`หน่วยบริโภค: ${context.recipeDetail?.serving}`}</p>
                         <div className="flex items-center w-auto">
                           <div>
-                            <Rating
-                              rating={4.5}
-                            />
+                            <Rating rating={4.5} />
                           </div>
                           <p className="ml-2">
                             {context.recipeDetail?.averageRating.toFixed(1)}
