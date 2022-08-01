@@ -85,6 +85,7 @@ export const SnapshotDetailPage = () => {
       context.setValue('initValue', { comment: ''})
       formik.resetForm()
       context.setValue('commentList', [])
+      context.setValue('isEditIndex', -1)
     }
   }, []);
 

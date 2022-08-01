@@ -11,6 +11,7 @@ import {
 import Cookies from "js-cookie";
 import { addSnapshotComment } from "@core/services/snapshot/post_snapshot";
 import { editSnapshotComment } from "@core/services/snapshot/put_snapshot";
+import { deleteSnapshotComment } from "@core/services/snapshot/delete_snapshot";
 
 class SnapshotDetail {
   snapshotDetail: snapshotDetailType;
@@ -201,6 +202,28 @@ class SnapshotDetail {
     } catch (error) {
       this.modal.openModal(
         "มีปัญหาในการแก้ไขความคิดเห็น",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  };
+
+  deleteComment = async (commentId, snapshotId) => {
+    try {
+      const token = Cookies.get("token");
+      const resp = await deleteSnapshotComment(commentId, token);
+      if (resp.status === 200) {
+        this.modal.closeModal();
+        this.formik?.resetForm()
+        this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบความคิดเห็นสำเร็จ");
+        this.commentList = []
+        this.prepareSnapshotCommentsList(snapshotId, true)
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการลบความคิดเห็น",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",

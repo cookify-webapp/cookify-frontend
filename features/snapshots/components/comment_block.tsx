@@ -40,6 +40,12 @@ export const CommentBlock = ({
   const context = useContext(SnapshotDetailContext);
 
   //---------------------
+  //  ROUTER
+  //---------------------
+  const router = useRouter();
+  const { snapshotId } = router.query;
+
+  //---------------------
   //   REF
   //---------------------
   const ref: any = createRef();
@@ -116,7 +122,7 @@ export const CommentBlock = ({
                               "ลบความคิดเห็น",
                               "ต้องการลบความคิดเห็นใช่หรือไม่",
                               () => {
-                                null;
+                                context.deleteComment(comment._id, snapshotId)
                               },
                               "ยกเลิก",
                               "ลบ"
