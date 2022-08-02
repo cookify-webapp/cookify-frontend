@@ -110,8 +110,7 @@ class SnapshotForm {
       const resp = await addSnapshot(formData, token);
       if (resp.status === 200) {
         this.handleResetForm()
-        // this.router.push(`/snapshots/${resp.data?.id}`);
-        this.router.push(`/snapshots`);
+        this.router.push(`/snapshots/${resp.data?.id}`);
         this.flashMessageContext.handleShow(
           "เพิ่มสำเร็จ",
           "เพิ่ม Snapshot สำเร็จ"

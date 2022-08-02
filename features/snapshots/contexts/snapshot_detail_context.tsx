@@ -240,7 +240,7 @@ class SnapshotDetail {
       if (resp.status === 200) {
         this.modal.closeModal();
         this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบ Snapshot สำเร็จ");
-        this.router.back();
+        this.router.push('/snapshots')
       }
     } catch (error) {
       this.modal.openModal(
