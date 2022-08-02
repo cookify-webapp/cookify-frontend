@@ -23,13 +23,12 @@ export const Rating = ({ rating }) => {
   //---------------------
   useEffect(() => {
     let buffer = _.cloneDeep(ratingToStar)
-    let ratingRounded = Math.round(rating * 10) / 10;
-    let hasDecimal = (ratingRounded % 1) >= 0.5
-    for (let i = 0; i < ratingRounded - 1; i++) {
+    let hasDecimal = (rating % 1) >= 0.5
+    for (let i = 0; i < Math.floor(rating); i++) {
       buffer[i] = 'full';
     }
     if (hasDecimal) {
-      buffer.splice(ratingRounded, 1, 'half')
+      buffer.splice(_.indexOf(buffer, 'empty'), 1, 'half')
     }
     setRatingToStar(buffer);
   }, []);

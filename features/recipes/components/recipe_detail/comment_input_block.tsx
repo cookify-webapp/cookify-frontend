@@ -15,6 +15,7 @@ import { SecondaryButton } from "@core/components/button/secondary_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { useRouter } from "next/router";
 import { FlashMessageContext } from "core/context/flash_message_context";
+import { RecipeDetailContext } from "@features/recipes/contexts/recipe_detail_context";
 
 interface CommentInputBlockProps {
   isEdit: boolean;
@@ -28,6 +29,7 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
   const authContext = useContext(AuthContext);
   const modal = useContext(ModalContext);
   const flashMessageContext = useContext(FlashMessageContext)
+  const recipeDetailContext = useContext(RecipeDetailContext)
 
   //---------------------
   //  ROUTER
@@ -52,12 +54,14 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
         context.prepareMyComment(recipeId)
         context.setValue('commentsList', [])
         context.prepareCommentsList(recipeId, true)
+        recipeDetailContext.prepareRecipeDetail(recipeId, true)
       })
       :
       context.addComment(recipeId, value, () => {
         context.prepareMyComment(recipeId)
         context.setValue('commentsList', [])
         context.prepareCommentsList(recipeId, true)
+        recipeDetailContext.prepareRecipeDetail(recipeId, true)
       })
     },
   });

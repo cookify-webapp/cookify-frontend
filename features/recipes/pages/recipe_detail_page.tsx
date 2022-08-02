@@ -265,7 +265,7 @@ export const RecipeDetailPage = () => {
                         <p className="bodyM mr-4 w-auto">{`หน่วยบริโภค: ${context.recipeDetail?.serving}`}</p>
                         <div className="flex items-center w-auto">
                           <div>
-                            <Rating rating={4.5} />
+                            <Rating rating={context.recipeDetail?.averageRating} />
                           </div>
                           <p className="ml-2">
                             {context.recipeDetail?.averageRating.toFixed(1)}
