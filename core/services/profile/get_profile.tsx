@@ -68,3 +68,27 @@ export const getUserRecipeList = (params, username, token?) => {
     );
   }
 };
+
+export const getUserSnapshotList = (params, username, token?) => {
+  const query = querystring.stringify(params);
+  if (token) {
+    return axios.get(
+      `${publicRuntimeConfig.CKF_SNAPSHOT_API}/list/${username}?${query}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+      }
+    );
+  } else {
+    return axios.get(
+      `${publicRuntimeConfig.CKF_SNAPSHOT_API}/list/${username}?${query}`,
+      {
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+  }
+};

@@ -4,6 +4,7 @@ import { ImageWithFallback } from "./image_with_fallback";
 import Link from "next/link";
 
 import getConfig from "next/config";
+import classNames from "classnames";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -21,9 +22,10 @@ interface SnapshotPropType {
     name: string
   }
   createdAt: string
+  isBorder?: boolean
 }
 
-export const Snapshot = ({ _id, caption, image, author, recipe }: SnapshotPropType) => {
+export const Snapshot = ({ _id, caption, image, author, recipe, isBorder }: SnapshotPropType) => {
   //---------------------
   // RENDER
   //---------------------
@@ -33,7 +35,7 @@ export const Snapshot = ({ _id, caption, image, author, recipe }: SnapshotPropTy
       {() => (
         <Link href={`/snapshots/${_id}`} passHref>
           <a>
-            <div className="rounded-[12px] bg-white w-full flex justify-center pr-4 space-x-4 h-[120px]">
+            <div className={classNames("rounded-[12px] bg-white w-full flex justify-center pr-4 space-x-4 h-[120px]", {'ring-1 ring-gray-30 my-[1px]': isBorder})}>
               <div className="w-[120px] h-[120px] rounded-l-[12px] border-r border-gray-30 shrink-0">
                 <ImageWithFallback
                   src={`${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${image}`}

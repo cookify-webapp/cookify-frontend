@@ -39,7 +39,7 @@ export const Recipe = ({
                 </div>
                 <div className="flex flex-col justify-between py-2">
                   <div>
-                    <Rating rating={averageRating} spaceX='space-x-2' />
+                    <Rating rating={averageRating} />
                     <p className="titleS mt-2 line-clamp-1">{name}</p>
                     <p className="bodyS text-gray-50 line-clamp-1">{`โดย ${author}`}</p>
                   </div>

@@ -1,8 +1,10 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import Cookies from 'js-cookie'
-import { getFollowerList, getFollowingList, getMe, getUserDetail, getUserRecipeList } from "@core/services/profile/get_profile";
+import { getFollowerList, getFollowingList, getMe, getUserDetail, getUserRecipeList, getUserSnapshotList } from "@core/services/profile/get_profile";
 import { userDetailType, userType } from "../types/user_profile_type";
+import { recipesListType } from "@features/recipes/types/recipes";
+import { snapshotPropType } from "core/types/core_components_type";
 
 class UserProfile {
   userDetail: userDetailType
@@ -10,8 +12,8 @@ class UserProfile {
   followingList: userType[]
   followerList: userType[]
 
-  recipesList
-  snapshotsList
+  recipesList: recipesListType[]
+  snapshotsList: snapshotPropType[]
 
   followingCount: number
   followerCount: number
@@ -200,7 +202,7 @@ class UserProfile {
         this.totalCountRecipe = resp.data?.totalCount
         this.totalPagesRecipe = resp.data?.totalPages
       } else if (resp.status === 204) {
-        this.followerList = []
+        this.recipesList = []
       }
     } catch (error) {
       this.modal.openModal(
@@ -215,28 +217,28 @@ class UserProfile {
     }
   }
 
-  prepareUserSnapshot = async () => {
+  prepareUserSnapshot = async (username) => {
     try {
       if (this.page === 1) {
         this.snapshotLoading = true
       }
       const token = Cookies.get("token");
-      // const resp = await getUserRecipeList({
-      //   page: this.page,
-      //   perPage: this.perPage
-      // }, username, token)
-      // if (resp.status === 200) {
-      //   this.recipesList = [...this.recipesList, ...resp.data?.recipes]
-      //   this.pageRecipe = resp.data?.page
-      //   this.perPageRecipe = resp.data?.perPage
-      //   this.totalCountRecipe = resp.data?.totalCount
-      //   this.totalPagesRecipe = resp.data?.totalPages
-      // } else if (resp.status === 204) {
-      //   this.followerList = []
-      // }
+      const resp = await getUserSnapshotList({
+        page: this.pageSnapshot,
+        perPage: this.perPageSnapshot
+      }, username, token)
+      if (resp.status === 200) {
+        this.snapshotsList = [...this.snapshotsList, ...resp.data?.snapshots]
+        this.pageSnapshot = resp.data?.page
+        this.perPageSnapshot = resp.data?.perPage
+        this.totalCountSnapshot = resp.data?.totalCount
+        this.totalPagesSnapshot = resp.data?.totalPages
+      } else if (resp.status === 204) {
+        this.recipesList = []
+      }
     } catch (error) {
       this.modal.openModal(
-        "มีปัญหาในการดึงรายการสูตรอาหาร",
+        "มีปัญหาในการดึงรายการ Snapshot",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",
