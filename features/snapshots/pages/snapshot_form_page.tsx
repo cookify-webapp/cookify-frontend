@@ -62,9 +62,9 @@ export const SnapshotFormPage = () => {
     validationSchema: () => snapshotValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      // isEdit
-      //   ? context.editRecipe(recipeId, value)
-      //   : context.addRecipe(value);
+      isEdit
+        ? context.editSnapshot(snapshotId, value)
+        : context.addSnapshot(value);
     },
   });
 
@@ -153,7 +153,7 @@ export const SnapshotFormPage = () => {
             </div>
             {!context.loading && (
               <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
-                <h1 className="pt-8 lg:pt-2 headlineL">เพิ่ม Snapshot</h1>
+                <h1 className="pt-8 lg:pt-2 headlineL">{`${isEdit ? 'แก้ไข' : 'เพิ่ม'} Snapshot`}</h1>
 
                 <div className="grid grid-cols-12 gap-4 mt-6">
                   <div className="col-span-12 lg:col-span-5 p-6 rounded-[12px] bg-white">
@@ -164,7 +164,7 @@ export const SnapshotFormPage = () => {
                           id="recipeImage"
                           src={
                             cover?.file ||
-                            `${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${formik.values?.imageFileName}`
+                            `${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${formik.values?.imageFileName}`
                           }
                           className="w-full h-full object-cover"
                         />
@@ -295,7 +295,7 @@ export const SnapshotFormPage = () => {
                             "ต้องการยกเลิก"
                           );
                         } else {
-                          router.push("/recipes");
+                          router.back();
                           context.handleResetForm();
                           setCover({
                             file: null,

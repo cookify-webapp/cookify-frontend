@@ -11,3 +11,12 @@ export const addSnapshotComment = (snapshotId, comment, token) => {
     }
   })
 }
+
+export const addSnapshot = (formData, token) => {
+  return axios.post(`${publicRuntimeConfig.CKF_SNAPSHOT_API}/create`, formData, { 
+    headers: { 
+      Authorization: `Bearer ${token}`,
+      'content-type': 'multipart/form-data' 
+    }
+  })
+} 

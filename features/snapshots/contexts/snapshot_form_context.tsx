@@ -1,11 +1,13 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
-import { snapshotInitialValues } from "../forms/snapshot_form";
+import { createSnapshotFormData, snapshotInitialValues } from "../forms/snapshot_form";
 import { snapshotDetailType } from "../types/snapshot_detail_type";
 import { getRecipesList } from "@core/services/recipes/get_recipes";
 import { recipesListType } from "@features/recipes/types/recipes";
 import Cookies from "js-cookie";
 import { getSnapshotDetail } from "@core/services/snapshot/get_snapshot";
+import { addSnapshot } from "@core/services/snapshot/post_snapshot";
+import { editSnapshot } from "@core/services/snapshot/put_snapshot";
 
 class SnapshotForm {
   initValue = snapshotInitialValues();
@@ -83,6 +85,9 @@ class SnapshotForm {
       const resp = await getSnapshotDetail(id, token);
       if (resp.status === 200) {
         this.snapshotDetail = resp.data?.snapshot;
+        this.initValue = snapshotInitialValues(this.snapshotDetail)
+        console.log(this.initValue)
+        this.formik.setValues(this.initValue)
       }
     } catch (error) {
       this.modal.openModal(
@@ -94,6 +99,61 @@ class SnapshotForm {
       );
     } finally {
       this.loading = false;
+    }
+  };
+
+  addSnapshot = async (value) => {
+    try {
+      this.loadingAddEdit = true;
+      const formData = createSnapshotFormData(value);
+      const token = Cookies.get("token");
+      const resp = await addSnapshot(formData, token);
+      if (resp.status === 200) {
+        this.handleResetForm()
+        // this.router.push(`/snapshots/${resp.data?.id}`);
+        this.router.push(`/snapshots`);
+        this.flashMessageContext.handleShow(
+          "เพิ่มสำเร็จ",
+          "เพิ่ม Snapshot สำเร็จ"
+        );
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการเพิ่ม Snapshot",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.loadingAddEdit = false;
+    }
+  };
+
+  editSnapshot = async (id, value) => {
+    try {
+      this.loadingAddEdit = true;
+      const formData = createSnapshotFormData(value);
+      const token = Cookies.get("token");
+      const resp = await editSnapshot(id, formData, token);
+      if (resp.status === 200) {
+        this.handleResetForm()
+        this.router.push(`/snapshots/${id}`);
+        this.flashMessageContext.handleShow(
+          "แก้ไขสำเร็จ",
+          "แก้ไข Snapshot สำเร็จ"
+        );
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการแก้ไข Snapshot",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    } finally {
+      this.loadingAddEdit = false;
     }
   };
 }

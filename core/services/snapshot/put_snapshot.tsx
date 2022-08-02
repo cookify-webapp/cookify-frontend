@@ -11,3 +11,12 @@ export const editSnapshotComment = (commentId, comment, token) => {
     }
   })
 } 
+
+export const editSnapshot = (id, formData, token) => {
+  return axios.put(`${publicRuntimeConfig.CKF_SNAPSHOT_API}/${id}/edit`, formData, { 
+    headers: { 
+      Authorization: `Bearer ${token}`,
+      'content-type': 'multipart/form-data' 
+    }
+  })
+}

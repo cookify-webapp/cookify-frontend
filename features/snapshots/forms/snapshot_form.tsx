@@ -26,3 +26,22 @@ export const snapshotInitialValues = (value?: any) => {
     snapshotImage: null,
   };
 };
+
+//-------------------
+//  FORM DATA
+//-------------------
+export const createSnapshotFormData = (value) => {
+  const formData = new FormData()
+
+  let data = {
+    caption: value.caption,
+    recipe: value.recipe._id
+  };
+
+  formData.append("data", JSON.stringify(data));
+  if (value.recipeImage !== null) {
+    formData.append("snapshotImage", value.snapshotImage, value.imageFileName);
+  }
+
+  return formData;
+};
