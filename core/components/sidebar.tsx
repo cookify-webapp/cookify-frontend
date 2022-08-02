@@ -63,7 +63,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "สูตรอาหารที่บันทึก",
       icon: "fas fa-bookmark",
-      link: ["/saved"],
+      link: ["/bookmarked"],
     },
     {
       title: "การแจ้งเตือน",

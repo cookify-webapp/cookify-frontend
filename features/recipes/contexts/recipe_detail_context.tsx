@@ -4,6 +4,7 @@ import { recipeDetailType } from "../types/recipes";
 import { getRecipeDetail } from "@core/services/recipes/get_recipes";
 import Cookies from "js-cookie";
 import { deleteRecipe } from "@core/services/recipes/delete_recipes";
+import { setBookmark } from "@core/services/bookmark/put_bookmark"
 
 class RecipeDetail {
   recipeDetail: recipeDetailType;
@@ -75,5 +76,29 @@ class RecipeDetail {
       );
     }
   };
+
+  setBookmark = async (recipeId) => {
+    try {
+      const token = Cookies.get("token");
+      const resp = await setBookmark(recipeId, token)
+      if (resp.status === 200) {
+        if (this.recipeDetail?.bookmarked) {
+          this.flashMessageContext.handleShow("ยกเลิกบันทึกสำเร็จ", "ยกเลิกบันทึกสูตรอาหารสำเร็จ");
+          this.prepareRecipeDetail(recipeId, true)
+        } else {
+          this.flashMessageContext.handleShow("บักทึกสำเร็จ", "บันทึกสูตรอาหารสำเร็จ");
+          this.prepareRecipeDetail(recipeId, true)
+        }
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการบันทึกสูตรอาหาร",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  }
 }
 export const RecipeDetailContext = createContext(new RecipeDetail());

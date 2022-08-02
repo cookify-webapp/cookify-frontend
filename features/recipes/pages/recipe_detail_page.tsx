@@ -192,7 +192,7 @@ export const RecipeDetailPage = () => {
                             <>
                               <div
                                 className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
-                                onClick={() => null}
+                                onClick={() => context.setBookmark(recipeId)}
                               >
                                 {context.recipeDetail?.bookmarked ? (
                                   <i className=" text-[16px] leading-[16px] fas fa-bookmark text-white"></i>
