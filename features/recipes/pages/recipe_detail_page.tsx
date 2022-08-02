@@ -165,19 +165,34 @@ export const RecipeDetailPage = () => {
                           <h3 className="headlineL">
                             {context.recipeDetail?.name}
                           </h3>
-                          <p className="bodyM text-gray-50">{`โดย ${dayjs(
-                            context.recipeDetail?.createdAt
-                          )
-                            .locale("th")
-                            .add(543, "year")
-                            .format("D MMM YY เวลา HH:mm น.")}`}</p>
+                          <p className="bodyM text-gray-50">
+                            โดย{" "}
+                            <span className="underline cursor-pointer">
+                              {" "}
+                              <Link
+                                href={
+                                  authContext.user?.username ===
+                                  context.recipeDetail?.author?.username
+                                    ? "/me"
+                                    : `/users/${context.recipeDetail?.author?._id}`
+                                }
+                                passHref
+                              >
+                                <a>{context.recipeDetail?.author?.username}</a>
+                              </Link>
+                            </span>
+                            {` เมื่อ ${dayjs(context.recipeDetail?.createdAt)
+                              .locale("th")
+                              .add(543, "year")
+                              .format("D MMM YY เวลา HH:mm น.")}`}
+                          </p>
                         </div>
                         <div className="w-auto flex space-x-2">
                           {authContext.user && (
                             <>
                               <div
                                 className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
-                                onClick={() => null}
+                                onClick={() => context.setBookmark(recipeId)}
                               >
                                 {context.recipeDetail?.bookmarked ? (
                                   <i className=" text-[16px] leading-[16px] fas fa-bookmark text-white"></i>
@@ -250,10 +265,7 @@ export const RecipeDetailPage = () => {
                         <p className="bodyM mr-4 w-auto">{`หน่วยบริโภค: ${context.recipeDetail?.serving}`}</p>
                         <div className="flex items-center w-auto">
                           <div>
-                            <Rating
-                              rating={context.recipeDetail?.averageRating}
-                              spaceX="space-x-2"
-                            />
+                            <Rating rating={context.recipeDetail?.averageRating} />
                           </div>
                           <p className="ml-2">
                             {context.recipeDetail?.averageRating.toFixed(1)}

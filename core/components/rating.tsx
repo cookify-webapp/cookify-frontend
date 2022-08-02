@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import _ from "lodash";
 
-export const Rating = ({ rating, spaceX }) => {
+export const Rating = ({ rating }) => {
   //---------------------
   // HOOKS
   //---------------------
@@ -22,14 +22,13 @@ export const Rating = ({ rating, spaceX }) => {
   // EFFECT
   //---------------------
   useEffect(() => {
-    const buffer = _.cloneDeep(ratingToStar);
-    let ratingRounded = Math.round(rating * 10) / 10;
-    let hasDecimal = (ratingRounded % 1) > 0.5
-    for (let i = 0; i < ratingRounded; i++) {
-      buffer.splice(i, 1, "full");
+    let buffer = _.cloneDeep(ratingToStar)
+    let hasDecimal = (rating % 1) >= 0.5
+    for (let i = 0; i < Math.floor(rating); i++) {
+      buffer[i] = 'full';
     }
     if (hasDecimal) {
-      buffer.splice(ratingRounded, 1, "half");
+      buffer.splice(_.indexOf(buffer, 'empty'), 1, 'half')
     }
     setRatingToStar(buffer);
   }, []);

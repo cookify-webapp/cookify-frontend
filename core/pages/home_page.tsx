@@ -35,6 +35,7 @@ export default function HomePage() {
     context.setValue("modalContext", modalContext);
     context.prepareIngredient();
     context.prepareRecipesList();
+    context.prepareSnapshotList()
   }, []);
 
   //---------------------
@@ -128,16 +129,26 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
-              {_.map(context.snapshots, (snapshot) => (
-                <div
-                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
-                  key={`snapshot_${snapshot.id}`}
-                >
-                  <Snapshot snapshot={snapshot} />
-                </div>
-              ))}
-            </div>
+            {!context.loadingSnapshot && (
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+                {_.map(context.snapshots, (snapshot) => (
+                  <div
+                    className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
+                    key={`snapshot_${snapshot._id}`}
+                  >
+                    <Snapshot
+                      _id={snapshot._id}
+                      author={snapshot.author}
+                      caption={snapshot.caption}
+                      createdAt={snapshot.createdAt}
+                      image={snapshot.image}
+                      recipe={snapshot.recipe}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
             <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               วัตถุดิบใหม่ล่าสุด
               <Link href="/ingredients" passHref>

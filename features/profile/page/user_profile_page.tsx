@@ -16,6 +16,7 @@ import _ from "lodash";
 import { TabFilter } from "@core/components/tab_filter";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Recipe } from "@core/components/recipe";
+import { Snapshot } from "@core/components/snapshot";
 const { publicRuntimeConfig } = getConfig();
 
 export const UserProfilePage = () => {
@@ -58,6 +59,7 @@ export const UserProfilePage = () => {
       context.setValue("pageRecipe", 1);
       context.setValue("pageSnapshot", 1);
       context.setValue("recipesList", []);
+      context.setValue('snapshotsList', [])
     };
   }, [user_id]);
 
@@ -66,9 +68,18 @@ export const UserProfilePage = () => {
   //---------------------
   const preparationRecipe = async () => {
     setHasMore(true);
-    context.setValue("page", context.pageRecipe + 1);
+    context.setValue("pageRecipe", context.pageRecipe + 1);
     context.prepareUserRecipe(context.userDetail?.username);
     if (context.pageRecipe === context.totalPagesRecipe) {
+      setHasMore(false);
+    }
+  };
+
+  const preparationSnapshot = async () => {
+    setHasMore(true);
+    context.setValue("pageSnapshot", context.pageSnapshot + 1);
+    context.prepareUserSnapshot(context.userDetail?.username);
+    if (context.pageSnapshot === context.totalPagesSnapshot) {
       setHasMore(false);
     }
   };
@@ -241,7 +252,7 @@ export const UserProfilePage = () => {
                               context.setValue("pageSnapshot", 1);
                               context.setValue("snapshotsList", []);
                             } else {
-                              context.prepareUserSnapshot();
+                              context.prepareUserSnapshot(context.userDetail?.username);
                               context.setValue("pageRecipe", 1);
                               context.setValue("recipesList", []);
                             }
@@ -303,7 +314,60 @@ export const UserProfilePage = () => {
                             )}
                         </>
                       )}
-                      {context.activeTab === "Snapshot" && <p>Snapshot here</p>}
+                      {context.activeTab === "Snapshot" && (
+                        <>
+                          {_.size(context.snapshotsList) > 0 &&
+                            !context.snapshotLoading && (
+                              <InfiniteScroll
+                                dataLength={context.snapshotsList.length}
+                                next={preparationSnapshot}
+                                hasMore={hasMore}
+                                loader={""}
+                              >
+                                <div className="grid grid-cols-12 gap-4">
+                                  {_.map(
+                                    context.snapshotsList,
+                                    (snapshot, index) => (
+                                      <div
+                                        className={classNames(
+                                          "col-span-12 md:col-span-6",
+                                          { "xl:col-span-4": !isMe }
+                                        )}
+                                        key={`recipe_${index}`}
+                                      >
+                                        <Snapshot
+                                          _id={snapshot._id}
+                                          author={snapshot.author}
+                                          caption={snapshot.caption}
+                                          createdAt={snapshot.createdAt}
+                                          image={snapshot.image}
+                                          recipe={snapshot.recipe}
+                                          isBorder
+                                        />
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </InfiniteScroll>
+                            )}
+                          {context.snapshotLoading && (
+                            <div className="py-10 flex items-center justify-center text-center text-gray-50">
+                              <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                            </div>
+                          )}
+                          {!context.snapshotLoading &&
+                            _.size(context.snapshotsList) === 0 && (
+                              <div className="py-10 flex items-center text-center text-gray-50">
+                                <div>
+                                  <i className="fas fa-camera text-[48px] w-12 h-12"></i>
+                                  <p className="titleM mt-4">
+                                    ไม่มีรายการ Snapshot
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

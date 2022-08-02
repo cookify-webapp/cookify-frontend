@@ -68,6 +68,22 @@ export type recipePropType = {
   isBorder?: boolean
 };
 
+export type snapshotPropType = {
+  _id: string
+  caption: string
+  image: string
+  author: {
+    _id: string
+    username: string
+    image: string
+  }
+  recipe: {
+    _id: string
+    name: string
+  }
+  createdAt: string
+}
+
 export type ingredientPropType = {
   ingredient: {
     _id: string;
