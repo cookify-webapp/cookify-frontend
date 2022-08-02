@@ -78,6 +78,7 @@ export const SnapshotDetailPage = () => {
     context.setValue("modal", modal);
     context.setValue('formik', formik)
     context.setValue('flashMessageContext', flashMessageContext)
+    context.setValue('router', router)
     context.prepareSnapshotDetail(snapshotId, authContext.user !== null);
     context.prepareSnapshotCommentsList(snapshotId, authContext.user !== null);
 
@@ -209,7 +210,7 @@ export const SnapshotDetailPage = () => {
                                             ท่านยืนยันที่จะลบหรือไม่ ?
                                           </p>,
                                           () => {
-                                            null;
+                                            context.deleteSnapshot(snapshotId)
                                           },
                                           "ยกเลิก",
                                           "ลบ"

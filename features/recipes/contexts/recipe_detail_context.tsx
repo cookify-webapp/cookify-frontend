@@ -63,7 +63,7 @@ class RecipeDetail {
       if (resp.status === 200) {
         this.modal.closeModal();
         this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบสูตรอาหารสำเร็จ");
-        this.router.push("/recipes");
+        this.router.back()
       }
     } catch (error) {
       this.modal.openModal(

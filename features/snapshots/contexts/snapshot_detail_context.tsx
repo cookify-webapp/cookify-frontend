@@ -11,7 +11,7 @@ import {
 import Cookies from "js-cookie";
 import { addSnapshotComment } from "@core/services/snapshot/post_snapshot";
 import { editSnapshotComment } from "@core/services/snapshot/put_snapshot";
-import { deleteSnapshotComment } from "@core/services/snapshot/delete_snapshot";
+import { deleteSnapshot, deleteSnapshotComment } from "@core/services/snapshot/delete_snapshot";
 
 class SnapshotDetail {
   snapshotDetail: snapshotDetailType;
@@ -33,6 +33,7 @@ class SnapshotDetail {
   totalPages: number;
   formik: any;
   flashMessageContext: any;
+  router
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -224,6 +225,26 @@ class SnapshotDetail {
     } catch (error) {
       this.modal.openModal(
         "มีปัญหาในการลบความคิดเห็น",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  };
+
+  deleteSnapshot = async (id) => {
+    try {
+      const token = Cookies.get("token");
+      const resp = await deleteSnapshot(id, token);
+      if (resp.status === 200) {
+        this.modal.closeModal();
+        this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบ Snapshot สำเร็จ");
+        this.router.back();
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการลบ Snapshot",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",

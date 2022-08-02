@@ -11,3 +11,12 @@ export const deleteSnapshotComment = (commentId, token) => {
     },
   });
 };
+
+export const deleteSnapshot = (id, token) => {
+  return axios.delete(`${publicRuntimeConfig.CKF_SNAPSHOT_API}/${id}/delete`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  });
+};
