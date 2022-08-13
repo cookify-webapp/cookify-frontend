@@ -1,13 +1,14 @@
 export type followingListType = {
   _id: string
-  caption: string
+  name?: string
+  caption?: string
   image: string
   author: {
     _id: string
     username: string
     image: string
   }
-  recipe: {
+  recipe?: {
     _id: string
     name: string
   }

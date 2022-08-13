@@ -91,7 +91,7 @@ export const SnapshotListPage = () => {
                           <div
                             className="text-white h-[120px] text-center flex items-center cursor-pointer rounded-[12px] col-span-12 md:col-span-6"
                             style={{
-                              background: `url(/images/snapshots/add_snapshot.svg) no-repeat center`,
+                              background: `url('https://i.ibb.co/m51kws7/high-angle-person-taking-photo-food-plate-with-smartphone-2.png') no-repeat center`,
                               backgroundSize: "cover",
                             }}
                             onClick={() => router.push("/snapshots/create")}
