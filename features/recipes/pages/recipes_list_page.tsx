@@ -116,7 +116,7 @@ export const RecipesListPage = () => {
               </h1>
             </div>
             {context.isMethodLoaded ? (
-              <div className="px-5 mx-auto xl:max-w-6xl flex space-x-[16px] scrollbar-hide md:space-x-0 overflow-x-auto md:grid md:grid-cols-12 md:gap-4 mt-6">
+              <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl flex space-x-[16px] scrollbar-hide md:space-x-0 overflow-x-auto md:grid md:grid-cols-12 md:gap-4 mt-6">
                 {_.map(context.cookingMethods, (method, index) => (
                   <div
                     className={classNames(
@@ -149,7 +149,7 @@ export const RecipesListPage = () => {
               </div>
             )}
           </div>
-          <div className="px-5 mx-auto xl:max-w-6xl py-6">
+          <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl py-6">
             <div className="bg-white rounded-[12px] py-6 grid grid-cols-12 gap-x-4">
               <div className="px-6 col-span-12 md:col-span-5 xl:col-span-4">
                 <p className="titleM">ค้นหาสูตรอาหารจากวัตถุดิบ</p>

@@ -13,12 +13,21 @@ export const getMe = (token) => {
   });
 };
 
-export const getUserDetail = (id) => {
-  return axios.get(`${publicRuntimeConfig.CKF_ACCOUNT_API}/${id}`, {
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+export const getUserDetail = (id, token?) => {
+  if (token) {
+    return axios.get(`${publicRuntimeConfig.CKF_ACCOUNT_API}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+    });
+  } else {
+    return axios.get(`${publicRuntimeConfig.CKF_ACCOUNT_API}/${id}`, {
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  }
 };
 
 export const getFollowingList = (params, userId) => {

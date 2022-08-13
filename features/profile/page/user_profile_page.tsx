@@ -17,6 +17,7 @@ import { TabFilter } from "@core/components/tab_filter";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
+import { FlashMessageContext } from "core/context/flash_message_context";
 const { publicRuntimeConfig } = getConfig();
 
 export const UserProfilePage = () => {
@@ -34,9 +35,10 @@ export const UserProfilePage = () => {
   const context = useContext(UserProfileContext);
   const modal = useContext(ModalContext);
   const auth = useContext(AuthContext);
+  const flashMessageContext = useContext(FlashMessageContext)
 
   const router = useRouter();
-  const { user_id } = router.query;
+  const { userId } = router.query;
 
   const isMe = router.pathname.includes("/me");
 
@@ -45,10 +47,11 @@ export const UserProfilePage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue('flashMessageContext', flashMessageContext)
     if (isMe) {
       context.prepareMyDetail();
     } else {
-      context.prepareUserDetail(user_id);
+      context.prepareUserDetail(userId);
     }
 
     return () => {
@@ -61,7 +64,7 @@ export const UserProfilePage = () => {
       context.setValue("recipesList", []);
       context.setValue('snapshotsList', [])
     };
-  }, [user_id]);
+  }, [userId]);
 
   //---------------------
   // HANDLER
@@ -158,7 +161,11 @@ export const UserProfilePage = () => {
                       {!isMe && auth.user && (
                         <div
                           className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75 ml-3"
-                          onClick={() => alert("follow")}
+                          onClick={() => {
+                            context.setFollowing(userId)
+                            context.setValue('recipesList', [])
+                            context.setValue('snapshotsList', [])
+                          }}
                         >
                           <i
                             className={classNames(

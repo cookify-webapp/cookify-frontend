@@ -1,70 +1,79 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
-import Cookies from 'js-cookie'
-import { getFollowerList, getFollowingList, getMe, getUserDetail, getUserRecipeList, getUserSnapshotList } from "@core/services/profile/get_profile";
+import Cookies from "js-cookie";
+import {
+  getFollowerList,
+  getFollowingList,
+  getMe,
+  getUserDetail,
+  getUserRecipeList,
+  getUserSnapshotList,
+} from "@core/services/profile/get_profile";
 import { userDetailType, userType } from "../types/user_profile_type";
 import { recipesListType } from "@features/recipes/types/recipes";
 import { snapshotPropType } from "core/types/core_components_type";
+import { setFollowing } from "@core/services/following/put_following";
 
 class UserProfile {
-  userDetail: userDetailType
+  userDetail: userDetailType;
 
-  followingList: userType[]
-  followerList: userType[]
+  followingList: userType[];
+  followerList: userType[];
 
-  recipesList: recipesListType[]
-  snapshotsList: snapshotPropType[]
+  recipesList: recipesListType[];
+  snapshotsList: snapshotPropType[];
 
-  followingCount: number
-  followerCount: number
-  isFollowing: boolean
+  followingCount: number;
+  followerCount: number;
+  isFollowing: boolean;
 
-  loading: boolean
-  modal
+  loading: boolean;
+  modal;
 
-  page: number
-  perPage: number
-  totalCount: number
-  totalPages: number
+  page: number;
+  perPage: number;
+  totalCount: number;
+  totalPages: number;
 
-  followLoading: boolean
+  followLoading: boolean;
 
-  recipeLoading: boolean
-  pageRecipe: number
-  perPageRecipe: number
-  totalCountRecipe: number
-  totalPagesRecipe: number
+  recipeLoading: boolean;
+  pageRecipe: number;
+  perPageRecipe: number;
+  totalCountRecipe: number;
+  totalPagesRecipe: number;
 
-  snapshotLoading: boolean
-  pageSnapshot: number
-  perPageSnapshot: number
-  totalCountSnapshot: number
-  totalPagesSnapshot: number
+  snapshotLoading: boolean;
+  pageSnapshot: number;
+  perPageSnapshot: number;
+  totalCountSnapshot: number;
+  totalPagesSnapshot: number;
 
-  activeTab
+  activeTab;
+  flashMessageContext: any;
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
-    this.userDetail = null
-    this.loading = true
-    this.followLoading = true
-    this.followerCount = 0
-    this.followingCount = 0
-    this.isFollowing = false
-    this.page = 1
-    this.perPage = 10
-    this.followerList = []
-    this.followingList = []
-    this.recipeLoading = false
-    this.pageRecipe = 1
-    this.perPageRecipe = 18
-    this.snapshotLoading = false
-    this.pageSnapshot = 1
-    this.perPageSnapshot = 18
-    this.recipesList = []
-    this.snapshotsList = []
-    this.activeTab = 'สูตรอาหาร'
+    this.userDetail = null;
+    this.loading = true;
+    this.followLoading = true;
+    this.followerCount = 0;
+    this.followingCount = 0;
+    this.isFollowing = false;
+    this.page = 1;
+    this.perPage = 10;
+    this.followerList = [];
+    this.followingList = [];
+    this.recipeLoading = false;
+    this.pageRecipe = 1;
+    this.perPageRecipe = 18;
+    this.snapshotLoading = false;
+    this.pageSnapshot = 1;
+    this.perPageSnapshot = 18;
+    this.recipesList = [];
+    this.snapshotsList = [];
+    this.activeTab = "สูตรอาหาร";
     makeAutoObservable(this);
   }
 
@@ -77,14 +86,14 @@ class UserProfile {
 
   prepareMyDetail = async () => {
     try {
-      this.loading = true
+      this.loading = true;
       const token = Cookies.get("token");
-      const resp = await getMe(token)
+      const resp = await getMe(token);
       if (resp.status === 200) {
-        this.userDetail = resp.data?.account
-        this.followerCount = resp.data?.followerCount
-        this.followingCount = resp.data?.followingCount
-        this.prepareUserRecipe(this.userDetail?.username)
+        this.userDetail = resp.data?.account;
+        this.followerCount = resp.data?.followerCount;
+        this.followingCount = resp.data?.followingCount;
+        this.prepareUserRecipe(this.userDetail?.username);
       }
     } catch (error) {
       this.modal.openModal(
@@ -93,22 +102,34 @@ class UserProfile {
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
-      )
+      );
     } finally {
-      this.loading = false
+      this.loading = false;
     }
-  }
+  };
 
   prepareUserDetail = async (id) => {
     try {
-      this.loading = true
-      const resp = await getUserDetail(id)
-      if (resp.status === 200) {
-        this.userDetail = resp.data?.account
-        this.followerCount = resp.data?.followerCount
-        this.followingCount = resp.data?.followingCount
-        this.isFollowing = resp.data?.isFollowing
-        this.prepareUserRecipe(this.userDetail?.username)
+      this.loading = true;
+      const token = Cookies.get("token");
+      if (token) {
+        const resp = await getUserDetail(id, token);
+        if (resp.status === 200) {
+          this.userDetail = resp.data?.account;
+          this.followerCount = resp.data?.followerCount;
+          this.followingCount = resp.data?.followingCount;
+          this.isFollowing = resp.data?.isFollowing;
+          this.prepareUserRecipe(this.userDetail?.username);
+        }
+      } else {
+        const resp = await getUserDetail(id);
+        if (resp.status === 200) {
+          this.userDetail = resp.data?.account;
+          this.followerCount = resp.data?.followerCount;
+          this.followingCount = resp.data?.followingCount;
+          this.isFollowing = resp.data?.isFollowing;
+          this.prepareUserRecipe(this.userDetail?.username);
+        }
       }
     } catch (error) {
       this.modal.openModal(
@@ -117,29 +138,32 @@ class UserProfile {
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
-      )
+      );
     } finally {
-      this.loading = false
+      this.loading = false;
     }
-  }
+  };
 
   prepareFollowingList = async (id) => {
     try {
       if (this.page === 1) {
-        this.followLoading = true
+        this.followLoading = true;
       }
-      const resp = await getFollowingList({
-        page: this.page,
-        perPage: this.perPage
-      }, id)
+      const resp = await getFollowingList(
+        {
+          page: this.page,
+          perPage: this.perPage,
+        },
+        id
+      );
       if (resp.status === 200) {
-        this.followingList = [...this.followingList, ...resp.data?.following]
-        this.page = resp.data?.page
-        this.perPage = resp.data?.perPage
-        this.totalCount = resp.data?.totalCount
-        this.totalPages = resp.data?.totalPages
+        this.followingList = [...this.followingList, ...resp.data?.following];
+        this.page = resp.data?.page;
+        this.perPage = resp.data?.perPage;
+        this.totalCount = resp.data?.totalCount;
+        this.totalPages = resp.data?.totalPages;
       } else if (resp.status === 204) {
-        this.followerList = []
+        this.followerList = [];
       }
     } catch (error) {
       this.modal.openModal(
@@ -148,29 +172,32 @@ class UserProfile {
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
-      )
+      );
     } finally {
-      this.followLoading = false
+      this.followLoading = false;
     }
-  }
+  };
 
   prepareFollowerList = async (id) => {
     try {
       if (this.page === 1) {
-        this.followLoading = true
+        this.followLoading = true;
       }
-      const resp = await getFollowerList({
-        page: this.page,
-        perPage: this.perPage
-      }, id)
+      const resp = await getFollowerList(
+        {
+          page: this.page,
+          perPage: this.perPage,
+        },
+        id
+      );
       if (resp.status === 200) {
-        this.followerList = [...this.followerList, ...resp.data?.follower]
-        this.page = resp.data?.page
-        this.perPage = resp.data?.perPage
-        this.totalCount = resp.data?.totalCount
-        this.totalPages = resp.data?.totalPages
+        this.followerList = [...this.followerList, ...resp.data?.follower];
+        this.page = resp.data?.page;
+        this.perPage = resp.data?.perPage;
+        this.totalCount = resp.data?.totalCount;
+        this.totalPages = resp.data?.totalPages;
       } else if (resp.status === 204) {
-        this.followerList = []
+        this.followerList = [];
       }
     } catch (error) {
       this.modal.openModal(
@@ -179,30 +206,34 @@ class UserProfile {
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
-      )
+      );
     } finally {
-      this.followLoading = false
+      this.followLoading = false;
     }
-  }
+  };
 
   prepareUserRecipe = async (username) => {
     try {
       if (this.page === 1) {
-        this.recipeLoading = true
+        this.recipeLoading = true;
       }
       const token = Cookies.get("token");
-      const resp = await getUserRecipeList({
-        page: this.pageRecipe,
-        perPage: this.perPageRecipe
-      }, username, token)
+      const resp = await getUserRecipeList(
+        {
+          page: this.pageRecipe,
+          perPage: this.perPageRecipe,
+        },
+        username,
+        token
+      );
       if (resp.status === 200) {
-        this.recipesList = [...this.recipesList, ...resp.data?.recipes]
-        this.pageRecipe = resp.data?.page
-        this.perPageRecipe = resp.data?.perPage
-        this.totalCountRecipe = resp.data?.totalCount
-        this.totalPagesRecipe = resp.data?.totalPages
+        this.recipesList = [...this.recipesList, ...resp.data?.recipes];
+        this.pageRecipe = resp.data?.page;
+        this.perPageRecipe = resp.data?.perPage;
+        this.totalCountRecipe = resp.data?.totalCount;
+        this.totalPagesRecipe = resp.data?.totalPages;
       } else if (resp.status === 204) {
-        this.recipesList = []
+        this.recipesList = [];
       }
     } catch (error) {
       this.modal.openModal(
@@ -211,30 +242,34 @@ class UserProfile {
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
-      )
+      );
     } finally {
-      this.recipeLoading = false
+      this.recipeLoading = false;
     }
-  }
+  };
 
   prepareUserSnapshot = async (username) => {
     try {
       if (this.page === 1) {
-        this.snapshotLoading = true
+        this.snapshotLoading = true;
       }
       const token = Cookies.get("token");
-      const resp = await getUserSnapshotList({
-        page: this.pageSnapshot,
-        perPage: this.perPageSnapshot
-      }, username, token)
+      const resp = await getUserSnapshotList(
+        {
+          page: this.pageSnapshot,
+          perPage: this.perPageSnapshot,
+        },
+        username,
+        token
+      );
       if (resp.status === 200) {
-        this.snapshotsList = [...this.snapshotsList, ...resp.data?.snapshots]
-        this.pageSnapshot = resp.data?.page
-        this.perPageSnapshot = resp.data?.perPage
-        this.totalCountSnapshot = resp.data?.totalCount
-        this.totalPagesSnapshot = resp.data?.totalPages
+        this.snapshotsList = [...this.snapshotsList, ...resp.data?.snapshots];
+        this.pageSnapshot = resp.data?.page;
+        this.perPageSnapshot = resp.data?.perPage;
+        this.totalCountSnapshot = resp.data?.totalCount;
+        this.totalPagesSnapshot = resp.data?.totalPages;
       } else if (resp.status === 204) {
-        this.recipesList = []
+        this.recipesList = [];
       }
     } catch (error) {
       this.modal.openModal(
@@ -243,10 +278,40 @@ class UserProfile {
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
-      )
+      );
     } finally {
-      this.snapshotLoading = false
+      this.snapshotLoading = false;
     }
-  }
+  };
+
+  setFollowing = async (userId) => {
+    try {
+      const token = Cookies.get("token");
+      const resp = await setFollowing(userId, token);
+      if (resp.status === 200) {
+        if (this.userDetail?.isFollowing) {
+          this.flashMessageContext.handleShow(
+            "ยกเลิกติดตามสำเร็จ",
+            "ยกเลิกติดตามผู้ใช้งานสำเร็จ"
+          );
+          this.prepareUserDetail(userId);
+        } else {
+          this.flashMessageContext.handleShow(
+            "ติดตามสำเร็จ",
+            "ติดตามผู้ใช้งานสำเร็จ"
+          );
+          this.prepareUserDetail(userId);
+        }
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการติดตามผู้ใช้งาน",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  };
 }
 export const UserProfileContext = createContext(new UserProfile());
