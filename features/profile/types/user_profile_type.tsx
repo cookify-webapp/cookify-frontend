@@ -8,6 +8,7 @@ export type userDetailType = {
   image: string
   allergy: ingredientType[]
   bookmark: []
+  isFollowing: boolean
 }
 
 export type userType = {

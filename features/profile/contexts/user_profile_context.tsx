@@ -5,6 +5,7 @@ import { getFollowerList, getFollowingList, getMe, getUserDetail, getUserRecipeL
 import { userDetailType, userType } from "../types/user_profile_type";
 import { recipesListType } from "@features/recipes/types/recipes";
 import { snapshotPropType } from "core/types/core_components_type";
+import { setFollowing } from "@core/services/following/put_following";
 
 class UserProfile {
   userDetail: userDetailType
@@ -42,6 +43,7 @@ class UserProfile {
   totalPagesSnapshot: number
 
   activeTab
+  flashMessageContext: any;
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -246,6 +248,30 @@ class UserProfile {
       )
     } finally {
       this.snapshotLoading = false
+    }
+  }
+
+  setFollowing = async (userId) => {
+    try {
+      const token = Cookies.get("token");
+      const resp = await setFollowing(userId, token)
+      if (resp.status === 200) {
+        if (this.userDetail?.isFollowing) {
+          this.flashMessageContext.handleShow("ยกเลิกติดตามสำเร็จ", "ยกเลิกติดตามผู้ใช้งานสำเร็จ");
+          this.prepareUserDetail(userId)
+        } else {
+          this.flashMessageContext.handleShow("ติดตามสำเร็จ", "ติดตามผู้ใช้งานสำเร็จ");
+          this.prepareUserDetail(userId)
+        }
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "มีปัญหาในการติดตามผู้ใช้งาน",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
     }
   }
 }
