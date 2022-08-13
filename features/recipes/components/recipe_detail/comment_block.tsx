@@ -11,6 +11,7 @@ import { RecipeCommentContext } from "@features/recipes/contexts/recipe_comment_
 import { AuthContext } from "core/context/auth_context";
 import { ModalContext } from "core/context/modal_context";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const { publicRuntimeConfig } = getConfig();
 interface CommentBlocKProps {
@@ -28,8 +29,8 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
   // CONTEXT
   //---------------------
   const recipeCommentContext = useContext(RecipeCommentContext);
-  const authContext = useContext(AuthContext)
-  const modal = useContext(ModalContext)
+  const authContext = useContext(AuthContext);
+  const modal = useContext(ModalContext);
 
   //---------------------
   //   REF
@@ -57,31 +58,55 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
         <div>
           <div className="flex items-center space-x-3">
             <div className="w-[48px] h-[48px] rounded-full border border-gray-30 flex-shrink-0">
-              <ImageWithFallback
-                alt="profile image"
-                className="w-full h-full object-cover rounded-full"
-                src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${comment?.author?.image}`}
-              />
+              <Link
+                href={
+                  authContext.user?.username === comment?.author?.username
+                    ? "/me"
+                    : `/users/${comment?.author?._id}`
+                }
+                passHref
+              >
+                <a>
+                  <ImageWithFallback
+                    alt="profile image"
+                    className="w-full h-full object-cover rounded-full"
+                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${comment?.author?.image}`}
+                  />
+                </a>
+              </Link>
             </div>
             <div className="w-full flex justify-between space-x-3 items-center">
               <div className="w-full">
                 <div className="flex flex-col md:flex-row md:items-center">
-                  <p className="titleS w-auto">{comment?.author?.username}</p>
+                  <p className="titleS w-auto">
+                    <Link
+                      href={
+                        authContext.user?.username === comment?.author?.username
+                          ? "/me"
+                          : `/users/${comment?.author?._id}`
+                      }
+                      passHref
+                    >
+                      <a>{comment?.author?.username}</a>
+                    </Link>
+                  </p>
                   <div className="flex items-center w-auto md:ml-4">
                     <div className="w-auto">
-                      <Rating rating={comment?.rating} spaceX="space-x-2" />
+                      <Rating rating={comment?.rating} />
                     </div>
                     <p className="ml-2">{comment?.rating.toFixed(1)}</p>
                   </div>
                 </div>
-                <p className="bodyM text-gray-50">{`โดย ${dayjs(
+                <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
                   comment?.createdAt
                 )
                   .locale("th")
                   .add(543, "year")
                   .format("D MMM YY เวลา HH:mm น.")}`}</p>
               </div>
-              {((authContext.user?.username !== comment?.author?.username) || isShowKebab) && (
+              {((authContext.user?.username !== comment?.author?.username &&
+                authContext.user) ||
+                isShowKebab) && (
                 <div className="relative w-auto">
                   <div
                     ref={ref}
@@ -107,16 +132,29 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                             className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
                             onClick={() => {
                               modal.openModal(
-                                'ลบความคิดเห็น',
-                                'คุณต้องการลบความคิดเห็นนี้ใช่หรือไม่',
-                                () => recipeCommentContext.deleteComment(comment?._id, () => {
-                                  recipeCommentContext.setValue('isAlreadyComment', false)
-                                  recipeCommentContext.setValue('commentsList', [])
-                                  recipeCommentContext.prepareCommentsList(recipeId, true)
-                                }),
-                                'ยกเลิก',
-                                'ลบ'
-                              )
+                                "ลบความคิดเห็น",
+                                "คุณต้องการลบความคิดเห็นนี้ใช่หรือไม่",
+                                () =>
+                                  recipeCommentContext.deleteComment(
+                                    comment?._id,
+                                    () => {
+                                      recipeCommentContext.setValue(
+                                        "isAlreadyComment",
+                                        false
+                                      );
+                                      recipeCommentContext.setValue(
+                                        "commentsList",
+                                        []
+                                      );
+                                      recipeCommentContext.prepareCommentsList(
+                                        recipeId,
+                                        true
+                                      );
+                                    }
+                                  ),
+                                "ยกเลิก",
+                                "ลบ"
+                              );
                             }}
                           >
                             <i className="fas fa-trash w-auto"></i>
@@ -124,7 +162,8 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                           </div>
                         </div>
                       )}
-                      {(authContext.user?.username !== comment?.author?.username) && (
+                      {authContext.user?.username !==
+                        comment?.author?.username && (
                         <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                           <div
                             className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"

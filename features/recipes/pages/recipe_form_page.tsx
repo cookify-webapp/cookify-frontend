@@ -184,7 +184,7 @@ export const RecipeFormPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl pb-8">
+          <div className="mx-auto xl:max-w-6xl pb-8">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {

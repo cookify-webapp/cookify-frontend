@@ -11,3 +11,7 @@ export const getMe = (token) => {
     },
   });
 } 
+
+export const verifyUniqueKey = (key) => {
+  return axios.get(`${publicRuntimeConfig.CKF_ACCOUNT_API}/admin/${key}/verify`, { headers: { 'content-type': 'application/json' }})
+}

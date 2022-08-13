@@ -44,7 +44,7 @@ export type sidebarType = {
 export type userAccountType = {
   src: string;
   userName: string;
-  role: "user" | "admin";
+  role: "user" | "admin" | '';
 };
 
 export type searchBoxType = {
@@ -65,7 +65,24 @@ export type recipePropType = {
   image: string
   author: string
   averageRating: number
+  isBorder?: boolean
 };
+
+export type snapshotPropType = {
+  _id: string
+  caption: string
+  image: string
+  author: {
+    _id: string
+    username: string
+    image: string
+  }
+  recipe: {
+    _id: string
+    name: string
+  }
+  createdAt: string
+}
 
 export type ingredientPropType = {
   ingredient: {

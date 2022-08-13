@@ -34,20 +34,9 @@ export default function HomePage() {
   useEffect(() => {
     context.setValue("modalContext", modalContext);
     context.prepareIngredient();
+    context.prepareRecipesList();
+    context.prepareSnapshotList()
   }, []);
-
-  //---------------------
-  //  FUNCTION
-  //---------------------
-  const checkIsBookmark = (recipeId) => {
-    let isBookmark = false;
-    for (let i = 0; i < _.size(authContext.user?.bookmark); i++) {
-      if (recipeId === authContext.user?.bookmark[i]) {
-        isBookmark = true;
-      }
-    }
-    return isBookmark;
-  };
 
   //---------------------
   //  RENDER
@@ -56,7 +45,7 @@ export default function HomePage() {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
+          <div className="mx-auto xl:max-w-6xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -85,23 +74,25 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
-              {_.map(context.recipes, (recipe) => (
-                <div
-                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
-                  key={recipe.title}
-                >
-                  <Recipe
-                    id={recipe._id}
-                    author={recipe.author?.username}
-                    averageRating={recipe.averageRating}
-                    image={recipe.image}
-                    method={recipe.method?.name}
-                    name={recipe.name}
-                  />
-                </div>
-              ))}
-            </div>
+            {!context.loadingRecipe && (
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+                {_.map(context.recipes, (recipe) => (
+                  <div
+                    className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
+                    key={recipe.title}
+                  >
+                    <Recipe
+                      id={recipe._id}
+                      author={recipe.author?.username}
+                      averageRating={recipe.averageRating}
+                      image={recipe.image}
+                      method={recipe.method?.name}
+                      name={recipe.name}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="mt-8 px-5 2xl:px-0">
               <div
                 className="flex items-center h-[200px] rounded-[12px]"
@@ -138,16 +129,26 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
-              {_.map(context.snapshots, (snapshot) => (
-                <div
-                  className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
-                  key={`snapshot_${snapshot.id}`}
-                >
-                  <Snapshot snapshot={snapshot} />
-                </div>
-              ))}
-            </div>
+            {!context.loadingSnapshot && (
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+                {_.map(context.snapshots, (snapshot) => (
+                  <div
+                    className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
+                    key={`snapshot_${snapshot._id}`}
+                  >
+                    <Snapshot
+                      _id={snapshot._id}
+                      author={snapshot.author}
+                      caption={snapshot.caption}
+                      createdAt={snapshot.createdAt}
+                      image={snapshot.image}
+                      recipe={snapshot.recipe}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
             <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               วัตถุดิบใหม่ล่าสุด
               <Link href="/ingredients" passHref>
@@ -165,7 +166,7 @@ export default function HomePage() {
                   >
                     <Link href={`/ingredients/${ingredient._id}`} passHref>
                       <a>
-                        <Ingredient ingredient={ingredient} hasArrow/>
+                        <Ingredient ingredient={ingredient} hasArrow />
                       </a>
                     </Link>
                   </div>

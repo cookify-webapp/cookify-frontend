@@ -98,7 +98,7 @@ export const IngredientsListPage = () => {
             />
           )}
           <HomeLayout>
-            <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl h-[calc(100vh-84px)] md:h-[calc(100vh-96px)] lg:h-[calc(100vh-104px)]">
+            <div className="mx-auto xl:max-w-6xl h-[calc(100vh-84px)] md:h-[calc(100vh-96px)] lg:h-[calc(100vh-104px)]">
               <div className="px-5 w-full block xl:hidden mt-2">
                 <SearchBox
                   onChange={(value) => {

@@ -35,7 +35,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "Snapshot",
       icon: "fas fa-camera",
-      link: ["/shapshots"],
+      link: ["/snapshots", '/snapshots/[snapshotId]', '/snapshots/create', '/snapshots/[snapshotId]/edit'],
     },
     {
       title: "สุ่มสูตรอาหาร",
@@ -53,7 +53,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "ข้อมูลบัญชีผู้ใช้",
       icon: "fas fa-user",
-      link: ["/profile"],
+      link: ["/me", '/me/edit'],
     },
     {
       title: "การติดตามของฉัน",
@@ -63,7 +63,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
     {
       title: "สูตรอาหารที่บันทึก",
       icon: "fas fa-bookmark",
-      link: ["/saved"],
+      link: ["/bookmarked"],
     },
     {
       title: "การแจ้งเตือน",
@@ -79,9 +79,9 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
       link: ["/complaints"],
     },
     {
-      title: "จัดการบัญชีผู้ใช้",
+      title: "จัดการผู้ดูแลระบบ",
       icon: "fas fa-user-cog",
-      link: ["/users"],
+      link: ["/admins"],
     },
   ];
 

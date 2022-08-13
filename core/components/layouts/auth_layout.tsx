@@ -28,6 +28,7 @@ export default function AuthLayouts({ children }: AuthLayoutsProps) {
   //  HOOKS
   //---------------------
   useEffect(() => {
+    context.setValue('router', router)
     context.setValue('user', JSON.parse(localStorage.getItem('user')))
     context.setValue("modal", modal);
     context.fetchMe();

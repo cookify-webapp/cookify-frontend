@@ -92,7 +92,7 @@ export const RecipesListPage = () => {
             context.prepareRecipesList();
           }}
         >
-          <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
+          <div className="mx-auto xl:max-w-6xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -110,13 +110,13 @@ export const RecipesListPage = () => {
                 }}
               />
             </div>
-            <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl">
+            <div className="mx-auto xl:max-w-6xl">
               <h1 className="px-5 2xl:px-0 pt-8 lg:pt-2 headlineL">
                 ประเภทอาหาร
               </h1>
             </div>
             {context.isMethodLoaded ? (
-              <div className="px-5 mx-auto xl:max-w-6xl 2xl:max-w-7xl flex space-x-[16px] scrollbar-hide md:space-x-0 overflow-x-auto md:grid md:grid-cols-12 md:gap-4 mt-6">
+              <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl flex space-x-[16px] scrollbar-hide md:space-x-0 overflow-x-auto md:grid md:grid-cols-12 md:gap-4 mt-6">
                 {_.map(context.cookingMethods, (method, index) => (
                   <div
                     className={classNames(
@@ -144,12 +144,12 @@ export const RecipesListPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex justify-center xl:max-w-6xl 2xl:max-w-7xl text-gray-50">
+              <div className="flex justify-center xl:max-w-6xl text-gray-50">
                 <i className="w-6 h-6 mt-6 text-center lg:mx-0 text-[24px] leading-6 fas fa-circle-notch fa-spin"></i>
               </div>
             )}
           </div>
-          <div className="px-5 mx-auto xl:max-w-6xl 2xl:max-w-7xl py-6">
+          <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl py-6">
             <div className="bg-white rounded-[12px] py-6 grid grid-cols-12 gap-x-4">
               <div className="px-6 col-span-12 md:col-span-5 xl:col-span-4">
                 <p className="titleM">ค้นหาสูตรอาหารจากวัตถุดิบ</p>

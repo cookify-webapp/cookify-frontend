@@ -58,7 +58,7 @@ export const RecipeDetailPage = () => {
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
   const recipeCommentContext = useContext(RecipeCommentContext);
-  const flashMessageContext = useContext(FlashMessageContext)
+  const flashMessageContext = useContext(FlashMessageContext);
   const modal = useContext(ModalContext);
 
   //---------------------
@@ -71,9 +71,9 @@ export const RecipeDetailPage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
-    context.setValue('modal', modal)
-    context.setValue('flashMessageContext', flashMessageContext)
-    context.setValue('router', router)
+    context.setValue("modal", modal);
+    context.setValue("flashMessageContext", flashMessageContext);
+    context.setValue("router", router);
     if (authContext.user) {
       context.prepareRecipeDetail(recipeId, true);
       recipeCommentContext.prepareCommentsList(recipeId, true);
@@ -84,7 +84,7 @@ export const RecipeDetailPage = () => {
     }
     recipeCommentContext.setValue("modal", modal);
     return () => {
-      context.setValue('recipeDetail', null)
+      context.setValue("recipeDetail", null);
       context.setValue("activeTab", "วัตถุดิบหลัก");
       recipeCommentContext.setValue("commentsList", []);
       recipeCommentContext.setValue("isEdit", false);
@@ -116,7 +116,7 @@ export const RecipeDetailPage = () => {
         <>
           {!context.loading && (
             <HomeLayout>
-              <div className="mx-auto xl:max-w-6xl 2xl:max-w-7xl pb-8">
+              <div className="mx-auto xl:max-w-6xl pb-8">
                 <div className="px-5 w-full block xl:hidden mt-2">
                   <SearchBox
                     onChange={(value) => {
@@ -165,87 +165,107 @@ export const RecipeDetailPage = () => {
                           <h3 className="headlineL">
                             {context.recipeDetail?.name}
                           </h3>
-                          <p className="bodyM text-gray-50">{`โดย ${dayjs(
-                            context.recipeDetail?.createdAt
-                          )
-                            .locale("th")
-                            .add(543, "year")
-                            .format("D MMM YY เวลา HH:mm น.")}`}</p>
+                          <p className="bodyM text-gray-50">
+                            โดย{" "}
+                            <span className="underline cursor-pointer">
+                              {" "}
+                              <Link
+                                href={
+                                  authContext.user?.username ===
+                                  context.recipeDetail?.author?.username
+                                    ? "/me"
+                                    : `/users/${context.recipeDetail?.author?._id}`
+                                }
+                                passHref
+                              >
+                                <a>{context.recipeDetail?.author?.username}</a>
+                              </Link>
+                            </span>
+                            {` เมื่อ ${dayjs(context.recipeDetail?.createdAt)
+                              .locale("th")
+                              .add(543, "year")
+                              .format("D MMM YY เวลา HH:mm น.")}`}
+                          </p>
                         </div>
                         <div className="w-auto flex space-x-2">
                           {authContext.user && (
-                            <div
-                              className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
-                              onClick={() => null}
-                            >
-                              {context.recipeDetail?.bookmarked ? (
-                                <i className=" text-[16px] leading-[16px] fas fa-bookmark text-white"></i>
-                              ) : (
-                                <i className=" text-[16px] leading-[16px] far fa-bookmark text-white"></i>
-                              )}
-                            </div>
-                          )}
-                          <div className="relative">
-                            <div
-                              ref={ref}
-                              className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
-                              onClick={() => setOpen(!open)}
-                            >
-                              <i className=" text-[16px] leading-[16px] fas fa-ellipsis-v text-white"></i>
-                            </div>
-                            {open && (
-                              <div className="flex justify-end">
-                                {(context.recipeDetail?.isMe && authContext.user) ? (
-                                  <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
-                                    <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() =>
-                                        router.push(`/recipes/${recipeId}/edit`)
-                                      }
-                                    >
-                                      <i className="fas fa-pen w-auto"></i>
-                                      <p className="ml-3">แก้ไขสูตรอาหาร</p>
-                                    </div>
-                                    <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() => {
-                                        modal.openModal(
-                                          'ลบสูตรอาหาร',
-                                          'คุณต้องการลบสูตรอาหารนี้ใช่หรือไม่',
-                                          () => context.deleteRecipe(recipeId),
-                                          'ยกเลิก',
-                                          'ลบ'
-                                        )
-                                      }}
-                                    >
-                                      <i className="fas fa-trash w-auto"></i>
-                                      <p className="ml-3">ลบสูตรอาหาร</p>
-                                    </div>
-                                  </div>
+                            <>
+                              <div
+                                className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
+                                onClick={() => context.setBookmark(recipeId)}
+                              >
+                                {context.recipeDetail?.bookmarked ? (
+                                  <i className=" text-[16px] leading-[16px] fas fa-bookmark text-white"></i>
                                 ) : (
-                                  <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
-                                    <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() => null}
-                                    >
-                                      <i className="fas fa-exclamation-triangle w-auto"></i>
-                                      <p className="ml-3">รายงานสูตรอาหาร</p>
-                                    </div>
+                                  <i className=" text-[16px] leading-[16px] far fa-bookmark text-white"></i>
+                                )}
+                              </div>
+                              <div className="relative">
+                                <div
+                                  ref={ref}
+                                  className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75"
+                                  onClick={() => setOpen(!open)}
+                                >
+                                  <i className=" text-[16px] leading-[16px] fas fa-ellipsis-v text-white"></i>
+                                </div>
+                                {open && (
+                                  <div className="flex justify-end">
+                                    {context.recipeDetail?.isMe &&
+                                    authContext.user ? (
+                                      <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
+                                        <div
+                                          className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                          onClick={() =>
+                                            router.push(
+                                              `/recipes/${recipeId}/edit`
+                                            )
+                                          }
+                                        >
+                                          <i className="fas fa-pen w-auto"></i>
+                                          <p className="ml-3">แก้ไขสูตรอาหาร</p>
+                                        </div>
+                                        <div
+                                          className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                          onClick={() => {
+                                            modal.openModal(
+                                              "ลบสูตรอาหาร",
+                                              "คุณต้องการลบสูตรอาหารนี้ใช่หรือไม่",
+                                              () =>
+                                                context.deleteRecipe(recipeId),
+                                              "ยกเลิก",
+                                              "ลบ"
+                                            );
+                                          }}
+                                        >
+                                          <i className="fas fa-trash w-auto"></i>
+                                          <p className="ml-3">ลบสูตรอาหาร</p>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
+                                        <div
+                                          className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                          onClick={() => null}
+                                        >
+                                          <i className="fas fa-exclamation-triangle w-auto"></i>
+                                          <p className="ml-3">
+                                            รายงานสูตรอาหาร
+                                          </p>
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
                                 )}
                               </div>
-                            )}
-                          </div>
+                            </>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center mt-2">
                         <p className="bodyM mr-4 w-auto">{`หน่วยบริโภค: ${context.recipeDetail?.serving}`}</p>
                         <div className="flex items-center w-auto">
                           <div>
-                            <Rating
-                              rating={context.recipeDetail?.averageRating}
-                              spaceX="space-x-2"
-                            />
+                            <Rating rating={context.recipeDetail?.averageRating} />
                           </div>
                           <p className="ml-2">
                             {context.recipeDetail?.averageRating.toFixed(1)}

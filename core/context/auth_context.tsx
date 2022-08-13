@@ -12,6 +12,8 @@ class Auth {
   isLogIn;
 
   modal;
+
+  router
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -96,9 +98,11 @@ class Auth {
 
   logout = () => {
     this.user = null
+    this.isLogIn = false
     Cookies.remove('token')
     localStorage.setItem('user', null)
-    location.reload()
+    this.modal.closeModal()
+    this.router.push('/')
   }
 }
 export const AuthContext = createContext(new Auth());
