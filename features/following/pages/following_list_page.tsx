@@ -110,26 +110,36 @@ export const FollowingListPage = () => {
                             className="border border-gray-40 rounded-[12px] bg-white py-2 mb-4"
                             key={`following_act_${index}`}
                           >
-                            <div className="flex justify-between space-x-3 items-center px-4">
-                              <div className="flex items-center space-x-3 w-auto">
-                                <div className="w-[48px] h-[48px] border border-gray-30 rounded-full overflow-hidden cursor-pointer flex-shrink-0">
-                                  <ImageWithFallback
-                                    alt="snapshot cover image"
-                                    className="w-full h-full object-cover"
-                                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${following?.author?.image}`}
-                                  />
-                                </div>
-                                <p className="titleS">
-                                  {following?.author?.username}
-                                  <span className="bodyM text-gray-60">
-                                    {` เพิ่ม${
-                                      following.type === "recipe"
-                                        ? "สูตรอาหารใหม่"
-                                        : " Snapshot ใหม่"
-                                    }`}
-                                  </span>
-                                </p>
+                            <div className="flex items-center space-x-3 w-auto px-4">
+                              <div className="w-[48px] h-[48px] border border-gray-30 rounded-full overflow-hidden cursor-pointer flex-shrink-0">
+                                <Link
+                                  href={`/users/${following?.author?._id}`}
+                                  passHref
+                                >
+                                  <a>
+                                    <ImageWithFallback
+                                      alt="snapshot cover image"
+                                      className="w-full h-full object-cover"
+                                      src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${following?.author?.image}`}
+                                    />
+                                  </a>
+                                </Link>
                               </div>
+                              <p>
+                                <Link
+                                  href={`/users/${following?.author?._id}`}
+                                  passHref
+                                >
+                                  <a className="titleS">{following?.author?.username}</a>
+                                </Link>
+                                <span className="bodyM text-gray-60">
+                                  {` เพิ่ม${
+                                    following.type === "recipe"
+                                      ? "สูตรอาหารใหม่"
+                                      : " Snapshot ใหม่"
+                                  }`}
+                                </span>
+                              </p>
                             </div>
                             <div className="border-t border-gray-40 mt-2"></div>
                             <div className="bg-gray-20 w-full flex justify-center">
@@ -143,14 +153,17 @@ export const FollowingListPage = () => {
                             </div>
                             <div className="mt-3 px-4">
                               <Link
-                                href={`/recipes/${following?.recipe?._id || following?._id}`}
+                                href={`/recipes/${
+                                  following?.recipe?._id || following?._id
+                                }`}
                                 passHref
                               >
                                 <a>
                                   <div className="flex space-x-2 items-center py-[5px] px-3 max-w-max bg-beige-20 rounded-[5px]">
                                     <i className="fas fa-book text-[14px] leading-[14px] text-brown-10 w-auto" />
                                     <p className="line-clamp-1 w-auto">
-                                      {following?.recipe?.name || following?.name}
+                                      {following?.recipe?.name ||
+                                        following?.name}
                                     </p>
                                   </div>
                                 </a>
@@ -164,9 +177,18 @@ export const FollowingListPage = () => {
                                 .format("D MMM YY เวลา HH:mm น.")}`}</p>
                             </div>
                             <div className="border-t border-gray-40 mt-3"></div>
-                            <Link href={following.type === 'recipe' ? `/recipes/${following._id}` : `/snapshots/${following._id}`} passHref>
-                              <a target='_blank'>
-                                <p className="titleS text-gray-60 text-center mt-2">แสดงความคิดเห็น</p>
+                            <Link
+                              href={
+                                following.type === "recipe"
+                                  ? `/recipes/${following._id}`
+                                  : `/snapshots/${following._id}`
+                              }
+                              passHref
+                            >
+                              <a target="_blank">
+                                <p className="titleS text-gray-60 text-center mt-2">
+                                  แสดงความคิดเห็น
+                                </p>
                               </a>
                             </Link>
                           </div>
