@@ -1,7 +1,7 @@
 export type followingListType = {
   _id: string
   name?: string
-  caption?: string
+  desc: string
   image: string
   author: {
     _id: string

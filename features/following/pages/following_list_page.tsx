@@ -77,7 +77,7 @@ export const FollowingListPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
-          <div className="mx-auto xl:max-w-6xl">
+          <div className="mx-auto xl:max-w-6xl pb-6">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
                 onChange={(value) => {
@@ -95,7 +95,7 @@ export const FollowingListPage = () => {
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl">
               <h1 className="pt-8 lg:pt-2 headlineL">การติดตามของฉัน</h1>
               <div className="mt-6 grid grid-cols-12 gap-4">
-                <div className="col-start-1 lg:col-start-2 col-span-12 lg:col-span-6 lg:col-end-8">
+                <div className="col-span-12 lg:col-span-6">
                   {_.size(context.followingList) > 0 && !context.loading && (
                     <InfiniteScroll
                       dataLength={context.followingList.length}
@@ -155,7 +155,7 @@ export const FollowingListPage = () => {
                                   </div>
                                 </a>
                               </Link>
-                              <p className="my-2 bodyM">{following.caption}</p>
+                              <p className="my-2 bodyM">{following.desc}</p>
                               <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
                                 following?.createdAt
                               )
@@ -163,6 +163,12 @@ export const FollowingListPage = () => {
                                 .add(543, "year")
                                 .format("D MMM YY เวลา HH:mm น.")}`}</p>
                             </div>
+                            <div className="border-t border-gray-40 mt-3"></div>
+                            <Link href={following.type === 'recipe' ? `/recipes/${following._id}` : `/snapshots/${following._id}`} passHref>
+                              <a target='_blank'>
+                                <p className="titleS text-gray-60 text-center mt-2">แสดงความคิดเห็น</p>
+                              </a>
+                            </Link>
                           </div>
                         )
                       )}
@@ -182,7 +188,7 @@ export const FollowingListPage = () => {
                     </div>
                   )}
                 </div>
-                <div className="hidden lg:block lg:col-start-9 lg:col-span-5">
+                <div className="hidden lg:block lg:col-start-8 lg:col-span-5">
                   <div
                     className="flex items-center h-[200px] rounded-[12px]"
                     style={{
