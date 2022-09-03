@@ -140,7 +140,7 @@ class SnapshotDetail {
     }
   };
 
-  addComment = async (snapshotId, value) => {
+  addComment = async (snapshotId, value, setHasMore) => {
     try {
       const data = {
         comment: value.comment,
@@ -158,6 +158,9 @@ class SnapshotDetail {
       if (resp.status === 200) {
         this.formik?.resetForm();
         this.commentList = []
+        this.page = 1
+        this.totalPages = 1
+        setHasMore(true)
         this.prepareSnapshotCommentsList(snapshotId, true)
         this.flashMessageContext.handleShow(
           "เพิ่มสำเร็จ",
@@ -175,7 +178,7 @@ class SnapshotDetail {
     }
   };
 
-  editComment = async (snapshotId, commentId, value) => {
+  editComment = async (snapshotId, commentId, value, setHasMore) => {
     try {
       const data = {
         comment: value.comment,
@@ -191,9 +194,15 @@ class SnapshotDetail {
         token
       );
       if (resp.status === 200) {
+        this.initValue = {
+          comment: ''
+        }
         this.formik?.resetForm();
         this.isEditIndex = -1
         this.commentList = []
+        this.page = 1
+        this.totalPages = 1
+        setHasMore(true)
         this.prepareSnapshotCommentsList(snapshotId, true)
         this.flashMessageContext.handleShow(
           "แก้ไขสำเร็จ",
@@ -211,7 +220,7 @@ class SnapshotDetail {
     }
   };
 
-  deleteComment = async (commentId, snapshotId) => {
+  deleteComment = async (commentId, snapshotId, setHasMore) => {
     try {
       const token = Cookies.get("token");
       const resp = await deleteSnapshotComment(commentId, token);
@@ -220,6 +229,9 @@ class SnapshotDetail {
         this.formik?.resetForm()
         this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบความคิดเห็นสำเร็จ");
         this.commentList = []
+        this.page = 1
+        this.totalPages = 1
+        setHasMore(true)
         this.prepareSnapshotCommentsList(snapshotId, true)
       }
     } catch (error) {

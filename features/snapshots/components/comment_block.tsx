@@ -19,13 +19,15 @@ interface commentBlockPropType {
   isEdit: boolean;
   index: number;
   formik: any
+  setHasMore: (v) => void
 }
 
 export const CommentBlock = ({
   comment,
   isEdit,
   index,
-  formik
+  formik,
+  setHasMore
 }: commentBlockPropType) => {
   //---------------------
   // STATE
@@ -122,7 +124,7 @@ export const CommentBlock = ({
                               "ลบความคิดเห็น",
                               "ต้องการลบความคิดเห็นใช่หรือไม่",
                               () => {
-                                context.deleteComment(comment._id, snapshotId)
+                                context.deleteComment(comment._id, snapshotId, setHasMore)
                               },
                               "ยกเลิก",
                               "ลบ"

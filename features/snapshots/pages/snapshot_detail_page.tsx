@@ -65,9 +65,9 @@ export const SnapshotDetailPage = () => {
     initialValues: context.initValue,
     onSubmit: (value) => {
       context.isEditIndex !== -1 ?
-      context.editComment(snapshotId, context.commentList[context.isEditIndex]._id, value)
+      context.editComment(snapshotId, context.commentList[context.isEditIndex]._id, value, setHasMore)
       :
-      context.addComment(snapshotId, value)
+      context.addComment(snapshotId, value, setHasMore)
     },
   });
 
@@ -89,6 +89,7 @@ export const SnapshotDetailPage = () => {
       context.setValue('isEditIndex', -1)
       context.setValue('page', 1)
       context.setValue('totalPages', 1)
+      setHasMore(true)
     }
   }, []);
 
@@ -289,7 +290,7 @@ export const SnapshotDetailPage = () => {
                                 context.commentList,
                                 (comment: commentListType, index) => (
                                   <Fragment key={`comment_${index}`}>
-                                    <CommentBlock comment={comment} isEdit={context.isEditIndex === index} index={index} formik={formik}/>
+                                    <CommentBlock comment={comment} isEdit={context.isEditIndex === index} index={index} formik={formik} setHasMore={setHasMore}/>
                                   </Fragment>
                                 )
                               )}
@@ -345,6 +346,7 @@ export const SnapshotDetailPage = () => {
                               <SecondaryButton
                                 onClick={() => {
                                   context.setValue("isEditIndex", -1);
+                                  formik.resetForm()
                                 }}
                                 title="ยกเลิก"
                               />
