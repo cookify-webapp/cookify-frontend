@@ -45,7 +45,7 @@ class SnapshotDetail {
     this.loadingDetail = false;
     this.commentList = [];
     this.page = 1
-    this.perPage = 5
+    this.perPage = 8
     this.loading = true
     this.isEditIndex = -1
     makeAutoObservable(this);

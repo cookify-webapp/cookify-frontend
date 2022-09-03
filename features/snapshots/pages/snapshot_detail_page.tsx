@@ -87,6 +87,8 @@ export const SnapshotDetailPage = () => {
       formik.resetForm()
       context.setValue('commentList', [])
       context.setValue('isEditIndex', -1)
+      context.setValue('page', 1)
+      context.setValue('totalPages', 1)
     }
   }, []);
 
@@ -272,11 +274,9 @@ export const SnapshotDetailPage = () => {
                     </div>
                   </div>
                   <div className="col-span-12 md:col-span-7 lg:col-span-8 bg-white rounded-[12px]">
-                    <div className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default">
+                    <div className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default" id="scrollableComments">
                       {_.size(context.commentList) > 0 && !context.loading && (
-                        <div
-                          id="scrollableComments"
-                        >
+                        <div>
                           <InfiniteScroll
                             dataLength={context.commentList.length}
                             next={preparation}
