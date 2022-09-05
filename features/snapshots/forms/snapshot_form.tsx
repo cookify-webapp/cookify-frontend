@@ -39,7 +39,7 @@ export const createSnapshotFormData = (value) => {
   };
 
   formData.append("data", JSON.stringify(data));
-  if (value.recipeImage !== null) {
+  if (value.snapshotImage !== null) {
     formData.append("snapshotImage", value.snapshotImage, value.imageFileName);
   }
 
