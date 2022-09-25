@@ -11,6 +11,8 @@ class Auth {
   initValue;
   isLogIn;
 
+  unreadNotification: number = 0
+
   modal;
 
   router
@@ -74,6 +76,7 @@ class Auth {
       let noCookie = Cookies.get("token") === undefined;
       if (noCookie) {
         this.user = null
+        this.unreadNotification = 0
         this.isLogIn = false
         localStorage.setItem('user', null)
       } else {
@@ -81,6 +84,7 @@ class Auth {
         const resp = await getMe(token);
         if (resp.status === 200) {
           this.user = resp.data?.account;
+          this.unreadNotification = resp.data?.unreadNotification
           this.isLogIn = true;
           localStorage.setItem('user', JSON.stringify(this.user))
         }
@@ -98,6 +102,7 @@ class Auth {
 
   logout = () => {
     this.user = null
+    this.unreadNotification = 0
     this.isLogIn = false
     Cookies.remove('token')
     localStorage.setItem('user', null)
