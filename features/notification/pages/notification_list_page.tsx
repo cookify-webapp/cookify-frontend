@@ -136,7 +136,7 @@ export const NotificationListPage = () => {
                                       }}
                                     ></p>
                                     <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
-                                      notification.craetedAt
+                                      notification.createdAt
                                     )
                                       .locale("th")
                                       .add(543, "year")

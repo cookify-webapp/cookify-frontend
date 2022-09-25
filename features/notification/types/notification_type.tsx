@@ -5,5 +5,5 @@ export type notificationListType = {
   link: string
   reciever: string
   read: boolean
-  craetedAt: string
+  createdAt: string
 }
