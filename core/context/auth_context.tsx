@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { login } from "@core/services/auth/post_auth";
 import Cookies from "js-cookie";
-import { getMe } from "@core/services/auth/get_auth";
+import { getMe, getUnreadNotification } from "@core/services/auth/get_auth";
 import { userType } from "core/types/auth_type";
 import Router from "next/router";
 
@@ -71,6 +71,24 @@ class Auth {
     }
   };
 
+  prepareUnreadNotification = async () => {
+    try {
+      const token = Cookies.get("token")
+      const resp = await getUnreadNotification(token)
+      if (resp.status === 200) {
+        this.unreadNotification = resp.data?.count
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "เกิดปัญหาในการดึงข้อมูลจำนวนการแจ้งเตือน",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  }
+
   fetchMe = async () => {
     try {
       let noCookie = Cookies.get("token") === undefined;
@@ -84,7 +102,7 @@ class Auth {
         const resp = await getMe(token);
         if (resp.status === 200) {
           this.user = resp.data?.account;
-          this.unreadNotification = resp.data?.unreadNotification
+          this.prepareUnreadNotification()
           this.isLogIn = true;
           localStorage.setItem('user', JSON.stringify(this.user))
         }

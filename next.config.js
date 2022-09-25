@@ -6,7 +6,8 @@ const moduleExports = {
     CKF_RECIPE_API: process.env.CKF_RECIPE_API,
     CKF_COMMENT_API: process.env.CKF_COMMENT_API,
     CKF_ACCOUNT_API: process.env.CKF_ACCOUNT_API,
-    CKF_SNAPSHOT_API: process.env.CKF_SNAPSHOT_API
+    CKF_SNAPSHOT_API: process.env.CKF_SNAPSHOT_API,
+    CKF_NOTIFICATION_API: process.env.CKF_NOTIFICATION_API
   },
   experimental: {
     outputStandalone: true,
