@@ -94,7 +94,7 @@ export const CommentBlock = ({
                 </div>
               </a>
             </Link>
-            {authContext.user !== null && (
+            {(authContext.user !== null && comment.isMe) && (
               <div className="w-auto">
                 <div
                   ref={ref}
@@ -133,17 +133,6 @@ export const CommentBlock = ({
                         >
                           <i className="fas fa-trash w-auto"></i>
                           <p className="ml-3 w-auto">ลบความคิดเห็น</p>
-                        </div>
-                      </div>
-                    )}
-                    {!comment.isMe && (
-                      <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
-                        <div
-                          className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                          onClick={() => null}
-                        >
-                          <i className="fas fa-exclamation-triangle w-auto"></i>
-                          <p className="ml-3">รายงานความคิดเห็น</p>
                         </div>
                       </div>
                     )}
