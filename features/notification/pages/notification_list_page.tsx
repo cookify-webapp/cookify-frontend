@@ -10,6 +10,8 @@ import _ from "lodash";
 import classNames from "classnames";
 import { notificationListType } from "../types/notification_type";
 import Link from "next/link";
+import dayjs from "dayjs";
+import "dayjs/locale/th";
 
 export const NotificationListPage = () => {
   //---------------------
@@ -30,6 +32,10 @@ export const NotificationListPage = () => {
   useEffect(() => {
     context.setValue("modal", modal);
     context.prepareNotificationList();
+
+    return () => {
+      context.setValue("notificationList", []);
+    };
   }, []);
 
   //---------------------
@@ -60,14 +66,14 @@ export const NotificationListPage = () => {
                 {_.size(context.notificationList) > 0 && (
                   <p
                     className="bodyM underline cursor-pointer w-auto"
-                    onClick={() => null}
+                    onClick={() => context.readAllNotification()}
                   >
                     เปลี่ยนเป็นอ่านแล้ว
                   </p>
                 )}
               </div>
               <div className="mt-6">
-                {_.size(context.notificationList) > 0 && (
+                {_.size(context.notificationList) > 0 && !context.loading && (
                   <div className="space-y-2">
                     {_.map(
                       context.notificationList,
@@ -85,12 +91,11 @@ export const NotificationListPage = () => {
                                   { "bg-white": !notification.read },
                                   { "bg-gray-20": notification.read }
                                 )}
-                                onClick={() => null}
-                                onContextMenu={() => null}
+                                onClick={() => context.readOneNotification(notification._id)}
                               >
                                 <div
                                   className={classNames(
-                                    "border-l-2 pl-4 md:pl-6 lg:pl-10 pr-6 flex justify-between items-center space-x-4",
+                                    "border-l-2 pl-4 md:pl-6 lg:pl-10 pr-6 flex justify-between items-center",
                                     {
                                       "border-l-blue":
                                         notification.type === "comment",
@@ -105,7 +110,7 @@ export const NotificationListPage = () => {
                                     }
                                   )}
                                 >
-                                  <div className=" w-auto">
+                                  <div className="w-auto">
                                     <i
                                       className={classNames(
                                         "text-brown-10",
@@ -124,12 +129,20 @@ export const NotificationListPage = () => {
                                       )}
                                     />
                                   </div>
-                                  <div className="w-full">
+                                  <div className="w-full px-4 md:px-6 lg:px-10">
                                     <p
                                       dangerouslySetInnerHTML={{
                                         __html: notification.caption,
                                       }}
                                     ></p>
+                                    <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
+                                      notification.craetedAt
+                                    )
+                                      .locale("th")
+                                      .add(543, "year")
+                                      .format(
+                                        "D MMM YY เวลา HH:mm น."
+                                      )}`}</p>
                                   </div>
                                   {!notification.read && (
                                     <div
@@ -157,6 +170,19 @@ export const NotificationListPage = () => {
                         </div>
                       )
                     )}
+                  </div>
+                )}
+                {context.loading && (
+                  <div className="py-10 flex items-center justify-center text-center text-gray-50">
+                    <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                  </div>
+                )}
+                {!context.loading && _.size(context.notificationList) === 0 && (
+                  <div className="py-10 flex items-center text-center text-gray-50">
+                    <div>
+                      <i className="fas fa-bel text-[48px] w-12 h-12"></i>
+                      <p className="titleM mt-4">ไม่มีรายการการแจ้งเตือน</p>
+                    </div>
                   </div>
                 )}
               </div>

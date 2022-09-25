@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { notificationListType } from "../types/notification_type";
 import Cookies from "js-cookie";
-import { getNotificationList } from "@core/services/notification/get_notification";
+import { getNotificationList, readAllNotification, readOneNotification } from "@core/services/notification/get_notification";
 
 class NotificationList {
   notificationList: notificationListType[]
@@ -44,6 +44,25 @@ class NotificationList {
       );
     } finally {
       this.loading = false
+    }
+  }
+
+  readOneNotification = async (id) => {
+    try {
+      const token = Cookies.get("token");
+      await readOneNotification(id, token)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  readAllNotification = async () => {
+    try {
+      const token = Cookies.get("token");
+      await readAllNotification(token)
+      this.prepareNotificationList()
+    } catch (error) {
+      console.log(error)
     }
   }
 }
