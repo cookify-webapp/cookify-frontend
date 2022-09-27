@@ -35,7 +35,9 @@ export default function AuthLayouts({ children }: AuthLayoutsProps) {
   }, [context.user?.image]);
 
   useEffect(() => {
-    context.prepareUnreadNotification()
+    if (context.user !== null) {
+      context.prepareUnreadNotification()
+    }
   }, [router.pathname])
 
   //---------------------
