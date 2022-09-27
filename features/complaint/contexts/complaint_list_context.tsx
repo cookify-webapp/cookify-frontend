@@ -70,7 +70,7 @@ class ComplaintList {
       }
     } catch (error) {
       this.modal.openModal(
-        "มีปัญหาในการดึงรายการการติดตาม",
+        "มีปัญหาในการดึงรายการเรื่องร้องเรียน",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",

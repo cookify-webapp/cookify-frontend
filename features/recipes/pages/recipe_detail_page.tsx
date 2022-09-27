@@ -30,6 +30,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { CommentBlock } from "../components/recipe_detail/comment_block";
 import { ModalContext } from "core/context/modal_context";
 import { FlashMessageContext } from "core/context/flash_message_context";
+import { ComplaintModal } from "@core/components/modal/complaint_modal";
+import { ComplaintModalContext } from "core/context/complaint_modal_context";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -60,6 +62,7 @@ export const RecipeDetailPage = () => {
   const recipeCommentContext = useContext(RecipeCommentContext);
   const flashMessageContext = useContext(FlashMessageContext);
   const modal = useContext(ModalContext);
+  const complaintModalContext = useContext(ComplaintModalContext)
 
   //---------------------
   //  ROUTER
@@ -114,6 +117,7 @@ export const RecipeDetailPage = () => {
     <Observer>
       {() => (
         <>
+          <ComplaintModal />
           {!context.loading && (
             <HomeLayout>
               <div className="mx-auto xl:max-w-6xl pb-8">
@@ -245,7 +249,9 @@ export const RecipeDetailPage = () => {
                                       <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                                         <div
                                           className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                          onClick={() => null}
+                                          onClick={() => {
+                                            complaintModalContext.openModal('recipe', context.recipeDetail?.name, context.recipeDetail?.author?.username, context.recipeDetail?.createdAt, context.recipeDetail?._id)
+                                          }}
                                         >
                                           <i className="fas fa-exclamation-triangle w-auto"></i>
                                           <p className="ml-3">

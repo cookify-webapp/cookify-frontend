@@ -550,6 +550,7 @@ export const RecipeFormPage = () => {
                           }}
                           value={step}
                           height={50}
+                          isAutoSize
                         />
                       </div>
                       {_.size(formik.values?.steps) !== 1 && (

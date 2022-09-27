@@ -14,6 +14,7 @@ interface TextAreaInputProps {
   disabled?: boolean;
   height?: number;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  isAutoSize?: boolean
 }
 
 export function TextAreaInput(props: TextAreaInputProps) {
@@ -42,6 +43,9 @@ export function TextAreaInput(props: TextAreaInputProps) {
           {
             "bg-gray-20 border-gray-30 text-gray-50 cursor-not-allowed":
               props.disabled,
+          },
+          {
+            "auto-size": props.isAutoSize
           }
         )}
       />

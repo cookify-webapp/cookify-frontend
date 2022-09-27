@@ -29,6 +29,8 @@ import { commentValidateSchema } from "../forms/comment_form";
 import { SecondaryButton } from "@core/components/button/secondary_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { FlashMessageContext } from "core/context/flash_message_context";
+import { ComplaintModal } from "@core/components/modal/complaint_modal";
+import { ComplaintModalContext } from "core/context/complaint_modal_context";
 const { publicRuntimeConfig } = getConfig();
 
 export const SnapshotDetailPage = () => {
@@ -45,7 +47,8 @@ export const SnapshotDetailPage = () => {
   const modal = useContext(ModalContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
-  const flashMessageContext = useContext(FlashMessageContext)
+  const flashMessageContext = useContext(FlashMessageContext);
+  const complaintModalContext = useContext(ComplaintModalContext);
 
   //---------------------
   //  ROUTER
@@ -64,10 +67,14 @@ export const SnapshotDetailPage = () => {
     validationSchema: () => commentValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      context.isEditIndex !== -1 ?
-      context.editComment(snapshotId, context.commentList[context.isEditIndex]._id, value, setHasMore)
-      :
-      context.addComment(snapshotId, value, setHasMore)
+      context.isEditIndex !== -1
+        ? context.editComment(
+            snapshotId,
+            context.commentList[context.isEditIndex]._id,
+            value,
+            setHasMore
+          )
+        : context.addComment(snapshotId, value, setHasMore);
     },
   });
 
@@ -76,21 +83,21 @@ export const SnapshotDetailPage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
-    context.setValue('formik', formik)
-    context.setValue('flashMessageContext', flashMessageContext)
-    context.setValue('router', router)
+    context.setValue("formik", formik);
+    context.setValue("flashMessageContext", flashMessageContext);
+    context.setValue("router", router);
     context.prepareSnapshotDetail(snapshotId, authContext.user !== null);
     context.prepareSnapshotCommentsList(snapshotId, authContext.user !== null);
 
     return () => {
-      context.setValue('initValue', { comment: ''})
-      formik.resetForm()
-      context.setValue('commentList', [])
-      context.setValue('isEditIndex', -1)
-      context.setValue('page', 1)
-      context.setValue('totalPages', 1)
-      setHasMore(true)
-    }
+      context.setValue("initValue", { comment: "" });
+      formik.resetForm();
+      context.setValue("commentList", []);
+      context.setValue("isEditIndex", -1);
+      context.setValue("page", 1);
+      context.setValue("totalPages", 1);
+      setHasMore(true);
+    };
   }, []);
 
   //---------------------
@@ -127,6 +134,7 @@ export const SnapshotDetailPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
+          <ComplaintModal />
           <div className="mx-auto xl:max-w-6xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
@@ -213,7 +221,7 @@ export const SnapshotDetailPage = () => {
                                             ท่านยืนยันที่จะลบหรือไม่ ?
                                           </p>,
                                           () => {
-                                            context.deleteSnapshot(snapshotId)
+                                            context.deleteSnapshot(snapshotId);
                                           },
                                           "ยกเลิก",
                                           "ลบ"
@@ -229,7 +237,16 @@ export const SnapshotDetailPage = () => {
                                   <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                                     <div
                                       className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() => null}
+                                      onClick={() => {
+                                        complaintModalContext.openModal(
+                                          "snapshot",
+                                          context.snapshotDetail?.recipe?.name,
+                                          context.snapshotDetail?.author
+                                            ?.username,
+                                          context.snapshotDetail?.createdAt,
+                                          context.snapshotDetail?._id
+                                        );
+                                      }}
                                     >
                                       <i className="fas fa-exclamation-triangle w-auto"></i>
                                       <p className="ml-3">รายงาน Snapshot</p>
@@ -275,7 +292,10 @@ export const SnapshotDetailPage = () => {
                     </div>
                   </div>
                   <div className="col-span-12 md:col-span-7 lg:col-span-8 bg-white rounded-[12px]">
-                    <div className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default" id="scrollableComments">
+                    <div
+                      className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default"
+                      id="scrollableComments"
+                    >
                       {_.size(context.commentList) > 0 && !context.loading && (
                         <div>
                           <InfiniteScroll
@@ -290,7 +310,13 @@ export const SnapshotDetailPage = () => {
                                 context.commentList,
                                 (comment: commentListType, index) => (
                                   <Fragment key={`comment_${index}`}>
-                                    <CommentBlock comment={comment} isEdit={context.isEditIndex === index} index={index} formik={formik} setHasMore={setHasMore}/>
+                                    <CommentBlock
+                                      comment={comment}
+                                      isEdit={context.isEditIndex === index}
+                                      index={index}
+                                      formik={formik}
+                                      setHasMore={setHasMore}
+                                    />
                                   </Fragment>
                                 )
                               )}
@@ -346,7 +372,7 @@ export const SnapshotDetailPage = () => {
                               <SecondaryButton
                                 onClick={() => {
                                   context.setValue("isEditIndex", -1);
-                                  formik.resetForm()
+                                  formik.resetForm();
                                 }}
                                 title="ยกเลิก"
                               />
@@ -358,7 +384,9 @@ export const SnapshotDetailPage = () => {
                                 formik.submitForm();
                               }}
                               disabled={!formik.dirty || !formik.isValid}
-                              title={context.isEditIndex !== -1 ? "บันทึก" : "ส่ง"}
+                              title={
+                                context.isEditIndex !== -1 ? "บันทึก" : "ส่ง"
+                              }
                             />
                           </div>
                         </div>
