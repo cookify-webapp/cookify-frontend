@@ -75,7 +75,7 @@ export default function HomePage() {
               </Link>
             </h2>
             {!context.loadingRecipe && (
-              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 scrollbar-hide">
                 {_.map(context.recipes, (recipe) => (
                   <div
                     className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
@@ -130,7 +130,7 @@ export default function HomePage() {
               </Link>
             </h2>
             {!context.loadingSnapshot && (
-              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 scrollbar-hide">
                 {_.map(context.snapshots, (snapshot) => (
                   <div
                     className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
@@ -158,7 +158,7 @@ export default function HomePage() {
               </Link>
             </h2>
             {!context.loading && (
-              <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 mb-8">
+              <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 mb-8 scrollbar-hide">
                 {_.map(context.ingredients, (ingredient, index) => (
                   <div
                     className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"

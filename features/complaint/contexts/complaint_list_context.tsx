@@ -10,6 +10,8 @@ class ComplaintList {
   tabType: 'new' | 'inprogress' | 'completed' | string
   searchWord: string
 
+  isShowClearValue: boolean
+
   page: number
   perPage: number
   totalPages: number
@@ -28,6 +30,7 @@ class ComplaintList {
     this.page = 1
     this.perPage = 10
     this.loading = false
+    this.isShowClearValue = false
     makeAutoObservable(this);
   }
 
