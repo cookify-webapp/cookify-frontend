@@ -63,7 +63,8 @@ class ComplaintList {
         status: this.convertTabType()
       }, token)
       if (resp.status === 200) {
-        this.complaintList = [...this.complaintList, resp.data?.complaints]
+        this.complaintList = [...this.complaintList, ...resp.data?.complaints]
+        console.log(this.complaintList)
         this.page = resp.data?.page
         this.perPage = resp.data?.perPage
         this.totalCount = resp.data?.totalCount

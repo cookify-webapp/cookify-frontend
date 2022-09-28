@@ -44,8 +44,8 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
   return (
     <Observer>
       {() => (
-        <div className="border border-gray-40 rounded-[12px] p-5">
-          <p className="bodyL">
+        <div className="border border-gray-40 rounded-[12px] p-4">
+          <p className="bodyL break-all">
             {`คำร้องขอให้ตรวจสอบ ${
               props.complaint?.type === "Recipe" ? "สูตรอาหาร" : "Snapshot"
             } `}
@@ -55,31 +55,33 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
               }/${props.complaint?.post}`}
               passHref
             >
-              <a target="_blank">
-                <span className="font-semibold underline">{`#${props.complaint?.post}`}</span>
-                <i className="fas fa-external-link text-[20px] leading-[20px]" />
+              <a target="_blank" className="">
+                <span className="font-semibold underline w-auto">
+                  {`#${props.complaint?.post}`}
+                  <i className="fas fa-link text-[20px] leading-[20px] w-[20px] ml-1" />
+                </span>
               </a>
             </Link>
           </p>
-          <div className="mt-2 flex space-x-1 bodyM">
-            <p className="font-semibold w-auto">ผู้ร้องขอ:</p>
+          <div className="mt-2 flex space-x-2 bodyM">
+            <p className="font-semibold w-auto flex-shrink-0">ผู้ร้องขอ:</p>
             <p>{props.complaint?.reporter?.username}</p>
           </div>
-          <div className="mt-2 flex space-x-1 bodyM">
-            <p className="font-semibold w-auto">เวลาที่ร้องขอ:</p>
+          <div className="mt-2 flex space-x-2 bodyM">
+            <p className="font-semibold w-auto flex-shrink-0">เวลาที่ร้องขอ:</p>
             <p>{`${dayjs(props.complaint?.createdAt)
               .locale("th")
               .add(543, "year")
               .format("D MMM YY เวลา HH:mm น.")}`}</p>
           </div>
-          <div className="mt-2 flex space-x-1 bodyM">
-            <p className="font-semibold w-auto">เนื้อหาที่ร้องเรียน:</p>
+          <div className="mt-2 flex space-x-2 bodyM">
+            <p className="font-semibold w-auto flex-shrink-0">เนื้อหาที่ร้องเรียน:</p>
             <p>{props.complaint?.detail}</p>
           </div>
           {props.complaint?.status !== "filed" && (
             <>
-              <div className="my-2 flex space-x-1 bodyM">
-                <p className="font-semibold w-auto">ผู้รับเรื่องดำเนินการ:</p>
+              <div className="my-2 flex space-x-2 bodyM">
+                <p className="font-semibold w-auto flex-shrink-0">ผู้รับเรื่องดำเนินการ:</p>
                 <p>{props.complaint?.moderator}</p>
               </div>
               {_.size(props.complaint?.remarks) > 0 && (
@@ -98,15 +100,15 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                 </div>
               )}
               <div className="flex space-x-1 bodyM">
-                <p className="font-semibold w-auto">สถานะคำร้อง:</p>
+                <p className="font-semibold w-auto flex-shrink-0">สถานะคำร้อง:</p>
                 <p>{convertStatus()}</p>
               </div>
             </>
           )}
-          {props.complaint?.isMe && (
+          {(props.complaint?.isMe || props.complaint?.status === 'filed') && (
             <>
-              <div className="mt-6 mx-5 md:mx-32 lg:mx-64 border-t border-t-gray-30" />
-              <div className="flex justify-center space-x-4 mt-6 items-center">
+              <div className="mt-6 w-full md:w-[500px] flex mx-auto border-t border-t-gray-30" />
+              <div className="flex justify-center space-x-4 mt-4 items-center">
                 <div className="w-full md:w-[150px]">
                   <PrimaryButton
                     title={
