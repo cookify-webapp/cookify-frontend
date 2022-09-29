@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 import { complaintListType } from "../types/complaint_type";
 import Cookies from "js-cookie";
 import { getComplaintList } from "@core/services/complaint/get_complaints";
+import { editComplaintStatus } from "@core/services/complaint/put_complaints";
 
 class ComplaintList {
   complaintList: complaintListType[]
@@ -20,6 +21,7 @@ class ComplaintList {
   loading: boolean
 
   modal
+  flashMessageContext
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -82,6 +84,47 @@ class ComplaintList {
       );
     } finally {
       this.loading = false
+    }
+  }
+
+  editComplaintStatus = async (complaintId: string, status: 'examining' | 'rejected' | 'completed', setHasMore) => {
+    try {
+      this.modal.closeModal()
+      const token = Cookies.get("token");
+      const data = {
+        data: {
+          status: status
+        }
+      }
+      const resp = await editComplaintStatus(complaintId, JSON.stringify(data), token)
+      if (resp.status === 200) {
+        this.modal.closeModal()
+        setHasMore(true)
+        this.page = 1
+        this.complaintList = []
+        this.prepareComplaintList()
+        this.flashMessageContext.handleShow('เปลี่ยนสถานะสำเร็จ', 'เปลี่ยนสถานะเรื่องร้องเรียนสำเร็จ')
+      }
+    } catch (error) {
+      if (error?.response?.status === 400) {
+        this.modal.openModal(
+          "ไม่สามารถดำเนินการได้",
+          "เนื่องจากมีผู้รับผิดชอบเรื่องร้องเรียนของโพสต์ดังกล่าวแล้ว",
+          () => {
+            this.modal.closeModal()
+          },
+          "ปิด",
+          "ตกลง"
+        );
+      } else {
+        this.modal.openModal(
+          "มีปัญหาในการจัดการเรื่องร้องเรียน",
+          error.message,
+          () => this.modal.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     }
   }
 }

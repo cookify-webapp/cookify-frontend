@@ -17,6 +17,7 @@ import _ from "lodash";
 import { ComplaintBox } from "../components/complaint_box";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { complaintListType } from "../types/complaint_type";
+import { FlashMessageContext } from "core/context/flash_message_context";
 
 export const ComplaintListPage = () => {
   //---------------------
@@ -30,6 +31,7 @@ export const ComplaintListPage = () => {
   const homeLayoutContext = useContext(HomeLayoutContext);
   const context = useContext(ComplaintListContext);
   const modal = useContext(ModalContext);
+  const flashMessageContext = useContext(FlashMessageContext)
 
   //---------------------
   // ROUTER
@@ -42,6 +44,7 @@ export const ComplaintListPage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue('flashMessageContext', flashMessageContext)
     if (id) {
       context.setValue("searchWord", id as string);
     }
@@ -168,7 +171,7 @@ export const ComplaintListPage = () => {
                         context.complaintList,
                         (complaint: complaintListType, index) => (
                           <Fragment key={`complaint_${index}`}>
-                            <ComplaintBox complaint={complaint} />
+                            <ComplaintBox complaint={complaint} setHasMore={() => setHasMore(true)}/>
                           </Fragment>
                         )
                       )}

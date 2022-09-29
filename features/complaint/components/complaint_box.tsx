@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Observer } from "mobx-react-lite";
 import Link from "next/link";
 import { complaintListType } from "../types/complaint_type";
@@ -7,15 +7,20 @@ import "dayjs/locale/th";
 import { SecondaryButton } from "@core/components/button/secondary_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import _ from "lodash";
+import { ModalContext } from "core/context/modal_context";
+import { ComplaintListContext } from "../contexts/complaint_list_context";
 
 interface ComplaintBoxPropsType {
   complaint: complaintListType;
+  setHasMore: Function
 }
 
 export const ComplaintBox = (props: ComplaintBoxPropsType) => {
   //---------------------
   // CONTEXT
   //---------------------
+  const modal = useContext(ModalContext)
+  const context = useContext(ComplaintListContext)
 
   //---------------------
   // EFFECT
@@ -82,7 +87,7 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
             <>
               <div className="my-2 flex space-x-2 bodyM">
                 <p className="font-semibold w-auto flex-shrink-0">ผู้รับเรื่องดำเนินการ:</p>
-                <p>{props.complaint?.moderator}</p>
+                <p>{props.complaint?.moderator?.username}</p>
               </div>
               {_.size(props.complaint?.remarks) > 0 && (
                 <div className="mt-2 mb-4 space-y-4">
@@ -121,7 +126,17 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                         : "ลบประวัติคำร้อง"
                     }
                     disabled={props.complaint?.status === "in progress"}
-                    onClick={() => null}
+                    onClick={() => {
+                      if (props.complaint?.status === 'filed') {
+                        modal.openModal(
+                          "ยืนยันที่จะรับเรื่องหรือไม่",
+                          "เมื่อทำการรับเรื่องแล้ว คุณจะเป็นผู้ดำเนินการรับผิดชอบเนื้อหาดังกล่าว",
+                          () => context.editComplaintStatus(props.complaint?._id, 'examining', props.setHasMore),
+                          "ยกเลิก",
+                          "รับเรื่อง"
+                        );
+                      }
+                    }}
                   />
                 </div>
                 {props.complaint?.status === "filed" && (
@@ -134,8 +149,8 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                 ) && (
                   <div className="w-full md:w-[150px]">
                     <PrimaryButton
-                      title='ตรวจสอบเสร็จสิ้น'
-                      disabled={props.complaint?.status === "verifying"}
+                      title='เสร็จสิ้น'
+                      disabled={props.complaint?.status !== "verifying"}
                       onClick={() => null}
                     />
                   </div>
