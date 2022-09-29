@@ -18,6 +18,7 @@ import { ComplaintBox } from "../components/complaint_box";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { complaintListType } from "../types/complaint_type";
 import { FlashMessageContext } from "core/context/flash_message_context";
+import { ContactUserModal } from "../components/contact_user_modal";
 
 export const ComplaintListPage = () => {
   //---------------------
@@ -110,6 +111,7 @@ export const ComplaintListPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
+          <ContactUserModal />
           <div className="mx-auto xl:max-w-6xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
@@ -171,7 +173,7 @@ export const ComplaintListPage = () => {
                         context.complaintList,
                         (complaint: complaintListType, index) => (
                           <Fragment key={`complaint_${index}`}>
-                            <ComplaintBox complaint={complaint} setHasMore={() => setHasMore(true)}/>
+                            <ComplaintBox complaint={complaint} setHasMore={() => setHasMore(true)} />
                           </Fragment>
                         )
                       )}

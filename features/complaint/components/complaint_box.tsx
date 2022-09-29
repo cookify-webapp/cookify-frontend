@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import Link from "next/link";
 import { complaintListType } from "../types/complaint_type";
@@ -9,23 +9,26 @@ import { PrimaryButton } from "@core/components/button/primary_button";
 import _ from "lodash";
 import { ModalContext } from "core/context/modal_context";
 import { ComplaintListContext } from "../contexts/complaint_list_context";
+import { ContactUserModalContext } from "../contexts/contact_user_modal_context";
+import { ContactUserModal } from "./contact_user_modal";
 
 interface ComplaintBoxPropsType {
   complaint: complaintListType;
-  setHasMore: Function
+  setHasMore: Function;
 }
 
 export const ComplaintBox = (props: ComplaintBoxPropsType) => {
   //---------------------
-  // CONTEXT
+  // STATE
   //---------------------
-  const modal = useContext(ModalContext)
-  const context = useContext(ComplaintListContext)
+  const [isOpen, setIsOpen] = useState(false)
 
   //---------------------
-  // EFFECT
+  // CONTEXT
   //---------------------
-  useEffect(() => {}, []);
+  const modal = useContext(ModalContext);
+  const context = useContext(ComplaintListContext);
+  const contactUserModalContext = useContext(ContactUserModalContext);
 
   //---------------------
   // HANDLER
@@ -80,17 +83,21 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
               .format("D MMM YY เวลา HH:mm น.")}`}</p>
           </div>
           <div className="mt-2 flex space-x-2 bodyM">
-            <p className="font-semibold w-auto flex-shrink-0">เนื้อหาที่ร้องเรียน:</p>
+            <p className="font-semibold w-auto flex-shrink-0">
+              เนื้อหาที่ร้องเรียน:
+            </p>
             <p>{props.complaint?.detail}</p>
           </div>
           {props.complaint?.status !== "filed" && (
             <>
               <div className="my-2 flex space-x-2 bodyM">
-                <p className="font-semibold w-auto flex-shrink-0">ผู้รับเรื่องดำเนินการ:</p>
+                <p className="font-semibold w-auto flex-shrink-0">
+                  ผู้รับเรื่องดำเนินการ:
+                </p>
                 <p>{props.complaint?.moderator?.username}</p>
               </div>
               {_.size(props.complaint?.remarks) > 0 && (
-                <div className="mt-2 mb-4 space-y-4">
+                <div className="my-4 space-y-4">
                   {_.map(props.complaint?.remarks, (remark, index) => (
                     <div
                       className="p-4 bg-gray-30 rounded-[12px] bodyM"
@@ -105,12 +112,14 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                 </div>
               )}
               <div className="flex space-x-1 bodyM">
-                <p className="font-semibold w-auto flex-shrink-0">สถานะคำร้อง:</p>
+                <p className="font-semibold w-auto flex-shrink-0">
+                  สถานะคำร้อง:
+                </p>
                 <p>{convertStatus()}</p>
               </div>
             </>
           )}
-          {(props.complaint?.isMe || props.complaint?.status === 'filed') && (
+          {(props.complaint?.isMe || props.complaint?.status === "filed") && (
             <>
               <div className="mt-6 w-full md:w-[500px] flex mx-auto border-t border-t-gray-30" />
               <div className="flex justify-center space-x-4 mt-4 items-center">
@@ -127,14 +136,30 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                     }
                     disabled={props.complaint?.status === "in progress"}
                     onClick={() => {
-                      if (props.complaint?.status === 'filed') {
+                      if (props.complaint?.status === "filed") {
                         modal.openModal(
                           "ยืนยันที่จะรับเรื่องหรือไม่",
                           "เมื่อทำการรับเรื่องแล้ว คุณจะเป็นผู้ดำเนินการรับผิดชอบเนื้อหาดังกล่าว",
-                          () => context.editComplaintStatus(props.complaint?._id, 'examining', props.setHasMore),
+                          () =>
+                            context.editComplaintStatus(
+                              props.complaint?._id,
+                              "examining",
+                              props.setHasMore
+                            ),
                           "ยกเลิก",
                           "รับเรื่อง"
                         );
+                      } else if (
+                        ["examining", "verifying"].includes(
+                          props.complaint?.status
+                        )
+                      ) {
+                        contactUserModalContext.openModal(props.complaint?.type, props.complaint?._id, () => {
+                          props.setHasMore()
+                          context.setValue('page', 1)
+                          context.setValue('complaintList', [])
+                          context.prepareComplaintList()
+                        })
                       }
                     }}
                   />
@@ -149,7 +174,7 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                 ) && (
                   <div className="w-full md:w-[150px]">
                     <PrimaryButton
-                      title='เสร็จสิ้น'
+                      title="เสร็จสิ้น"
                       disabled={props.complaint?.status !== "verifying"}
                       onClick={() => null}
                     />

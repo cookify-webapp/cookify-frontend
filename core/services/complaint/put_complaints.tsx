@@ -11,3 +11,12 @@ export const editComplaintStatus = (complaintId, data, token) => {
     }
   })
 }
+
+export const contactUser = (complaintId, data, token) => {
+  return axios.put(`${publicRuntimeConfig.CKF_COMPLAINT_API}/${complaintId}/contact`, data, { 
+    headers: { 
+      Authorization: `Bearer ${token}`,
+      'content-type': 'application/json' 
+    }
+  })
+}
