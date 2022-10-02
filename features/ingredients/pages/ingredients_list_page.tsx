@@ -43,7 +43,6 @@ export const IngredientsListPage = () => {
       context.setValue("page", 1);
       context.setValue("totalPages", 1);
       context.setValue("ingredientsList", []);
-      context.setValue("itemsToShow", []);
     };
   }, []);
 
@@ -57,7 +56,6 @@ export const IngredientsListPage = () => {
       }
       context.setValue("page", 1);
       context.setValue("ingredientsList", []);
-      context.setValue("itemsToShow", []);
       context.prepareIngredientsList();
     }, 500),
     []
@@ -92,13 +90,12 @@ export const IngredientsListPage = () => {
                 context.setValue("page", 1);
                 context.setValue("totalPages", 1);
                 context.setValue("ingredientsList", []);
-                context.setValue("itemsToShow", []);
                 context.prepareIngredientsList();
               }}
             />
           )}
           <HomeLayout>
-            <div className="mx-auto xl:max-w-6xl h-[calc(100vh-84px)] md:h-[calc(100vh-96px)] lg:h-[calc(100vh-104px)]">
+            <div className="mx-auto xl:max-w-6xl mb-8">
               <div className="px-5 w-full block xl:hidden mt-2">
                 <SearchBox
                   onChange={(value) => {
@@ -114,12 +111,9 @@ export const IngredientsListPage = () => {
                 />
               </div>
               <div
-                className={classNames("px-5 2xl:px-0 pt-8 lg:pt-2 sticky", {
-                  "flex justify-between items-center":
-                    authContext.user?.accountType === "admin",
-                })}
+                className="px-5 2xl:px-0 pt-8 lg:pt-2 sticky flex justify-between items-center"
               >
-                <h1 className="headlineL">รายการวัตถุดิบ</h1>
+                <h1 className="headlineL w-auto">รายการวัตถุดิบ</h1>
                 {authContext.user?.accountType === "admin" && (
                   <div className="w-[150px]">
                     <PrimaryButton
@@ -151,7 +145,6 @@ export const IngredientsListPage = () => {
                     onChange={(value) => {
                       setHasMore(true);
                       context.setValue("typeSelected", value);
-                      context.setValue("itemsToShow", []);
                       context.setValue("ingredientsList", []);
                       context.setValue("page", 1);
                       context.prepareIngredientsList();
@@ -160,21 +153,20 @@ export const IngredientsListPage = () => {
                 </div>
               </div>
 
-              <div className="px-5 2xl:px-0 mt-6 md:mt-8 pb-8">
-                {_.size(context.itemsToShow) > 0 && !context.loading ? (
+              <div className="px-5 2xl:px-0 mt-6 md:mt-8">
+                {_.size(context.ingredientsList) > 0 && !context.loading ? (
                   <div
-                    id="scrollableIngredient"
-                    className="max-h-[calc(100vh-318px)] md:max-h-[calc(100vh-378px)] lg:max-h-[calc(100vh-290px)] overflow-y-auto"
+                    
                   >
                     <InfiniteScroll
-                      dataLength={context.itemsToShow.length}
+                      dataLength={context.ingredientsList.length}
                       next={preparation}
                       hasMore={hasMore}
                       loader=""
-                      scrollableTarget="scrollableIngredient"
+                      
                     >
                       <div className="grid grid-cols-12 gap-x-6 gap-y-4">
-                        {_.map(context.itemsToShow, (ingredient, index) => (
+                        {_.map(context.ingredientsList, (ingredient, index) => (
                           <div
                             className="col-span-12 md:col-span-4 lg:col-span-3 w-auto"
                             key={`ingredients_${index}`}
@@ -199,7 +191,7 @@ export const IngredientsListPage = () => {
                         <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
                       </div>
                     )}
-                    {!context.loading && _.size(context.itemsToShow) === 0 && (
+                    {!context.loading && _.size(context.ingredientsList) === 0 && (
                       <div className="h-[calc(100vh-422px)] md:h-[calc(100vh-378px)] lg:h-[calc(100vh-290px)] flex items-center text-center text-gray-50">
                         <div>
                           <i className="fas fa-egg text-[48px] w-12 h-12"></i>
