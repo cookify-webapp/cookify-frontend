@@ -62,7 +62,7 @@ export const RecipeDetailPage = () => {
   const recipeCommentContext = useContext(RecipeCommentContext);
   const flashMessageContext = useContext(FlashMessageContext);
   const modal = useContext(ModalContext);
-  const complaintModalContext = useContext(ComplaintModalContext)
+  const complaintModalContext = useContext(ComplaintModalContext);
 
   //---------------------
   //  ROUTER
@@ -153,6 +153,14 @@ export const RecipeDetailPage = () => {
                   />
                 </div>
                 <div className="px-5 2xl:px-0">
+                  {context.recipeDetail?.isHidden && (
+                    <div className="mt-4 flex space-x-4 px-4 py-2 rounded-[12px] items-center bg-white">
+                      <i className="fas fa-info-circle w-auto text-error" />
+                      <p className="text-[14px]">
+                        {context.recipeDetail?.remark}
+                      </p>
+                    </div>
+                  )}
                   <div className="p-6 mt-4 lg:mt-6 bg-white rounded-[12px] flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
                     <div className="flex justify-center md:justify-start md:w-auto">
                       <div className="w-[247px] h-[247px]">
@@ -250,7 +258,14 @@ export const RecipeDetailPage = () => {
                                         <div
                                           className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
                                           onClick={() => {
-                                            complaintModalContext.openModal('recipe', context.recipeDetail?.name, context.recipeDetail?.author?.username, context.recipeDetail?.createdAt, context.recipeDetail?._id)
+                                            complaintModalContext.openModal(
+                                              "recipe",
+                                              context.recipeDetail?.name,
+                                              context.recipeDetail?.author
+                                                ?.username,
+                                              context.recipeDetail?.createdAt,
+                                              context.recipeDetail?._id
+                                            );
                                           }}
                                         >
                                           <i className="fas fa-exclamation-triangle w-auto"></i>
@@ -271,7 +286,9 @@ export const RecipeDetailPage = () => {
                         <p className="bodyM mr-4 w-auto">{`หน่วยบริโภค: ${context.recipeDetail?.serving}`}</p>
                         <div className="flex items-center w-auto">
                           <div>
-                            <Rating rating={context.recipeDetail?.averageRating} />
+                            <Rating
+                              rating={context.recipeDetail?.averageRating}
+                            />
                           </div>
                           <p className="ml-2">
                             {context.recipeDetail?.averageRating.toFixed(1)}

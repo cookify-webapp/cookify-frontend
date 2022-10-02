@@ -65,6 +65,8 @@ export type recipeDetailType = {
   averageRating: number
   isMe: boolean
   bookmarked: boolean
+  isHidden: boolean
+  remark: string
 }
 
 export type recipeCommentType = {

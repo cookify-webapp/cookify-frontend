@@ -51,7 +51,7 @@ class Auth {
         Router.back();
       }
     } catch (error) {
-      if (error?.response?.status === 403) {
+      if (error?.response?.status === 401) {
         this.modal.openModal(
           "ไม่สามารถเข้าสู่ระบบได้",
           "เนื่องจากชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง",

@@ -105,7 +105,20 @@ export const RecipeFormPage = () => {
     initialValues: context.initValue,
     onSubmit: (value) => {
       isEdit
-        ? context.editRecipe(recipeId, value)
+        ? () => {
+          if (context.recipeDetail?.isHidden) {
+            modal.openModal(
+              'ยืนยันการแก้ไขเรื่องร้องเรียนหรือไม่',
+              'ผู้ดูแลจะทำการตรวจสอบการแก้ไขของคุณตามเงื่อนไขข้อร้องเรียนที่ได้รับ คุณยืนยันการแก้ไขหรือไม่',
+              () => context.editRecipe(recipeId, value),
+              'ยกเลิก',
+              'ยืนยัน'
+            )
+          } else {
+            context.editRecipe(recipeId, value)
+          }
+          
+        }
         : context.addRecipe(value);
     },
   });
