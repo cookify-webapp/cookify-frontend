@@ -179,8 +179,8 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                           <p className="titleS">{menu.title}</p>
                         </div>
                         {menu.title === "การแจ้งเตือน" &&
-                          !_.includes(menu.link, router.pathname) && (
-                            <div className="py-1 px-2 w-8 h-8 titleS text-center rounded-full bg-beige-20">
+                          (!_.includes(menu.link, router.pathname) && (notiCount > 0)) && (
+                            <div className="w-8 h-8 flex-shrink-0 flex items-center titleS text-center rounded-full bg-beige-20">
                               <p className="titleS">{notiCount}</p>
                             </div>
                           )}

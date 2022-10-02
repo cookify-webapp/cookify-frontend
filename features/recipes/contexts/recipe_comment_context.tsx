@@ -10,6 +10,7 @@ import { addRecipeComment } from "@core/services/recipes/post_recipes";
 import { FormikContextType } from "formik";
 import { editRecipeComment } from "@core/services/recipes/put_recipes";
 import { deleteRecipeComment } from "@core/services/recipes/delete_recipes";
+import { AxiosResponse } from "axios";
 
 class RecipeComment {
   isCommentLoading: boolean;
@@ -62,16 +63,16 @@ class RecipeComment {
           rating: this.myComment?.rating,
           comment: this.myComment?.comment,
         };
-        this.formik?.setValues(this.initValue)
+        this.formik?.setValues(this.initValue);
         this.isAlreadyComment = true;
       } else if (resp.status === 204) {
         this.myComment = null;
         this.isAlreadyComment = false;
-        this.formik?.resetForm()
+        this.formik?.resetForm();
         this.initValue = {
           rating: 0,
-          comment: ''
-        }
+          comment: "",
+        };
       }
     } catch (error) {
       this.modal.openModal(
@@ -89,9 +90,10 @@ class RecipeComment {
   prepareCommentsList = async (id, isLogin) => {
     try {
       this.isCommentLoading = true;
+      let resp: AxiosResponse<any>;
       if (isLogin) {
         const token = Cookies.get("token");
-        const resp = await getRecipeComments(
+        resp = await getRecipeComments(
           id,
           {
             page: this.page,
@@ -99,29 +101,20 @@ class RecipeComment {
           },
           token
         );
-        if (resp.status === 200) {
-          this.commentsList = [...this.commentsList, ...resp.data?.comments];
-          this.page = resp.data?.page;
-          this.perPage = resp.data?.perPage;
-          this.totalPages = resp.data?.totalPages;
-          this.totalRow = resp.data?.totalCount;
-        } else if (resp.status === 204) {
-          this.commentsList = [];
-        }
       } else {
-        const resp = await getRecipeComments(id, {
+        resp = await getRecipeComments(id, {
           page: this.page,
           perPage: this.perPage,
         });
-        if (resp.status === 200) {
-          this.commentsList = resp.data?.comments;
-          this.page = resp.data?.page;
-          this.perPage = resp.data?.perPage;
-          this.totalPages = resp.data?.totalPages;
-          this.totalRow = resp.data?.totalCount;
-        } else if (resp.status === 204) {
-          this.commentsList = [];
-        }
+      }
+      if (resp.status === 200) {
+        this.commentsList = [...this.commentsList, ...resp.data?.comments];
+        this.page = resp.data?.page;
+        this.perPage = resp.data?.perPage;
+        this.totalPages = resp.data?.totalPages;
+        this.totalRow = resp.data?.totalCount;
+      } else if (resp.status === 204) {
+        this.commentsList = [];
       }
     } catch (error) {
       this.modal.openModal(
@@ -214,7 +207,7 @@ class RecipeComment {
           rating: 0,
           comment: "",
         };
-        this.formik?.resetForm()
+        this.formik?.resetForm();
         this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบความคิดเห็นสำเร็จ");
         onSuccess();
       }

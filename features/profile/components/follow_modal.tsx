@@ -4,11 +4,9 @@ import classNames from "classnames";
 import { UserProfileContext } from "../contexts/user_profile_context";
 import InfiniteScroll from "react-infinite-scroll-component";
 import _ from "lodash";
-import getConfig from "next/config";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
 import Link from "next/link";
 import { AuthContext } from "core/context/auth_context";
-const { publicRuntimeConfig } = getConfig();
 
 interface followModalPropType {
   isOpen: boolean;
@@ -127,7 +125,7 @@ export const FollowModal = ({
                                     <ImageWithFallback
                                       alt="profile cover"
                                       className="w-full h-full object-cover"
-                                      src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${user.image}`}
+                                      src={user.image}
                                     />
                                   </div>
                                   <div>

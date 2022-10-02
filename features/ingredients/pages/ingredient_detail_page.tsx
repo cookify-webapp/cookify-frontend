@@ -8,7 +8,6 @@ import { Breadcrumb } from "@core/components/breadcrumb";
 import { SearchBox } from "@core/components/input/search_box";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
 import { AuthContext } from "core/context/auth_context";
 import { ModalContext } from "core/context/modal_context";
@@ -19,8 +18,6 @@ import _ from "lodash";
 import Link from "next/link";
 import { Ingredient } from "@core/components/ingredient";
 import { FlashMessageContext } from "core/context/flash_message_context";
-
-const { publicRuntimeConfig } = getConfig();
 
 export const IngredientDetailPage = () => {
   //---------------------
@@ -113,7 +110,7 @@ export const IngredientDetailPage = () => {
                           <ImageWithFallback
                             alt="ingredient cover image"
                             className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] border border-gray-30 rounded-[12px]"
-                            src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${context.ingredientDetail?.image}`}
+                            src={context.ingredientDetail?.image}
                           />
                           <div className="w-auto mx-4 md:mx-6">
                             <p className="titleM md:headlineL line-clamp-1">

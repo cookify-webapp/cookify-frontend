@@ -137,6 +137,7 @@ class SnapshotForm {
       const resp = await editSnapshot(id, formData, token);
       if (resp.status === 200) {
         this.handleResetForm()
+        this.modal.closeModal()
         this.router.push(`/snapshots/${id}`);
         this.flashMessageContext.handleShow(
           "แก้ไขสำเร็จ",

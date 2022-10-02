@@ -6,14 +6,11 @@ import _ from "lodash";
 import { useFormik } from "formik";
 import { IngredientValidateSchema } from "@features/ingredients/forms/ingredient_form";
 import { ModalContext } from "core/context/modal_context";
-import getConfig from "next/config";
 import { SecondaryButton } from "@core/components/button/secondary_button";
 import { TextBox } from "@core/components/input/text_box";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { SelectInput } from "@core/components/input/select_input";
 import { FlashMessageContext } from "core/context/flash_message_context";
-
-const { publicRuntimeConfig } = getConfig();
 
 interface IngredientFormProps {
   onCancel: () => void;
@@ -122,7 +119,7 @@ export const IngredientForm = ({
                   <div className="w-[192px] h-[192px] rounded-[12px] border border-gray-30 mx-auto overflow-hidden">
                     {formik.values?.imageFileName ? (
                       <img
-                        src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${formik.values?.imageFileName}`}
+                        src={formik.values?.imageFileName}
                         className="w-full h-full object-cover"
                       />
                     ) : (

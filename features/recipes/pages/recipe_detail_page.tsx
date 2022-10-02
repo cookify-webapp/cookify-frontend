@@ -13,7 +13,6 @@ import { Breadcrumb } from "@core/components/breadcrumb";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { RecipeDetailContext } from "../contexts/recipe_detail_context";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import "dayjs/locale/th";
 import dayjs from "dayjs";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
@@ -30,8 +29,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { CommentBlock } from "../components/recipe_detail/comment_block";
 import { ModalContext } from "core/context/modal_context";
 import { FlashMessageContext } from "core/context/flash_message_context";
-
-const { publicRuntimeConfig } = getConfig();
+import { ComplaintModal } from "@core/components/modal/complaint_modal";
+import { ComplaintModalContext } from "core/context/complaint_modal_context";
 
 export const RecipeDetailPage = () => {
   //---------------------
@@ -60,6 +59,7 @@ export const RecipeDetailPage = () => {
   const recipeCommentContext = useContext(RecipeCommentContext);
   const flashMessageContext = useContext(FlashMessageContext);
   const modal = useContext(ModalContext);
+  const complaintModalContext = useContext(ComplaintModalContext);
 
   //---------------------
   //  ROUTER
@@ -114,6 +114,7 @@ export const RecipeDetailPage = () => {
     <Observer>
       {() => (
         <>
+          <ComplaintModal />
           {!context.loading && (
             <HomeLayout>
               <div className="mx-auto xl:max-w-6xl pb-8">
@@ -149,13 +150,21 @@ export const RecipeDetailPage = () => {
                   />
                 </div>
                 <div className="px-5 2xl:px-0">
+                  {(context.recipeDetail?.isHidden && context.recipeDetail?.remark) && (
+                    <div className="mt-4 flex space-x-4 px-4 py-2 rounded-[12px] items-center bg-white">
+                      <i className="fas fa-info-circle w-auto text-error" />
+                      <p className="text-[14px] text-gray-60">
+                        {context.recipeDetail?.remark}
+                      </p>
+                    </div>
+                  )}
                   <div className="p-6 mt-4 lg:mt-6 bg-white rounded-[12px] flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
                     <div className="flex justify-center md:justify-start md:w-auto">
                       <div className="w-[247px] h-[247px]">
                         <ImageWithFallback
                           alt="ingredient cover image"
                           className="w-full h-full border border-gray-30 rounded-[12px]"
-                          src={`${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${context.recipeDetail?.image}`}
+                          src={context.recipeDetail?.image}
                         />
                       </div>
                     </div>
@@ -245,7 +254,16 @@ export const RecipeDetailPage = () => {
                                       <div className="absolute z-10 w-[190px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
                                         <div
                                           className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                          onClick={() => null}
+                                          onClick={() => {
+                                            complaintModalContext.openModal(
+                                              "recipe",
+                                              context.recipeDetail?.name,
+                                              context.recipeDetail?.author
+                                                ?.username,
+                                              context.recipeDetail?.createdAt,
+                                              context.recipeDetail?._id
+                                            );
+                                          }}
                                         >
                                           <i className="fas fa-exclamation-triangle w-auto"></i>
                                           <p className="ml-3">
@@ -265,7 +283,9 @@ export const RecipeDetailPage = () => {
                         <p className="bodyM mr-4 w-auto">{`หน่วยบริโภค: ${context.recipeDetail?.serving}`}</p>
                         <div className="flex items-center w-auto">
                           <div>
-                            <Rating rating={context.recipeDetail?.averageRating} />
+                            <Rating
+                              rating={context.recipeDetail?.averageRating}
+                            />
                           </div>
                           <p className="ml-2">
                             {context.recipeDetail?.averageRating.toFixed(1)}

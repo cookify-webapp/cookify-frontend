@@ -32,7 +32,13 @@ export default function AuthLayouts({ children }: AuthLayoutsProps) {
     context.setValue('user', JSON.parse(localStorage.getItem('user')))
     context.setValue("modal", modal);
     context.fetchMe();
-  }, []);
+  }, [context.user?.image]);
+
+  useEffect(() => {
+    if (context.user !== null) {
+      context.prepareUnreadNotification()
+    }
+  }, [router.pathname])
 
   //---------------------
   //  RENDER

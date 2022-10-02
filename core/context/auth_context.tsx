@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { login } from "@core/services/auth/post_auth";
 import Cookies from "js-cookie";
-import { getMe } from "@core/services/auth/get_auth";
+import { getMe, getUnreadNotification } from "@core/services/auth/get_auth";
 import { userType } from "core/types/auth_type";
 import Router from "next/router";
 
@@ -10,6 +10,8 @@ class Auth {
   user: userType;
   initValue;
   isLogIn;
+
+  unreadNotification: number = 0
 
   modal;
 
@@ -49,7 +51,7 @@ class Auth {
         Router.back();
       }
     } catch (error) {
-      if (error?.response?.status === 403) {
+      if (error?.response?.status === 401) {
         this.modal.openModal(
           "ไม่สามารถเข้าสู่ระบบได้",
           "เนื่องจากชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง",
@@ -69,11 +71,30 @@ class Auth {
     }
   };
 
+  prepareUnreadNotification = async () => {
+    try {
+      const token = Cookies.get("token")
+      const resp = await getUnreadNotification(token)
+      if (resp.status === 200) {
+        this.unreadNotification = resp.data?.count
+      }
+    } catch (error) {
+      this.modal.openModal(
+        "เกิดปัญหาในการดึงข้อมูลจำนวนการแจ้งเตือน",
+        error.message,
+        () => this.modal.closeModal(),
+        "ปิด",
+        "ตกลง"
+      );
+    }
+  }
+
   fetchMe = async () => {
     try {
       let noCookie = Cookies.get("token") === undefined;
       if (noCookie) {
         this.user = null
+        this.unreadNotification = 0
         this.isLogIn = false
         localStorage.setItem('user', null)
       } else {
@@ -81,6 +102,7 @@ class Auth {
         const resp = await getMe(token);
         if (resp.status === 200) {
           this.user = resp.data?.account;
+          this.prepareUnreadNotification()
           this.isLogIn = true;
           localStorage.setItem('user', JSON.stringify(this.user))
         }
@@ -98,6 +120,7 @@ class Auth {
 
   logout = () => {
     this.user = null
+    this.unreadNotification = 0
     this.isLogIn = false
     Cookies.remove('token')
     localStorage.setItem('user', null)

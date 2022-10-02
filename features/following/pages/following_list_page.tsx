@@ -11,10 +11,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { followingListType } from "../types/following_list_type";
 import { TertiaryButton } from "@core/components/button/tertiary_button";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import Link from "next/link";
-const { publicRuntimeConfig } = getConfig();
 import dayjs from "dayjs";
 import "dayjs/locale/th";
 
@@ -120,7 +118,7 @@ export const FollowingListPage = () => {
                                     <ImageWithFallback
                                       alt="snapshot cover image"
                                       className="w-full h-full object-cover"
-                                      src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${following?.author?.image}`}
+                                      src={following?.author?.image}
                                     />
                                   </a>
                                 </Link>
@@ -147,7 +145,7 @@ export const FollowingListPage = () => {
                                 <ImageWithFallback
                                   alt="snapshot cover image"
                                   className="w-full h-full object-cover"
-                                  src={`${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${following?.image}`}
+                                  src={following?.image}
                                 />
                               </div>
                             </div>

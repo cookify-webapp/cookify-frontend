@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import { addSnapshotComment } from "@core/services/snapshot/post_snapshot";
 import { editSnapshotComment } from "@core/services/snapshot/put_snapshot";
 import { deleteSnapshot, deleteSnapshotComment } from "@core/services/snapshot/delete_snapshot";
+import { AxiosResponse } from "axios";
 
 class SnapshotDetail {
   snapshotDetail: snapshotDetailType;
@@ -61,17 +62,15 @@ class SnapshotDetail {
   prepareSnapshotDetail = async (id, isLogin) => {
     try {
       this.loadingDetail = true;
+      let resp: AxiosResponse<any>
       if (isLogin) {
         const token = Cookies.get("token");
-        const resp = await getSnapshotDetail(id, token);
-        if (resp.status === 200) {
-          this.snapshotDetail = resp.data?.snapshot;
-        }
+        resp = await getSnapshotDetail(id, token);
       } else {
-        const resp = await getSnapshotDetail(id);
-        if (resp.status === 200) {
-          this.snapshotDetail = resp.data?.snapshot;
-        }
+        resp = await getSnapshotDetail(id);
+      }
+      if (resp.status === 200) {
+        this.snapshotDetail = resp.data?.snapshot;
       }
     } catch (error) {
       this.modal.openModal(
@@ -91,41 +90,33 @@ class SnapshotDetail {
       if (this.page === 1) {
         this.loading = true;
       }
+      let resp: AxiosResponse<any>
       if (isLogin) {
         const token = Cookies.get("token");
-        const resp = await getSnapshotCommentsList(
+        resp = await getSnapshotCommentsList(
           {
             page: this.page,
             perPage: this.perPage,
           },
           id, token
         );
-        if (resp.status === 200) {
-          this.commentList = [...this.commentList, ...resp.data?.comments];
-          this.page = resp.data?.page;
-          this.perPage = resp.data?.perPage;
-          this.totalCount = resp.data?.totalCount;
-          this.totalPages = resp.data?.totalPages;
-        } else if (resp.status === 204) {
-          this.commentList = [];
-        }
       } else {
-        const resp = await getSnapshotCommentsList(
+        resp = await getSnapshotCommentsList(
           {
             page: this.page,
             perPage: this.perPage,
           },
           id
         );
-        if (resp.status === 200) {
-          this.commentList = [...this.commentList, ...resp.data?.comments];
-          this.page = resp.data?.page;
-          this.perPage = resp.data?.perPage;
-          this.totalCount = resp.data?.totalCount;
-          this.totalPages = resp.data?.totalPages;
-        } else if (resp.status === 204) {
-          this.commentList = [];
-        }
+      }
+      if (resp.status === 200) {
+        this.commentList = [...this.commentList, ...resp.data?.comments];
+        this.page = resp.data?.page;
+        this.perPage = resp.data?.perPage;
+        this.totalCount = resp.data?.totalCount;
+        this.totalPages = resp.data?.totalPages;
+      } else if (resp.status === 204) {
+        this.commentList = [];
       }
     } catch (error) {
       this.modal.openModal(

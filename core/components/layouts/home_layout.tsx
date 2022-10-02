@@ -65,7 +65,7 @@ export const HomeLayout = ({ children, onClickSearch } : HomeLayoutProps) => {
             )}
           >
             <div className="">
-              <SideBar notiCount={10} role={authContext.user?.accountType} />
+              <SideBar notiCount={authContext.unreadNotification} role={authContext.user?.accountType} />
             </div>
           </div>
           {context.isShowSidebar && (

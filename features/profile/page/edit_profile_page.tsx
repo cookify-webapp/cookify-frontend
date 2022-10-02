@@ -12,12 +12,10 @@ import { ModalContext } from "core/context/modal_context";
 import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
 import { FlashMessageContext } from "core/context/flash_message_context";
 import _ from "lodash";
-import getConfig from "next/config";
 import { SecondaryButton } from "@core/components/button/secondary_button";
 import { TextBox } from "@core/components/input/text_box";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { Tag } from "@core/components/tag";
-const { publicRuntimeConfig } = getConfig();
 
 export const EditProfilePage = () => {
   //---------------------
@@ -142,7 +140,7 @@ export const EditProfilePage = () => {
                         id="profileImage"
                         src={
                           cover?.file ||
-                          `${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${formik.values?.imageFileName}`
+                          formik.values?.imageFileName
                         }
                         className="w-full h-full object-cover"
                       />

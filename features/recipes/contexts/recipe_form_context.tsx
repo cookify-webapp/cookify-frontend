@@ -170,6 +170,7 @@ class RecipeForm {
       const resp = await editRecipe(id, formData, token);
       if (resp.status === 200) {
         this.handleResetForm()
+        this.modal.closeModal()
         this.router.push(`/recipes/${id}`);
         this.flashMessageContext.handleShow(
           "แก้ไขสำเร็จ",

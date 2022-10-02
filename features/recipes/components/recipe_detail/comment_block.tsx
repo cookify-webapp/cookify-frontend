@@ -2,7 +2,6 @@ import React, { createRef, useContext, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { recipeCommentType } from "@features/recipes/types/recipes";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import { Rating } from "@core/components/rating";
 import "dayjs/locale/th";
 import dayjs from "dayjs";
@@ -13,7 +12,6 @@ import { ModalContext } from "core/context/modal_context";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-const { publicRuntimeConfig } = getConfig();
 interface CommentBlocKProps {
   comment: recipeCommentType;
   isShowKebab?: boolean;
@@ -70,7 +68,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                   <ImageWithFallback
                     alt="profile image"
                     className="w-full h-full object-cover rounded-full"
-                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${comment?.author?.image}`}
+                    src={comment?.author?.image}
                   />
                 </a>
               </Link>
@@ -104,9 +102,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                   .add(543, "year")
                   .format("D MMM YY เวลา HH:mm น.")}`}</p>
               </div>
-              {((authContext.user?.username !== comment?.author?.username &&
-                authContext.user) ||
-                isShowKebab) && (
+              {(isShowKebab) && (
                 <div className="relative w-auto">
                   <div
                     ref={ref}
@@ -159,18 +155,6 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                           >
                             <i className="fas fa-trash w-auto"></i>
                             <p className="ml-3 w-auto">ลบความคิดเห็น</p>
-                          </div>
-                        </div>
-                      )}
-                      {authContext.user?.username !==
-                        comment?.author?.username && (
-                        <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
-                          <div
-                            className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                            onClick={() => null}
-                          >
-                            <i className="fas fa-exclamation-triangle w-auto"></i>
-                            <p className="ml-3">รายงานความคิดเห็น</p>
                           </div>
                         </div>
                       )}

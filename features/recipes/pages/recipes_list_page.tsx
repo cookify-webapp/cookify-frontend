@@ -36,7 +36,7 @@ export const RecipesListPage = () => {
   //---------------------
   // ROUTER
   //---------------------
-  const router = useRouter()
+  const router = useRouter();
 
   //---------------------
   // EFFECT
@@ -228,7 +228,7 @@ export const RecipesListPage = () => {
                           background: `url(/images/recipes/add_recipe.svg) no-repeat center`,
                           backgroundSize: "cover",
                         }}
-                        onClick={() => router.push('/recipes/create')}
+                        onClick={() => router.push("/recipes/create")}
                       >
                         <p className="headlineM">เพิ่มสูตรอาหารที่นี่</p>
                       </div>
@@ -264,6 +264,16 @@ export const RecipesListPage = () => {
                   <div>
                     <i className="fas fa-book text-[48px] w-12 h-12"></i>
                     <p className="titleM mt-4">ไม่มีรายการสูตรอาหาร</p>
+                    {
+                      <div className="mt-4 w-[150px] mx-auto">
+                        <PrimaryButton
+                          title="เพิ่มสูตรอาหาร"
+                          onClick={() => {
+                            router.push("/recipes/create");
+                          }}
+                        />
+                      </div>
+                    }
                   </div>
                 </div>
               )}

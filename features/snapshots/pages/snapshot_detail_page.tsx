@@ -13,7 +13,6 @@ import { ModalContext } from "core/context/modal_context";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { useRouter } from "next/router";
 import { AuthContext } from "core/context/auth_context";
-import getConfig from "next/config";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
 import Link from "next/link";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
@@ -29,7 +28,9 @@ import { commentValidateSchema } from "../forms/comment_form";
 import { SecondaryButton } from "@core/components/button/secondary_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { FlashMessageContext } from "core/context/flash_message_context";
-const { publicRuntimeConfig } = getConfig();
+import { ComplaintModal } from "@core/components/modal/complaint_modal";
+import { ComplaintModalContext } from "core/context/complaint_modal_context";
+import classNames from "classnames";
 
 export const SnapshotDetailPage = () => {
   //---------------------
@@ -45,7 +46,8 @@ export const SnapshotDetailPage = () => {
   const modal = useContext(ModalContext);
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
-  const flashMessageContext = useContext(FlashMessageContext)
+  const flashMessageContext = useContext(FlashMessageContext);
+  const complaintModalContext = useContext(ComplaintModalContext);
 
   //---------------------
   //  ROUTER
@@ -64,10 +66,14 @@ export const SnapshotDetailPage = () => {
     validationSchema: () => commentValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      context.isEditIndex !== -1 ?
-      context.editComment(snapshotId, context.commentList[context.isEditIndex]._id, value, setHasMore)
-      :
-      context.addComment(snapshotId, value, setHasMore)
+      context.isEditIndex !== -1
+        ? context.editComment(
+            snapshotId,
+            context.commentList[context.isEditIndex]._id,
+            value,
+            setHasMore
+          )
+        : context.addComment(snapshotId, value, setHasMore);
     },
   });
 
@@ -76,21 +82,21 @@ export const SnapshotDetailPage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
-    context.setValue('formik', formik)
-    context.setValue('flashMessageContext', flashMessageContext)
-    context.setValue('router', router)
+    context.setValue("formik", formik);
+    context.setValue("flashMessageContext", flashMessageContext);
+    context.setValue("router", router);
     context.prepareSnapshotDetail(snapshotId, authContext.user !== null);
     context.prepareSnapshotCommentsList(snapshotId, authContext.user !== null);
 
     return () => {
-      context.setValue('initValue', { comment: ''})
-      formik.resetForm()
-      context.setValue('commentList', [])
-      context.setValue('isEditIndex', -1)
-      context.setValue('page', 1)
-      context.setValue('totalPages', 1)
-      setHasMore(true)
-    }
+      context.setValue("initValue", { comment: "" });
+      formik.resetForm();
+      context.setValue("commentList", []);
+      context.setValue("isEditIndex", -1);
+      context.setValue("page", 1);
+      context.setValue("totalPages", 1);
+      setHasMore(true);
+    };
   }, []);
 
   //---------------------
@@ -127,6 +133,7 @@ export const SnapshotDetailPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
+          <ComplaintModal />
           <div className="mx-auto xl:max-w-6xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
@@ -145,227 +152,262 @@ export const SnapshotDetailPage = () => {
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl">
               <h1 className="pt-8 lg:pt-2 headlineL">Snapshot</h1>
               {!context.loadingDetail && (
-                <div className="mt-6 grid grid-cols-12 gap-4">
-                  <div
-                    className="col-span-12 md:col-span-5 lg:col-span-4"
-                    id="snapshotDetail"
-                  >
-                    <div className="bg-white rounded-[12px]">
-                      <div className="flex items-center justify-between py-2 px-4 space-x-6">
-                        <Link
-                          href={
-                            authContext.user?.username ===
-                            context.snapshotDetail?.author?.username
-                              ? "/me"
-                              : `/users/${context.snapshotDetail?.author?._id}`
-                          }
-                          passHref
-                        >
-                          <a>
-                            <div className="flex items-center space-x-3 w-auto">
-                              <div className="w-[48px] h-[48px] border border-gray-30 rounded-full overflow-hidden cursor-pointer flex-shrink-0">
-                                <ImageWithFallback
-                                  alt="snapshot cover image"
-                                  className="w-full h-full object-cover"
-                                  src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${context.snapshotDetail?.author?.image}`}
-                                />
+                <>
+                  {(context.snapshotDetail?.isHidden && context.snapshotDetail?.remark) && (
+                    <div className="mt-4 flex space-x-4 px-4 py-2 rounded-[12px] items-center bg-white">
+                      <i className="fas fa-info-circle w-auto text-error" />
+                      <p className="text-[14px] text-gray-60">
+                        {context.snapshotDetail?.remark}
+                      </p>
+                    </div>
+                  )}
+                  <div className={classNames("grid grid-cols-12 gap-4", {'mt-4': (context.snapshotDetail?.isHidden && context.snapshotDetail?.remark)}, {'mt-6': !context.snapshotDetail?.isHidden})}>
+                    <div
+                      className="col-span-12 md:col-span-5 lg:col-span-4"
+                      id="snapshotDetail"
+                    >
+                      <div className="bg-white rounded-[12px]">
+                        <div className="flex items-center justify-between py-2 px-4 space-x-6">
+                          <Link
+                            href={
+                              authContext.user?.username ===
+                              context.snapshotDetail?.author?.username
+                                ? "/me"
+                                : `/users/${context.snapshotDetail?.author?._id}`
+                            }
+                            passHref
+                          >
+                            <a>
+                              <div className="flex items-center space-x-3 w-auto">
+                                <div className="w-[48px] h-[48px] border border-gray-30 rounded-full overflow-hidden cursor-pointer flex-shrink-0">
+                                  <ImageWithFallback
+                                    alt="snapshot cover image"
+                                    className="w-full h-full object-cover"
+                                    src={context.snapshotDetail?.author?.image}
+                                  />
+                                </div>
+                                <p className="titleS">
+                                  {context.snapshotDetail?.author?.username}
+                                </p>
                               </div>
-                              <p className="titleS">
-                                {context.snapshotDetail?.author?.username}
+                            </a>
+                          </Link>
+                          {authContext.user !== null && (
+                            <div className="relative w-auto">
+                              <div
+                                ref={ref}
+                                className="cursor-pointer w-auto flex items-center justify-center text-center shrink-0"
+                                onClick={() => setOpen(!open)}
+                              >
+                                <i className=" text-[16px] leading-[16px] fas fa-ellipsis-v"></i>
+                              </div>
+                              {open && (
+                                <div className="flex justify-end">
+                                  {context.snapshotDetail?.isMe && (
+                                    <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
+                                      <div
+                                        className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                        onClick={() =>
+                                          router.push(
+                                            `/snapshots/${snapshotId}/edit`
+                                          )
+                                        }
+                                      >
+                                        <i className="fas fa-pen w-auto"></i>
+                                        <p className="ml-3 w-auto">
+                                          แก้ไข Snapshot
+                                        </p>
+                                      </div>
+                                      <div
+                                        className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                        onClick={() => {
+                                          modal.openModal(
+                                            "ลบ Snapshot นี้หรือไม่",
+                                            <p>
+                                              เมื่อทำการลบ Snapshot แล้ว
+                                              จะไม่สามารถกู้คืนได้อีก
+                                              ท่านยืนยันที่จะลบหรือไม่ ?
+                                            </p>,
+                                            () => {
+                                              context.deleteSnapshot(
+                                                snapshotId
+                                              );
+                                            },
+                                            "ยกเลิก",
+                                            "ลบ"
+                                          );
+                                        }}
+                                      >
+                                        <i className="fas fa-trash w-auto"></i>
+                                        <p className="ml-3 w-auto">
+                                          ลบ Snapshot
+                                        </p>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {!context.snapshotDetail?.isMe && (
+                                    <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
+                                      <div
+                                        className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
+                                        onClick={() => {
+                                          complaintModalContext.openModal(
+                                            "snapshot",
+                                            context.snapshotDetail?.recipe
+                                              ?.name,
+                                            context.snapshotDetail?.author
+                                              ?.username,
+                                            context.snapshotDetail?.createdAt,
+                                            context.snapshotDetail?._id
+                                          );
+                                        }}
+                                      >
+                                        <i className="fas fa-exclamation-triangle w-auto"></i>
+                                        <p className="ml-3">รายงาน Snapshot</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className="h-[347px] max-h-[347px]">
+                          <ImageWithFallback
+                            alt="snapshot cover image"
+                            className="w-full h-full object-cover"
+                            src={context.snapshotDetail?.image}
+                          />
+                        </div>
+                        <div className="py-3 px-4">
+                          <Link
+                            href={`/recipes/${context.snapshotDetail?.recipe?._id}`}
+                            passHref
+                          >
+                            <a>
+                              <div className="flex space-x-2 items-center py-[5px] px-3 max-w-max bg-beige-20 rounded-[5px]">
+                                <i className="fas fa-book text-[14px] leading-[14px] text-brown-10 w-auto" />
+                                <p className="line-clamp-1 w-auto">
+                                  {context.snapshotDetail?.recipe?.name}
+                                </p>
+                              </div>
+                            </a>
+                          </Link>
+                          <p className="my-2 bodyM">
+                            {context.snapshotDetail?.caption}
+                          </p>
+                          <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
+                            context.snapshotDetail?.createdAt
+                          )
+                            .locale("th")
+                            .add(543, "year")
+                            .format("D MMM YY เวลา HH:mm น.")}`}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-span-12 md:col-span-7 lg:col-span-8 bg-white rounded-[12px]">
+                      <div
+                        className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default"
+                        id="scrollableComments"
+                      >
+                        {_.size(context.commentList) > 0 && !context.loading && (
+                          <div>
+                            <InfiniteScroll
+                              dataLength={context.commentList.length}
+                              next={preparation}
+                              hasMore={hasMore}
+                              loader=""
+                              scrollableTarget="scrollableComments"
+                            >
+                              <div className="space-y-4">
+                                {_.map(
+                                  context.commentList,
+                                  (comment: commentListType, index) => (
+                                    <Fragment key={`comment_${index}`}>
+                                      <CommentBlock
+                                        comment={comment}
+                                        isEdit={context.isEditIndex === index}
+                                        index={index}
+                                        formik={formik}
+                                        setHasMore={setHasMore}
+                                      />
+                                    </Fragment>
+                                  )
+                                )}
+                              </div>
+                            </InfiniteScroll>
+                          </div>
+                        )}
+                        {_.size(context.commentList) === 0 && !context.loading && (
+                          <div className="flex items-center text-center text-gray-50 h-[420px]">
+                            <div>
+                              <i className="fas fa-comment text-[48px] w-12 h-12"></i>
+                              <p className="titleM mt-4">
+                                ไม่มีรายการความคิดเห็น
                               </p>
                             </div>
-                          </a>
-                        </Link>
-                        {authContext.user !== null && (
-                          <div className="relative w-auto">
-                            <div
-                              ref={ref}
-                              className="cursor-pointer w-auto flex items-center justify-center text-center shrink-0"
-                              onClick={() => setOpen(!open)}
-                            >
-                              <i className=" text-[16px] leading-[16px] fas fa-ellipsis-v"></i>
-                            </div>
-                            {open && (
-                              <div className="flex justify-end">
-                                {context.snapshotDetail?.isMe && (
-                                  <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
-                                    <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() =>
-                                        router.push(
-                                          `/snapshots/${snapshotId}/edit`
-                                        )
-                                      }
-                                    >
-                                      <i className="fas fa-pen w-auto"></i>
-                                      <p className="ml-3 w-auto">
-                                        แก้ไข Snapshot
-                                      </p>
-                                    </div>
-                                    <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() => {
-                                        modal.openModal(
-                                          "ลบ Snapshot นี้หรือไม่",
-                                          <p>
-                                            เมื่อทำการลบ Snapshot แล้ว
-                                            จะไม่สามารถกู้คืนได้อีก
-                                            ท่านยืนยันที่จะลบหรือไม่ ?
-                                          </p>,
-                                          () => {
-                                            context.deleteSnapshot(snapshotId)
-                                          },
-                                          "ยกเลิก",
-                                          "ลบ"
-                                        );
-                                      }}
-                                    >
-                                      <i className="fas fa-trash w-auto"></i>
-                                      <p className="ml-3 w-auto">ลบ Snapshot</p>
-                                    </div>
-                                  </div>
-                                )}
-                                {!context.snapshotDetail?.isMe && (
-                                  <div className="absolute z-10 w-[225px] bg-white card-shadow mt-2 rounded-[12px] overflow-y-auto">
-                                    <div
-                                      className="flex items-center cursor-pointer text-black bodyS sm:bodyM px-[16px] py-[10px] bg-gray-2 hover:bg-gray-20 p-3 sm:p-4"
-                                      onClick={() => null}
-                                    >
-                                      <i className="fas fa-exclamation-triangle w-auto"></i>
-                                      <p className="ml-3">รายงาน Snapshot</p>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
+                          </div>
+                        )}
+                        {context.loading && (
+                          <div className="flex items-center justify-center text-center text-gray-50 h-[420px]">
+                            <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
                           </div>
                         )}
                       </div>
-                      <div className="h-[347px] max-h-[347px]">
-                        <ImageWithFallback
-                          alt="snapshot cover image"
-                          className="w-full h-full object-cover"
-                          src={`${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${context.snapshotDetail?.image}`}
-                        />
-                      </div>
-                      <div className="py-3 px-4">
-                        <Link
-                          href={`/recipes/${context.snapshotDetail?.recipe?._id}`}
-                          passHref
-                        >
-                          <a>
-                            <div className="flex space-x-2 items-center py-[5px] px-3 max-w-max bg-beige-20 rounded-[5px]">
-                              <i className="fas fa-book text-[14px] leading-[14px] text-brown-10 w-auto" />
-                              <p className="line-clamp-1 w-auto">
-                                {context.snapshotDetail?.recipe?.name}
-                              </p>
-                            </div>
-                          </a>
-                        </Link>
-                        <p className="my-2 bodyM">
-                          {context.snapshotDetail?.caption}
-                        </p>
-                        <p className="bodyM text-gray-50">{`เมื่อ ${dayjs(
-                          context.snapshotDetail?.createdAt
-                        )
-                          .locale("th")
-                          .add(543, "year")
-                          .format("D MMM YY เวลา HH:mm น.")}`}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-span-12 md:col-span-7 lg:col-span-8 bg-white rounded-[12px]">
-                    <div className="bg-white rounded-[12px] p-4 h-[460px] max-h-[460px] overflow-y-auto scrollbar-hide md:scrollbar-default" id="scrollableComments">
-                      {_.size(context.commentList) > 0 && !context.loading && (
-                        <div>
-                          <InfiniteScroll
-                            dataLength={context.commentList.length}
-                            next={preparation}
-                            hasMore={hasMore}
-                            loader=""
-                            scrollableTarget="scrollableComments"
-                          >
-                            <div className="space-y-4">
-                              {_.map(
-                                context.commentList,
-                                (comment: commentListType, index) => (
-                                  <Fragment key={`comment_${index}`}>
-                                    <CommentBlock comment={comment} isEdit={context.isEditIndex === index} index={index} formik={formik} setHasMore={setHasMore}/>
-                                  </Fragment>
-                                )
-                              )}
-                            </div>
-                          </InfiniteScroll>
+                      <div className="border-t border-gray-40 my-4 " />
+                      {!authContext.user && (
+                        <div className="bg-white rounded-[12px] pb-4">
+                          <p className="bodyL text-center">
+                            อยากร่วมแสดงความคิดเห็นกับเราไหม ?
+                            <br />
+                            <Link href="/login" passHref>
+                              <a className="underline text-brown-10">
+                                ลงชื่อเข้าสู่ระบบ
+                              </a>
+                            </Link>
+                            <br />
+                            {` เพื่อแสดงความคิดเห็นเลย`}
+                          </p>
                         </div>
                       )}
-                      {_.size(context.commentList) === 0 && !context.loading && (
-                        <div className="flex items-center text-center text-gray-50 h-[420px]">
-                          <div>
-                            <i className="fas fa-comment text-[48px] w-12 h-12"></i>
-                            <p className="titleM mt-4">
-                              ไม่มีรายการความคิดเห็น
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      {context.loading && (
-                        <div className="flex items-center justify-center text-center text-gray-50 h-[420px]">
-                          <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
-                        </div>
-                      )}
-                    </div>
-                    <div className="border-t border-gray-40 my-4 " />
-                    {!authContext.user && (
-                      <div className="bg-white rounded-[12px] pb-4">
-                        <p className="bodyL text-center">
-                          อยากร่วมแสดงความคิดเห็นกับเราไหม ?
-                          <br />
-                          <Link href="/login" passHref>
-                            <a className="underline text-brown-10">
-                              ลงชื่อเข้าสู่ระบบ
-                            </a>
-                          </Link>
-                          <br />
-                          {` เพื่อแสดงความคิดเห็นเลย`}
-                        </p>
-                      </div>
-                    )}
-                    {authContext.user && (
-                      <div className="my-6 px-4">
-                        <TextAreaInput
-                          onChange={(e) => {
-                            formik.setFieldValue("comment", e.target.value);
-                          }}
-                          value={formik.values?.comment}
-                          placeholder="แสดงความคิดเห็นที่นี่..."
-                          height={100}
-                        />
-                        <div className="flex space-x-4 md:justify-end mt-3">
-                          {context.isEditIndex !== -1 && (
+                      {authContext.user && (
+                        <div className="my-6 px-4">
+                          <TextAreaInput
+                            onChange={(e) => {
+                              formik.setFieldValue("comment", e.target.value);
+                            }}
+                            value={formik.values?.comment}
+                            placeholder="แสดงความคิดเห็นที่นี่..."
+                            height={100}
+                          />
+                          <div className="flex space-x-4 md:justify-end mt-3">
+                            {context.isEditIndex !== -1 && (
+                              <div className="w-full md:w-[120px]">
+                                <SecondaryButton
+                                  onClick={() => {
+                                    context.setValue("isEditIndex", -1);
+                                    formik.resetForm();
+                                  }}
+                                  title="ยกเลิก"
+                                />
+                              </div>
+                            )}
                             <div className="w-full md:w-[120px]">
-                              <SecondaryButton
+                              <PrimaryButton
                                 onClick={() => {
-                                  context.setValue("isEditIndex", -1);
-                                  formik.resetForm()
+                                  formik.submitForm();
                                 }}
-                                title="ยกเลิก"
+                                disabled={!formik.dirty || !formik.isValid}
+                                title={
+                                  context.isEditIndex !== -1 ? "บันทึก" : "ส่ง"
+                                }
                               />
                             </div>
-                          )}
-                          <div className="w-full md:w-[120px]">
-                            <PrimaryButton
-                              onClick={() => {
-                                formik.submitForm();
-                              }}
-                              disabled={!formik.dirty || !formik.isValid}
-                              title={context.isEditIndex !== -1 ? "บันทึก" : "ส่ง"}
-                            />
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
+                </>
               )}
             </div>
           </div>
