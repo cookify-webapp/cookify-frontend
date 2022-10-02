@@ -153,15 +153,15 @@ export const SnapshotDetailPage = () => {
               <h1 className="pt-8 lg:pt-2 headlineL">Snapshot</h1>
               {!context.loadingDetail && (
                 <>
-                  {context.snapshotDetail?.isHidden && (
+                  {(context.snapshotDetail?.isHidden && context.snapshotDetail?.remark) && (
                     <div className="mt-4 flex space-x-4 px-4 py-2 rounded-[12px] items-center bg-white">
                       <i className="fas fa-info-circle w-auto text-error" />
-                      <p className="text-[14px]">
+                      <p className="text-[14px] text-gray-60">
                         {context.snapshotDetail?.remark}
                       </p>
                     </div>
                   )}
-                  <div className={classNames("grid grid-cols-12 gap-4", {'mt-4': context.snapshotDetail?.isHidden}, {'mt-6': !context.snapshotDetail?.isHidden})}>
+                  <div className={classNames("grid grid-cols-12 gap-4", {'mt-4': (context.snapshotDetail?.isHidden && context.snapshotDetail?.remark)}, {'mt-6': !context.snapshotDetail?.isHidden})}>
                     <div
                       className="col-span-12 md:col-span-5 lg:col-span-4"
                       id="snapshotDetail"

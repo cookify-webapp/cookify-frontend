@@ -62,9 +62,26 @@ export const SnapshotFormPage = () => {
     validationSchema: () => snapshotValidateSchema,
     initialValues: context.initValue,
     onSubmit: (value) => {
-      isEdit
-        ? context.editSnapshot(snapshotId, value)
-        : context.addSnapshot(value);
+      if (isEdit) {
+        if (
+          context.snapshotDetail?.isHidden &&
+          context.snapshotDetail?.remark
+        ) {
+          modal.openModal(
+            "ยืนยันการแก้ไขเรื่องร้องเรียนหรือไม่",
+            "ผู้ดูแลจะทำการตรวจสอบการแก้ไขของคุณตามเงื่อนไขข้อร้องเรียนที่ได้รับ คุณยืนยันการแก้ไขหรือไม่",
+            () => context.editSnapshot(snapshotId, value),
+            "ยกเลิก",
+            "ยืนยัน"
+          );
+        } else if (!context.snapshotDetail?.isHidden) {
+          context.editSnapshot(snapshotId, value);
+        } else {
+          context.editSnapshot(snapshotId, value);
+        }
+      } else {
+        context.addSnapshot(value);
+      }
     },
   });
 
@@ -153,7 +170,9 @@ export const SnapshotFormPage = () => {
             </div>
             {!context.loading && (
               <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
-                <h1 className="pt-8 lg:pt-2 headlineL">{`${isEdit ? 'แก้ไข' : 'เพิ่ม'} Snapshot`}</h1>
+                <h1 className="pt-8 lg:pt-2 headlineL">{`${
+                  isEdit ? "แก้ไข" : "เพิ่ม"
+                } Snapshot`}</h1>
 
                 <div className="grid grid-cols-12 gap-4 mt-6">
                   <div className="col-span-12 lg:col-span-5 p-6 rounded-[12px] bg-white">
@@ -162,10 +181,7 @@ export const SnapshotFormPage = () => {
                       {cover?.file || formik.values?.imageFileName ? (
                         <img
                           id="recipeImage"
-                          src={
-                            cover?.file ||
-                            formik.values?.imageFileName
-                          }
+                          src={cover?.file || formik.values?.imageFileName}
                           className="w-full h-full object-cover"
                         />
                       ) : (

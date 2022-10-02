@@ -150,10 +150,10 @@ export const RecipeDetailPage = () => {
                   />
                 </div>
                 <div className="px-5 2xl:px-0">
-                  {context.recipeDetail?.isHidden && (
+                  {(context.recipeDetail?.isHidden && context.recipeDetail?.remark) && (
                     <div className="mt-4 flex space-x-4 px-4 py-2 rounded-[12px] items-center bg-white">
                       <i className="fas fa-info-circle w-auto text-error" />
-                      <p className="text-[14px]">
+                      <p className="text-[14px] text-gray-60">
                         {context.recipeDetail?.remark}
                       </p>
                     </div>
