@@ -166,7 +166,7 @@ export const SubIngredientsSelectionModal = () => {
                 />
               </div>
               <div className="border-t-[1px] border-gray-30 pb-4" />
-              <div id="scrollableDiv" className="h-[250px] max-h-[250px] overflow-y-auto">
+              <div id="scrollableDiv" className="h-[250px] max-h-[250px] overflow-y-auto scrollbar-hide lg:scrollbar-default">
                 <InfiniteScroll
                   dataLength={context.itemsToShow.length}
                   next={preparation}
