@@ -33,9 +33,7 @@ export const NutritionLabel = ({
                 <>
                   {unit?.queryKey === "gram" ||
                   unit?.queryKey === "milliliter" ? (
-                    <p className="w-auto ml-4">{`${
-                      unit?.queryKey === "gram" ? "100" : "10"
-                    } ${unit?.name}`}</p>
+                    <p className="w-auto ml-4">{`100 ${unit?.name}`}</p>
                   ) : (
                     <p className="w-auto ml-4">{`${serve || "1"} ${
                       unit?.name
