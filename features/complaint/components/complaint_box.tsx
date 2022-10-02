@@ -21,7 +21,7 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
   //---------------------
   // STATE
   //---------------------
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   //---------------------
   // CONTEXT
@@ -119,7 +119,7 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
               </div>
             </>
           )}
-          {(props.complaint?.isMe || props.complaint?.status === "filed") && (
+          {(props.complaint?.isMe || props.complaint?.status === "filed" || context.tabType !== 'completed') && (
             <>
               <div className="mt-6 w-full md:w-[500px] flex mx-auto border-t border-t-gray-30" />
               <div className="flex justify-center space-x-4 mt-4 items-center">
@@ -132,7 +132,7 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                             props.complaint?.status
                           )
                         ? "ติดต่อผู้ใช้"
-                        : "ลบประวัติคำร้อง"
+                        : ""
                     }
                     disabled={props.complaint?.status === "in progress"}
                     onClick={() => {
@@ -154,12 +154,16 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                           props.complaint?.status
                         )
                       ) {
-                        contactUserModalContext.openModal(props.complaint?.type, props.complaint?._id, () => {
-                          props.setHasMore()
-                          context.setValue('page', 1)
-                          context.setValue('complaintList', [])
-                          context.prepareComplaintList()
-                        })
+                        contactUserModalContext.openModal(
+                          props.complaint?.type,
+                          props.complaint?._id,
+                          () => {
+                            props.setHasMore();
+                            context.setValue("page", 1);
+                            context.setValue("complaintList", []);
+                            context.prepareComplaintList();
+                          }
+                        );
                       }
                     }}
                   />
@@ -176,10 +180,48 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                     <PrimaryButton
                       title="เสร็จสิ้น"
                       disabled={props.complaint?.status !== "verifying"}
-                      onClick={() => null}
+                      onClick={() => {
+                        modal.openModal(
+                          "ยืนยันการตรวจสอบเสร็จสิ้น",
+                          "เมื่อยืนยันการตรวจสอบเสร็จสิ้น สถานะของเรื่องร้องเรียนนี้จะถูกปรับเป็นเสร็จสิ้นทันทีและโพสต์ที่ถูกร้องเรียนจะถูกปรับเป็นสาธารณะอีกครั้ง",
+                          () =>
+                            context.editComplaintStatus(
+                              props.complaint?._id,
+                              "completed",
+                              props.setHasMore
+                            ),
+                          "ยกเลิก",
+                          "ยืนยัน"
+                        );
+                      }}
                     />
                   </div>
                 )}
+              </div>
+            </>
+          )}
+          {context.tabType === "completed" && (
+            <>
+              <div className="mt-6 w-full md:w-[500px] flex mx-auto border-t border-t-gray-30" />
+              <div className="flex justify-center space-x-4 mt-4 items-center">
+                <div className="w-full md:w-[150px]">
+                  <PrimaryButton
+                    title="ลบประวัติคำร้อง"
+                    onClick={() => {
+                      modal.openModal(
+                        "ลบเรื่องร้องเรียนนี้",
+                        "เมื่อทำการลบเรื่องร้องเรียนนี้แล้ว จะไม่สามารถกู้คืนได้อีก",
+                        () =>
+                          context.deleteComplaint(
+                            props.complaint?._id,
+                            props.setHasMore
+                          ),
+                        "ยกเลิก",
+                        "ยืนยัน"
+                      );
+                    }}
+                  />
+                </div>
               </div>
             </>
           )}
