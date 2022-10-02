@@ -1,13 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { Observer } from "mobx-react-lite";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import { AuthContext } from "core/context/auth_context";
 import { RecipeCommentContext } from "@features/recipes/contexts/recipe_comment_context";
 import { useFormik } from "formik";
 import { commentValidateSchema } from "@features/recipes/forms/comment_form";
 import classNames from "classnames";
-const { publicRuntimeConfig } = getConfig();
 import _ from "lodash";
 import { TextAreaInput } from "@core/components/input/text_area_input";
 import { ModalContext } from "core/context/modal_context";
@@ -91,7 +89,7 @@ export const CommentInputBlock = ({ isEdit }: CommentInputBlockProps) => {
               <ImageWithFallback
                 alt="profile image"
                 className="w-full h-full object-cover rounded-full"
-                src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${authContext.user?.image}`}
+                src={authContext.user?.image}
               />
             </div>
             <p className="titleS">{authContext.user?.username}</p>

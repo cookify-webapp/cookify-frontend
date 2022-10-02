@@ -325,7 +325,7 @@ export const RecipeFormPage = () => {
                         id="recipeImage"
                         src={
                           cover?.file ||
-                          `${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${formik.values?.imageFileName}`
+                          formik.values?.imageFileName
                         }
                         className="w-full h-full object-cover"
                       />

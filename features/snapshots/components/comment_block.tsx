@@ -1,8 +1,7 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { createRef, useContext, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { commentListType } from "../types/snapshot_detail_type";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import Link from "next/link";
 import { AuthContext } from "core/context/auth_context";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
@@ -12,7 +11,6 @@ import dayjs from "dayjs";
 import "dayjs/locale/th";
 import classNames from "classnames";
 import { SnapshotDetailContext } from "../contexts/snapshot_detail_context";
-const { publicRuntimeConfig } = getConfig();
 
 interface commentBlockPropType {
   comment: commentListType;
@@ -79,7 +77,7 @@ export const CommentBlock = ({
                     <ImageWithFallback
                       alt="snapshot cover image"
                       className="w-full h-full object-cover"
-                      src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${comment?.author?.image}`}
+                      src={comment?.author?.image}
                     />
                   </div>
                   <div>

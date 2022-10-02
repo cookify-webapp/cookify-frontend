@@ -16,7 +16,8 @@ const moduleExports = {
   images: {
     domains: [
       'cookifywebapp-dev.sit.kmutt.ac.th',
-      'cookifywebapp.sit.kmutt.ac.th'
+      'cookifywebapp.sit.kmutt.ac.th',
+      'firebasestorage.googleapis.com'
     ],
   },
 }

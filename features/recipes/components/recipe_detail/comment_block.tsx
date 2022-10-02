@@ -2,7 +2,6 @@ import React, { createRef, useContext, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { recipeCommentType } from "@features/recipes/types/recipes";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import { Rating } from "@core/components/rating";
 import "dayjs/locale/th";
 import dayjs from "dayjs";
@@ -13,7 +12,6 @@ import { ModalContext } from "core/context/modal_context";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-const { publicRuntimeConfig } = getConfig();
 interface CommentBlocKProps {
   comment: recipeCommentType;
   isShowKebab?: boolean;
@@ -70,7 +68,7 @@ export const CommentBlock = ({ comment, isShowKebab }: CommentBlocKProps) => {
                   <ImageWithFallback
                     alt="profile image"
                     className="w-full h-full object-cover rounded-full"
-                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${comment?.author?.image}`}
+                    src={comment?.author?.image}
                   />
                 </a>
               </Link>

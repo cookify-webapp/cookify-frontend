@@ -13,7 +13,6 @@ import { Breadcrumb } from "@core/components/breadcrumb";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { RecipeDetailContext } from "../contexts/recipe_detail_context";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import "dayjs/locale/th";
 import dayjs from "dayjs";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
@@ -32,8 +31,6 @@ import { ModalContext } from "core/context/modal_context";
 import { FlashMessageContext } from "core/context/flash_message_context";
 import { ComplaintModal } from "@core/components/modal/complaint_modal";
 import { ComplaintModalContext } from "core/context/complaint_modal_context";
-
-const { publicRuntimeConfig } = getConfig();
 
 export const RecipeDetailPage = () => {
   //---------------------
@@ -167,7 +164,7 @@ export const RecipeDetailPage = () => {
                         <ImageWithFallback
                           alt="ingredient cover image"
                           className="w-full h-full border border-gray-30 rounded-[12px]"
-                          src={`${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${context.recipeDetail?.image}`}
+                          src={context.recipeDetail?.image}
                         />
                       </div>
                     </div>

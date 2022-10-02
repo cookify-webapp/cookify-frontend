@@ -13,7 +13,6 @@ import { ModalContext } from "core/context/modal_context";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { useRouter } from "next/router";
 import { AuthContext } from "core/context/auth_context";
-import getConfig from "next/config";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
 import Link from "next/link";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
@@ -32,7 +31,6 @@ import { FlashMessageContext } from "core/context/flash_message_context";
 import { ComplaintModal } from "@core/components/modal/complaint_modal";
 import { ComplaintModalContext } from "core/context/complaint_modal_context";
 import classNames from "classnames";
-const { publicRuntimeConfig } = getConfig();
 
 export const SnapshotDetailPage = () => {
   //---------------------
@@ -185,7 +183,7 @@ export const SnapshotDetailPage = () => {
                                   <ImageWithFallback
                                     alt="snapshot cover image"
                                     className="w-full h-full object-cover"
-                                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${context.snapshotDetail?.author?.image}`}
+                                    src={context.snapshotDetail?.author?.image}
                                   />
                                 </div>
                                 <p className="titleS">
@@ -277,7 +275,7 @@ export const SnapshotDetailPage = () => {
                           <ImageWithFallback
                             alt="snapshot cover image"
                             className="w-full h-full object-cover"
-                            src={`${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${context.snapshotDetail?.image}`}
+                            src={context.snapshotDetail?.image}
                           />
                         </div>
                         <div className="py-3 px-4">

@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { UserProfileContext } from "../contexts/user_profile_context";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import classNames from "classnames";
 import { FollowModal } from "../components/follow_modal";
 import { ModalContext } from "core/context/modal_context";
@@ -18,7 +17,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
 import { FlashMessageContext } from "core/context/flash_message_context";
-const { publicRuntimeConfig } = getConfig();
 
 export const UserProfilePage = () => {
   //---------------------
@@ -141,7 +139,7 @@ export const UserProfilePage = () => {
                           <ImageWithFallback
                             alt="profile cover"
                             className="w-full h-full object-cover"
-                            src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${context.userDetail?.image}`}
+                            src={context.userDetail?.image}
                           />
                         </div>
                         <div>

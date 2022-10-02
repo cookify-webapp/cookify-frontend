@@ -4,9 +4,6 @@ import classNames from "classnames";
 import { ImageWithFallback } from "./image_with_fallback";
 import { CheckboxInput } from "./input/checkbox";
 import { ingredientPropType } from "core/types/core_components_type";
-import getConfig from "next/config";
-
-const { publicRuntimeConfig } = getConfig();
 
 export const Ingredient = ({
   ingredient,
@@ -32,7 +29,7 @@ export const Ingredient = ({
             <ImageWithFallback
               alt="ingredient cover image"
               className="w-[52px] h-[52px] border border-gray-30 rounded-[12px]"
-              src={`${publicRuntimeConfig.CKF_IMAGE_API}/ingredients/${ingredient.image}`}
+              src={ingredient.image}
             />
             <div className="w-auto mx-4 ">
               <p className="titleM line-clamp-1">{ingredient.name}</p>

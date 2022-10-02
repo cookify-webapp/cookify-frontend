@@ -164,7 +164,7 @@ export const SnapshotFormPage = () => {
                           id="recipeImage"
                           src={
                             cover?.file ||
-                            `${publicRuntimeConfig.CKF_IMAGE_API}/snapshots/${formik.values?.imageFileName}`
+                            formik.values?.imageFileName
                           }
                           className="w-full h-full object-cover"
                         />

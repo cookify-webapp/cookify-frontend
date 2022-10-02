@@ -2,14 +2,10 @@ import React, { useState, createRef, useContext } from "react";
 import { Observer } from "mobx-react-lite";
 import { ImageWithFallback } from "./image_with_fallback";
 import { useOnClickOutside } from "core/utils/useOnClickOutside";
-import router from "next/router";
 import { userAccountType } from "core/types/core_components_type";
 import Link from "next/link";
 import { AuthContext } from "core/context/auth_context";
 import { ModalContext } from "core/context/modal_context";
-import getConfig from "next/config";
-
-const { publicRuntimeConfig } = getConfig();
 
 export const UserAccount = ({ src, userName, role }: userAccountType) => {
   //---------------------
@@ -70,7 +66,7 @@ export const UserAccount = ({ src, userName, role }: userAccountType) => {
             <div className="flex items-center">
               <div className="w-[36px] sm:w-[48px] h-[36px] sm:h-[48px]">
                 <ImageWithFallback
-                  src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${src}`}
+                  src={src}
                   alt="user profile image"
                   className="rounded-full border border-gray-10 w-[36px] sm:w-[48px] h-[36px] sm:h-[48px]"
                 />
