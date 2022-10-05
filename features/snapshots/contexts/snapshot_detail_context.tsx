@@ -11,7 +11,10 @@ import {
 import Cookies from "js-cookie";
 import { addSnapshotComment } from "@core/services/snapshot/post_snapshot";
 import { editSnapshotComment } from "@core/services/snapshot/put_snapshot";
-import { deleteSnapshot, deleteSnapshotComment } from "@core/services/snapshot/delete_snapshot";
+import {
+  deleteSnapshot,
+  deleteSnapshotComment,
+} from "@core/services/snapshot/delete_snapshot";
 import { AxiosResponse } from "axios";
 
 class SnapshotDetail {
@@ -21,10 +24,10 @@ class SnapshotDetail {
   commentList: commentListType[];
 
   initValue: {
-    comment: string
-  }
+    comment: string;
+  };
 
-  isEditIndex: number
+  isEditIndex: number;
 
   modal;
   page: number;
@@ -34,21 +37,21 @@ class SnapshotDetail {
   totalPages: number;
   formik: any;
   flashMessageContext: any;
-  router
+  router;
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.initValue = {
-      comment: ''
-    }
+      comment: "",
+    };
     this.snapshotDetail = null;
     this.loadingDetail = false;
     this.commentList = [];
-    this.page = 1
-    this.perPage = 8
-    this.loading = true
-    this.isEditIndex = -1
+    this.page = 1;
+    this.perPage = 8;
+    this.loading = true;
+    this.isEditIndex = -1;
     makeAutoObservable(this);
   }
 
@@ -62,7 +65,7 @@ class SnapshotDetail {
   prepareSnapshotDetail = async (id, isLogin) => {
     try {
       this.loadingDetail = true;
-      let resp: AxiosResponse<any>
+      let resp: AxiosResponse<any>;
       if (isLogin) {
         const token = Cookies.get("token");
         resp = await getSnapshotDetail(id, token);
@@ -73,13 +76,17 @@ class SnapshotDetail {
         this.snapshotDetail = resp.data?.snapshot;
       }
     } catch (error) {
-      this.modal.openModal(
-        "มีปัญหาในการดึงข้อมูล Snapshot",
-        error.message,
-        () => this.modal.closeModal(),
-        "ปิด",
-        "ตกลง"
-      );
+      if (error?.response?.status === 404) {
+        this.router.replace("/404");
+      } else {
+        this.modal.openModal(
+          "มีปัญหาในการดึงข้อมูล Snapshot",
+          error.message,
+          () => this.modal.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     } finally {
       this.loadingDetail = false;
     }
@@ -90,7 +97,7 @@ class SnapshotDetail {
       if (this.page === 1) {
         this.loading = true;
       }
-      let resp: AxiosResponse<any>
+      let resp: AxiosResponse<any>;
       if (isLogin) {
         const token = Cookies.get("token");
         resp = await getSnapshotCommentsList(
@@ -98,7 +105,8 @@ class SnapshotDetail {
             page: this.page,
             perPage: this.perPage,
           },
-          id, token
+          id,
+          token
         );
       } else {
         resp = await getSnapshotCommentsList(
@@ -148,11 +156,11 @@ class SnapshotDetail {
       );
       if (resp.status === 200) {
         this.formik?.resetForm();
-        this.commentList = []
-        this.page = 1
-        this.totalPages = 1
-        setHasMore(true)
-        this.prepareSnapshotCommentsList(snapshotId, true)
+        this.commentList = [];
+        this.page = 1;
+        this.totalPages = 1;
+        setHasMore(true);
+        this.prepareSnapshotCommentsList(snapshotId, true);
         this.flashMessageContext.handleShow(
           "เพิ่มสำเร็จ",
           "เพิ่มความคิดเห็นสำเร็จ"
@@ -186,15 +194,15 @@ class SnapshotDetail {
       );
       if (resp.status === 200) {
         this.initValue = {
-          comment: ''
-        }
+          comment: "",
+        };
         this.formik?.resetForm();
-        this.isEditIndex = -1
-        this.commentList = []
-        this.page = 1
-        this.totalPages = 1
-        setHasMore(true)
-        this.prepareSnapshotCommentsList(snapshotId, true)
+        this.isEditIndex = -1;
+        this.commentList = [];
+        this.page = 1;
+        this.totalPages = 1;
+        setHasMore(true);
+        this.prepareSnapshotCommentsList(snapshotId, true);
         this.flashMessageContext.handleShow(
           "แก้ไขสำเร็จ",
           "แก้ไขความคิดเห็นสำเร็จ"
@@ -217,13 +225,13 @@ class SnapshotDetail {
       const resp = await deleteSnapshotComment(commentId, token);
       if (resp.status === 200) {
         this.modal.closeModal();
-        this.formik?.resetForm()
+        this.formik?.resetForm();
         this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบความคิดเห็นสำเร็จ");
-        this.commentList = []
-        this.page = 1
-        this.totalPages = 1
-        setHasMore(true)
-        this.prepareSnapshotCommentsList(snapshotId, true)
+        this.commentList = [];
+        this.page = 1;
+        this.totalPages = 1;
+        setHasMore(true);
+        this.prepareSnapshotCommentsList(snapshotId, true);
       }
     } catch (error) {
       this.modal.openModal(
@@ -243,7 +251,7 @@ class SnapshotDetail {
       if (resp.status === 200) {
         this.modal.closeModal();
         this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบ Snapshot สำเร็จ");
-        this.router.push('/snapshots')
+        this.router.push("/snapshots");
       }
     } catch (error) {
       this.modal.openModal(

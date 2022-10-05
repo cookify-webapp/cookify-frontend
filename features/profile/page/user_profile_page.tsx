@@ -44,6 +44,7 @@ export const UserProfilePage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
+    context.setValue('router', router)
     context.setValue("modal", modal);
     context.setValue('flashMessageContext', flashMessageContext)
     if (isMe) {
