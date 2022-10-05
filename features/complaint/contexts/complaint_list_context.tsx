@@ -23,6 +23,7 @@ class ComplaintList {
 
   modal;
   flashMessageContext;
+  router
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -79,13 +80,29 @@ class ComplaintList {
         this.complaintList = [];
       }
     } catch (error) {
-      this.modal.openModal(
-        "มีปัญหาในการดึงรายการเรื่องร้องเรียน",
-        error.message,
-        () => this.modal.closeModal(),
-        "ปิด",
-        "ตกลง"
-      );
+      if (error?.response?.status === 403) {
+        setTimeout(() => {
+          this.router.push("/");
+        }, 3000);
+        this.modal.openModal(
+          "ไม่สามารถเข้าถึงหน้าดังกล่าวได้",
+          "เนื่องจากคุณไม่ใช่ผู้ดูแลระบบ",
+          () => {
+            this.modal.closeModal();
+            this.router.push("/");
+          },
+          "ปิด",
+          "ตกลง"
+        );
+      } else {
+        this.modal.openModal(
+          "มีปัญหาในการดึงรายการเรื่องร้องเรียน",
+          error.message,
+          () => this.modal.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     } finally {
       this.loading = false;
     }
