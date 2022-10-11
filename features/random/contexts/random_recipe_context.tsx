@@ -10,12 +10,15 @@ class RandomRecipe {
   loading: boolean
   modal
 
+ currentRandomStatus: 'wait' | 'inprogress' | 'show' 
+
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.randomRecipe = null
     this.loading = false
+    this.currentRandomStatus = 'wait'
     makeAutoObservable(this);
   }
 
@@ -29,6 +32,7 @@ class RandomRecipe {
   onHandleRandomRecipe = async (isLogin) => {
     try {
       this.loading = true
+      this.currentRandomStatus = 'inprogress'
       let resp: AxiosResponse<any>
       if (isLogin) {
         const token = Cookies.get("token");
@@ -38,8 +42,14 @@ class RandomRecipe {
       }
       if (resp.status === 200) {
         this.randomRecipe = resp.data?.recipes[0]
+        setTimeout(() => {
+          this.currentRandomStatus = 'show'
+          this.loading = false
+        }, 5000)
       }
     } catch (error) {
+      this.currentRandomStatus = 'wait'
+      this.loading = false
       this.modal.openModal(
         "มีปัญหาในการสุ่มสูตรอาหาร",
         error.message,
@@ -47,8 +57,6 @@ class RandomRecipe {
         "ปิด",
         "ตกลง"
       )
-    } finally {
-      this.loading = false
     }
   }
 }
