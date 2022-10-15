@@ -45,7 +45,7 @@ export const RecipesListPage = () => {
     context.setValue("searchWord", homeLayoutContext.searchWord);
     context.setValue("modal", modal);
     context.prepareCookingMethods();
-    context.prepareRecipesList();
+    context.prepareRecipesList(authContext.user?.username !== '');
 
     return () => {
       context.setValue("recipesList", []);
@@ -65,13 +65,13 @@ export const RecipesListPage = () => {
     setHasMore(true);
     context.setValue("recipesList", []);
     context.setValue("page", 1);
-    context.prepareRecipesList();
+    context.prepareRecipesList(authContext.user?.username !== '');
   };
 
   const preparation = async () => {
     setHasMore(true);
     context.setValue("page", context.page + 1);
-    context.prepareRecipesList();
+    context.prepareRecipesList(authContext.user?.username !== '');
     if (context.page === context.totalPages) {
       setHasMore(false);
     }
@@ -89,7 +89,7 @@ export const RecipesListPage = () => {
             context.setValue("searchWord", homeLayoutContext.searchWord);
             context.setValue("recipesList", []);
             context.setValue("page", 1);
-            context.prepareRecipesList();
+            context.prepareRecipesList(authContext.user?.username !== '');
           }}
         >
           <div className="mx-auto xl:max-w-6xl">
@@ -106,7 +106,7 @@ export const RecipesListPage = () => {
                   setHasMore(true);
                   context.setValue("recipesList", []);
                   context.setValue("page", 1);
-                  context.prepareRecipesList();
+                  context.prepareRecipesList(authContext.user?.username !== '');
                 }}
               />
             </div>
@@ -136,7 +136,7 @@ export const RecipesListPage = () => {
                       context.setValue("selectedCookingMethod", method.name);
                       context.setValue("recipesList", []);
                       context.setValue("page", 1);
-                      context.prepareRecipesList();
+                      context.prepareRecipesList(authContext.user?.username !== '');
                     }}
                   >
                     <p className="headlineM">{method.name}</p>
@@ -169,7 +169,7 @@ export const RecipesListPage = () => {
                           );
                           context.setValue("recipesList", []);
                           context.setValue("page", 1);
-                          context.prepareRecipesList();
+                          context.prepareRecipesList(authContext.user?.username !== '');
                         },
                         () => {
                           ingredientSelectionModalContext.setValue(

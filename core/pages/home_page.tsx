@@ -34,7 +34,7 @@ export default function HomePage() {
   useEffect(() => {
     context.setValue("modalContext", modalContext);
     context.prepareIngredient();
-    context.prepareRecipesList();
+    context.prepareRecipesList(authContext.user?.username !== '');
     context.prepareSnapshotList()
   }, []);
 
