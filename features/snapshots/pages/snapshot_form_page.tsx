@@ -27,29 +27,12 @@ import { PrimaryButton } from "@core/components/button/primary_button";
 
 export const SnapshotFormPage = () => {
   //---------------------
-  // STATE
-  //---------------------
-  const [cover, setCover] = useState({
-    file: null,
-    original_filename: "",
-  });
-  const [open, setOpen] = useState(false);
-
-  //---------------------
   // CONTEXT
   //---------------------
   const homeLayoutContext = useContext(HomeLayoutContext);
   const flashMessageContext = useContext(FlashMessageContext);
   const modal = useContext(ModalContext);
   const context = useContext(SnapshotFormContext);
-
-  //---------------------
-  // ROUTER
-  //---------------------
-  const router = useRouter();
-  const { snapshotId } = router.query;
-
-  const isEdit = router.pathname.includes("/edit");
 
   //---------------------
   //  FORMIK
@@ -84,6 +67,24 @@ export const SnapshotFormPage = () => {
       }
     },
   });
+
+  //---------------------
+  // STATE
+  //---------------------
+  const [cover, setCover] = useState({
+    file: null,
+    original_filename: "",
+  });
+  const [open, setOpen] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string | undefined>(formik.values?.imageFileName)
+
+  //---------------------
+  // ROUTER
+  //---------------------
+  const router = useRouter();
+  const { snapshotId } = router.query;
+
+  const isEdit = router.pathname.includes("/edit");
 
   //---------------------
   // EFFECT
@@ -132,6 +133,7 @@ export const SnapshotFormPage = () => {
       });
       formik.setFieldValue("snapshotImage", file);
       formik.setFieldValue("imageFileName", file.name);
+      setImgSrc('')
     }
   };
 
@@ -145,6 +147,8 @@ export const SnapshotFormPage = () => {
     }, 500),
     []
   );
+
+  const onError = () => setImgSrc('/images/core/default.png')
 
   //---------------------
   // RENDER
@@ -181,8 +185,9 @@ export const SnapshotFormPage = () => {
                       {cover?.file || formik.values?.imageFileName ? (
                         <img
                           id="recipeImage"
-                          src={cover?.file || formik.values?.imageFileName}
+                          src={imgSrc || cover?.file || formik.values?.imageFileName}
                           className="w-full h-full object-cover"
+                          onError={onError}
                         />
                       ) : (
                         <img

@@ -31,17 +31,8 @@ import { ingredientType } from "../types/recipes";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { FlashMessageContext } from "core/context/flash_message_context";
-const { publicRuntimeConfig } = getConfig();
 
 export const RecipeFormPage = () => {
-  //---------------------
-  // STATE
-  //---------------------
-  const [cover, setCover] = useState({
-    file: null,
-    original_filename: "",
-  });
-
   //---------------------
   // CONTEXT
   //---------------------
@@ -55,6 +46,45 @@ export const RecipeFormPage = () => {
     SubIngredientSelectionModalContext
   );
   const flashMessageContext = useContext(FlashMessageContext);
+
+  //---------------------
+  //  FORMIK
+  //---------------------
+  const formik = useFormik({
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: false,
+    validateOnMount: true,
+    validationSchema: () => recipeValidateSchema,
+    initialValues: context.initValue,
+    onSubmit: (value) => {
+      if (isEdit) {
+        if (context.recipeDetail?.isHidden && context.recipeDetail?.remark) {
+          modal.openModal(
+            "ยืนยันการแก้ไขเรื่องร้องเรียนหรือไม่",
+            "ผู้ดูแลจะทำการตรวจสอบการแก้ไขของคุณตามเงื่อนไขข้อร้องเรียนที่ได้รับ คุณยืนยันการแก้ไขหรือไม่",
+            () => context.editRecipe(recipeId, value),
+            "ยกเลิก",
+            "ยืนยัน"
+          );
+        } else if (!context.recipeDetail?.isHidden) {
+          context.editRecipe(recipeId, value);
+        } else {
+          context.editRecipe(recipeId, value);
+        }
+      } else {
+        context.addRecipe(value);
+      }
+    },
+  });
+  //---------------------
+  // STATE
+  //---------------------
+  const [cover, setCover] = useState({
+    file: null,
+    original_filename: "",
+  });
+  const [imgSrc, setImgSrc] = useState<string | undefined>(formik.values?.imageFileName)
 
   //---------------------
   // EFFECT
@@ -93,37 +123,6 @@ export const RecipeFormPage = () => {
 
   const isEdit = router.pathname.includes("/edit");
 
-  //---------------------
-  //  FORMIK
-  //---------------------
-  const formik = useFormik({
-    enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: false,
-    validateOnMount: true,
-    validationSchema: () => recipeValidateSchema,
-    initialValues: context.initValue,
-    onSubmit: (value) => {
-      if (isEdit) {
-        if (context.recipeDetail?.isHidden && context.recipeDetail?.remark) {
-          modal.openModal(
-            "ยืนยันการแก้ไขเรื่องร้องเรียนหรือไม่",
-            "ผู้ดูแลจะทำการตรวจสอบการแก้ไขของคุณตามเงื่อนไขข้อร้องเรียนที่ได้รับ คุณยืนยันการแก้ไขหรือไม่",
-            () => context.editRecipe(recipeId, value),
-            "ยกเลิก",
-            "ยืนยัน"
-          );
-        } else if (!context.recipeDetail?.isHidden) {
-          context.editRecipe(recipeId, value);
-        } else {
-          context.editRecipe(recipeId, value);
-        }
-      } else {
-        context.addRecipe(value);
-      }
-    },
-  });
-
   //------------------
   //  REF
   //------------------
@@ -142,6 +141,7 @@ export const RecipeFormPage = () => {
       });
       formik.setFieldValue("recipeImage", file);
       formik.setFieldValue("imageFileName", file.name);
+      setImgSrc('')
     }
   };
 
@@ -190,6 +190,8 @@ export const RecipeFormPage = () => {
       formik.values?.ingredientsId.length === formik.values?.quantity.length
     );
   };
+
+  const onError = () => setImgSrc('/images/core/default.png')
 
   //---------------------
   // RENDER
@@ -324,8 +326,9 @@ export const RecipeFormPage = () => {
                     {cover?.file || formik.values?.imageFileName ? (
                       <img
                         id="recipeImage"
-                        src={cover?.file || formik.values?.imageFileName}
+                        src={imgSrc || cover?.file || formik.values?.imageFileName}
                         className="w-full h-full object-cover"
+                        onError={onError}
                       />
                     ) : (
                       <img

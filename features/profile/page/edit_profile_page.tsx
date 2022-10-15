@@ -19,14 +19,6 @@ import { Tag } from "@core/components/tag";
 
 export const EditProfilePage = () => {
   //---------------------
-  // STATE
-  //---------------------
-  const [cover, setCover] = useState({
-    file: null,
-    original_filename: "",
-  });
-
-  //---------------------
   // CONTEXT
   //---------------------
   const context = useContext(EditProfileContext);
@@ -54,6 +46,15 @@ export const EditProfilePage = () => {
       context.editProfile(value)
     },
   });
+
+  //---------------------
+  // STATE
+  //---------------------
+  const [cover, setCover] = useState({
+    file: null,
+    original_filename: "",
+  });
+  const [imgSrc, setImgSrc] = useState<string | undefined>(formik.values?.imageFileName)
 
   //---------------------
   // EFFECT
@@ -94,6 +95,7 @@ export const EditProfilePage = () => {
       });
       formik.setFieldValue("profileImage", file);
       formik.setFieldValue("imageFileName", file.name);
+      setImgSrc('')
     }
   };
 
@@ -105,6 +107,8 @@ export const EditProfilePage = () => {
     formik.setFieldValue("allergy", filter);
     ingredientSelectedModal.setValue("selectedIngredients", filter);
   };
+
+  const onError = () => setImgSrc('/images/core/default.png')
 
   //---------------------
   // RENDER
@@ -139,10 +143,12 @@ export const EditProfilePage = () => {
                       <img
                         id="profileImage"
                         src={
+                          imgSrc || 
                           cover?.file ||
                           formik.values?.imageFileName
                         }
                         className="w-full h-full object-cover"
+                        onError={onError}
                       />
                     ) : (
                       <img
