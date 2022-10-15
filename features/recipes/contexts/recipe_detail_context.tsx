@@ -44,13 +44,17 @@ class RecipeDetail {
         this.recipeDetail = resp.data?.recipe;
       }
     } catch (error) {
-      this.modal.openModal(
+      if (error?.response?.status === 404) {
+        this.router.replace('/404')
+      } else {
+        this.modal.openModal(
         "มีปัญหาในการดึงข้อมูลสูตรอาหาร",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
       );
+      }
     } finally {
       this.loading = false;
     }

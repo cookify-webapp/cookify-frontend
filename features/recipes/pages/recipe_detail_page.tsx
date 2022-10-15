@@ -150,14 +150,15 @@ export const RecipeDetailPage = () => {
                   />
                 </div>
                 <div className="px-5 2xl:px-0">
-                  {(context.recipeDetail?.isHidden && context.recipeDetail?.remark) && (
-                    <div className="mt-4 flex space-x-4 px-4 py-2 rounded-[12px] items-center bg-white">
-                      <i className="fas fa-info-circle w-auto text-error" />
-                      <p className="text-[14px] text-gray-60">
-                        {context.recipeDetail?.remark}
-                      </p>
-                    </div>
-                  )}
+                  {context.recipeDetail?.isHidden &&
+                    context.recipeDetail?.remark && (
+                      <div className="mt-4 flex space-x-4 px-4 py-2 rounded-[12px] items-center bg-white">
+                        <i className="fas fa-info-circle w-auto text-error" />
+                        <p className="text-[14px] text-gray-60">
+                          {context.recipeDetail?.remark}
+                        </p>
+                      </div>
+                    )}
                   <div className="p-6 mt-4 lg:mt-6 bg-white rounded-[12px] flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
                     <div className="flex justify-center md:justify-start md:w-auto">
                       <div className="w-[247px] h-[247px]">
@@ -355,33 +356,47 @@ export const RecipeDetailPage = () => {
                     )}
                     {context.activeTab === "วัตถุดิบทดแทน" && (
                       <div className="px-6 pb-6">
-                        <div className="flex space-x-3 items-center text-gray-50">
-                          <i className="fas fa-info-circle w-auto" />
-                          <p>สามารถกดที่วัตถุดิบเพื่อดูรายละเอียดวัตถุดิบได้</p>
-                        </div>
-                        <div className="grid grid-cols-12 gap-4 mt-2">
-                          {_.map(
-                            context.recipeDetail?.subIngredients,
-                            (ingredient, index) => (
-                              <div
-                                className="col-span-12 md:col-span-4 xl:col-span-3"
-                                key={`ingredient_${index}`}
-                              >
-                                <Link
-                                  href={`/ingredients/${ingredient?._id}`}
-                                  passHref
-                                >
-                                  <a>
-                                    <Ingredient
-                                      ingredient={ingredient}
-                                      isBorder
-                                    />
-                                  </a>
-                                </Link>
-                              </div>
-                            )
-                          )}
-                        </div>
+                        {_.size(context.recipeDetail?.subIngredients) === 0 && (
+                          <div className="pt-6 flex items-center text-center text-gray-50">
+                            <div>
+                              <i className="fas fa-egg text-[48px] w-12 h-12"></i>
+                              <p className="titleM mt-4">ไม่มีรายการวัตถุดิบทดแทน</p>
+                            </div>
+                          </div>
+                        )}
+                        {_.size(context.recipeDetail?.subIngredients) > 0 && (
+                          <>
+                            <div className="flex space-x-3 items-center text-gray-50">
+                              <i className="fas fa-info-circle w-auto" />
+                              <p>
+                                สามารถกดที่วัตถุดิบเพื่อดูรายละเอียดวัตถุดิบได้
+                              </p>
+                            </div>
+                            <div className="grid grid-cols-12 gap-4 mt-2">
+                              {_.map(
+                                context.recipeDetail?.subIngredients,
+                                (ingredient, index) => (
+                                  <div
+                                    className="col-span-12 md:col-span-4 xl:col-span-3"
+                                    key={`ingredient_${index}`}
+                                  >
+                                    <Link
+                                      href={`/ingredients/${ingredient?._id}`}
+                                      passHref
+                                    >
+                                      <a>
+                                        <Ingredient
+                                          ingredient={ingredient}
+                                          isBorder
+                                        />
+                                      </a>
+                                    </Link>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </>
+                        )}
                       </div>
                     )}
                     {context.activeTab === "โภชนาการ" && (

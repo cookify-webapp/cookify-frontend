@@ -27,7 +27,7 @@ export const IngredientDetailPage = () => {
   const homeLayoutContext = useContext(HomeLayoutContext);
   const authContext = useContext(AuthContext);
   const modalContext = useContext(ModalContext);
-  const flashMessageContext = useContext(FlashMessageContext)
+  const flashMessageContext = useContext(FlashMessageContext);
 
   //---------------------
   //  ROUTER
@@ -39,16 +39,16 @@ export const IngredientDetailPage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
-    context.setValue('router', router)
-    context.setValue('modalContext', modalContext)
-    context.setValue('flashMessageContext', flashMessageContext)
+    context.setValue("router", router);
+    context.setValue("modalContext", modalContext);
+    context.setValue("flashMessageContext", flashMessageContext);
     context.prepareIngredientDetail(ingredientId);
     context.prepareSampleIngredients(ingredientId);
-    
+
     return () => {
-      context.setValue('ingredientDetail', null)
-      context.setValue('sampleIngredients', [])
-    }
+      context.setValue("ingredientDetail", null);
+      context.setValue("sampleIngredients", []);
+    };
   }, [ingredientId]);
 
   //---------------------
@@ -134,7 +134,10 @@ export const IngredientDetailPage = () => {
                                   modalContext.openModal(
                                     "ลบวัตถุดิบ",
                                     "คุณจะไม่สามารถลบวัตถุดิบนี้ได้ ถ้าหากมีสูตรอาหารที่ ใช้วัตถุดิบนี้อยู่",
-                                    () => context.deleteIngredient(context.ingredientDetail?._id),
+                                    () =>
+                                      context.deleteIngredient(
+                                        context.ingredientDetail?._id
+                                      ),
                                     "ยกเลิก",
                                     "ลบ"
                                   );
@@ -189,13 +192,21 @@ export const IngredientDetailPage = () => {
                         />
                       </div>
                     </div>
-                    {
-                      !context.loadingSample && (
-                        <div className="col-span-12 lg:col-span-3">
-                          <p className="titleM">วัตถุดิบอื่น ๆ ในประเภทเดียวกัน</p>
+                    <div className="col-span-12 lg:col-span-3">
+                      <p className="titleM">วัตถุดิบอื่น ๆ ในประเภทเดียวกัน</p>
+                      {context.loadingSample && (
+                        <div className="h-[calc(100vh-422px)] md:h-[calc(100vh-378px)] lg:h-[calc(100vh-290px)] flex items-center justify-center text-center text-gray-50">
+                          <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                        </div>
+                      )}
+                      {!context.loadingSample &&
+                        _.size(context.sampleIngredients) > 0 && (
                           <div className="mt-6 grid grid-cols-2 gap-x-6 lg:gap-x-0 gap-y-4">
                             {_.map(context.sampleIngredients, (ingredient) => (
-                              <div key={ingredient._id} className="col-span-2 md:col-span-1 lg:col-span-2">
+                              <div
+                                key={ingredient._id}
+                                className="col-span-2 md:col-span-1 lg:col-span-2"
+                              >
                                 <Link
                                   href={`/ingredients/${ingredient._id}`}
                                   passHref
@@ -203,13 +214,21 @@ export const IngredientDetailPage = () => {
                                   <a>
                                     <Ingredient ingredient={ingredient} />
                                   </a>
-                                </Link>                            
+                                </Link>
                               </div>
                             ))}
                           </div>
-                        </div>                        
-                      )
-                    }
+                        )}
+                      {!context.loadingSample &&
+                        _.size(context.sampleIngredients) === 0 && (
+                          <div className="h-[calc(100vh-422px)] md:h-[calc(100vh-378px)] lg:h-[calc(100vh-290px)] flex items-center text-center text-gray-50">
+                            <div>
+                              <i className="fas fa-egg text-[48px] w-12 h-12"></i>
+                              <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>
+                            </div>
+                          </div>
+                        )}
+                    </div>
                   </div>
                 </div>
               </div>

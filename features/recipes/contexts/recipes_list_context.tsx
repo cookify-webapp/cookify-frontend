@@ -3,6 +3,8 @@ import { makeAutoObservable } from "mobx";
 import { getCookingMethods, getRecipesList } from "@core/services/recipes/get_recipes";
 import _ from 'lodash'
 import { recipesListType } from "@features/ingredients/types/recipes";
+import { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 
 class RecipesList {
   searchWord: string
@@ -104,7 +106,7 @@ class RecipesList {
     return value
   }
 
-  prepareRecipesList = async () => {
+  prepareRecipesList = async (isLogin: boolean) => {
     try {
       if (this.page === 1) {
         this.loading = true
@@ -134,7 +136,13 @@ class RecipesList {
         }
       }
 
-      const resp = await getRecipesList(queryParam)
+      let resp: AxiosResponse<any>
+      if (isLogin) {
+        const token = Cookies.get("token");
+        resp = await getRecipesList(queryParam, token)
+      } else {
+        resp = await getRecipesList(queryParam)
+      }
       if (resp.status === 200) {
         this.recipesList = [...this.recipesList, ...resp.data?.recipes] 
         this.page = resp.data?.page

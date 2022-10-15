@@ -131,7 +131,7 @@ export const SnapshotListPage = () => {
                       <div>
                         <i className="fas fa-camera text-[48px] w-12 h-12"></i>
                         <p className="titleM mt-4">ไม่มีรายการ Snapshot</p>
-                        {
+                        {authContext.user?.username !== "" && (
                           <div className="mt-4 w-[150px] mx-auto">
                             <PrimaryButton
                               title="เพิ่ม Snapshot"
@@ -140,7 +140,7 @@ export const SnapshotListPage = () => {
                               }}
                             />
                           </div>
-                        }
+                        )}
                       </div>
                     </div>
                   )}

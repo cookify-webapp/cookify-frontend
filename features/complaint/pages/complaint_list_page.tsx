@@ -45,6 +45,7 @@ export const ComplaintListPage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue('router', router)
     context.setValue('flashMessageContext', flashMessageContext)
     if (id) {
       context.setValue("searchWord", id as string);

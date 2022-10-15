@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect } from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
 import { IngredientFormContext } from "@features/ingredients/context/ingredient_form_context";
 import classNames from "classnames";
@@ -50,6 +50,11 @@ export const IngredientForm = ({
   });
 
   //---------------------
+  // STATE
+  //---------------------
+  const [imgSrc, setImgSrc] = useState<string | undefined>(formik.values?.imageFileName)
+
+  //---------------------
   // EFFECT
   //---------------------
   useEffect(() => {
@@ -95,8 +100,11 @@ export const IngredientForm = ({
 
       formik.setFieldValue("ingredientImage", file);
       formik.setFieldValue("imageFileName", file.name);
+      setImgSrc('')
     }
   };
+
+  const onError = () => setImgSrc('/images/core/default.png')
 
   //---------------------
   // RENDER
@@ -119,8 +127,9 @@ export const IngredientForm = ({
                   <div className="w-[192px] h-[192px] rounded-[12px] border border-gray-30 mx-auto overflow-hidden">
                     {formik.values?.imageFileName ? (
                       <img
-                        src={formik.values?.imageFileName}
+                        src={imgSrc || formik.values?.imageFileName}
                         className="w-full h-full object-cover"
+                        onError={onError}
                       />
                     ) : (
                       <img
@@ -237,7 +246,7 @@ export const IngredientForm = ({
                 <PrimaryButton
                   onClick={() => formik.submitForm()}
                   title={isEdit ? "บันทึก":"เพิ่ม"}
-                  disabled={!formik.dirty || !formik.isValid}
+                  disabled={!formik.dirty || !formik.isValid || context.loadingAddEdit}
                   loading={context.loadingAddEdit}
                 />
               </div>

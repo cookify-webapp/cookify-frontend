@@ -1,11 +1,17 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { adminListType } from "../types/admin_list_type";
-import { getAdminList, getPendingList } from "@core/services/user_management/get_admin";
+import {
+  getAdminList,
+  getPendingList,
+} from "@core/services/user_management/get_admin";
 import Cookies from "js-cookie";
 import _ from "lodash";
 import { inviteAdmin } from "@core/services/user_management/post_admin";
-import { deleteAdmin, deletePending } from "@core/services/user_management/delete_admin";
+import {
+  deleteAdmin,
+  deletePending,
+} from "@core/services/user_management/delete_admin";
 
 class AdminList {
   adminList: adminListType[];
@@ -15,8 +21,8 @@ class AdminList {
   totalPages: number;
 
   pendingList: {
-    uniqueKey: string
-    email: string
+    uniqueKey: string;
+    email: string;
   }[];
   pagePending: number;
   perPagePending: number;
@@ -29,26 +35,28 @@ class AdminList {
   isShowClearValue: boolean;
 
   loading: boolean;
-  loadingPending: boolean
+  loadingPending: boolean;
   modal;
-  flashMessageContext
-  formik
+  flashMessageContext;
+  formik;
 
-  buttonLoading: boolean
+  buttonLoading: boolean;
 
   initValue: {
-    email: string
-  }
+    email: string;
+  };
+
+  router
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
     this.adminList = [];
     this.initValue = {
-      email: ''
-    }
+      email: "",
+    };
     this.loading = false;
-    this.loadingPending = false
+    this.loadingPending = false;
     this.page = 1;
     this.perPage = 18;
     this.activeTab = "ผู้ดูแลระบบ";
@@ -56,11 +64,11 @@ class AdminList {
     this.isShowClearValue = false;
     this.searchWord = "";
     this.pendingList = [];
-    this.pagePending = 1
-    this.perPagePending = 10
-    this.totalCountPending = 10
-    this.totalPagesPending = 4
-    this.buttonLoading = false
+    this.pagePending = 1;
+    this.perPagePending = 10;
+    this.totalCountPending = 10;
+    this.totalPagesPending = 4;
+    this.buttonLoading = false;
     makeAutoObservable(this);
   }
 
@@ -74,7 +82,7 @@ class AdminList {
   prepareAdminList = async () => {
     try {
       if (this.page === 1) {
-        this.loading = true
+        this.loading = true;
       }
       const token = Cookies.get("token");
       const resp = await getAdminList(
@@ -95,13 +103,29 @@ class AdminList {
         this.adminList = [];
       }
     } catch (error) {
-      this.modal.openModal(
-        "มีปัญหาในการดึงรายการผู้ดูแลระบบ",
-        error.message,
-        () => this.modal.closeModal(),
-        "ปิด",
-        "ตกลง"
-      );
+      if (error?.response?.status === 403) {
+        setTimeout(() => {
+          this.router.push("/");
+        }, 3000);
+        this.modal.openModal(
+          "ไม่สามารถเข้าถึงหน้าดังกล่าวได้",
+          "เนื่องจากคุณไม่ใช่ผู้ดูแลระบบ",
+          () => {
+            this.modal.closeModal();
+            this.router.push("/");
+          },
+          "ปิด",
+          "ตกลง"
+        );
+      } else {
+        this.modal.openModal(
+          "มีปัญหาในการดึงรายการผู้ดูแลระบบ",
+          error.message,
+          () => this.modal.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     } finally {
       this.loading = false;
     }
@@ -110,7 +134,7 @@ class AdminList {
   preparePendingList = async () => {
     try {
       if (this.page === 1) {
-        this.loadingPending = true
+        this.loadingPending = true;
       }
       const token = Cookies.get("token");
       const resp = await getPendingList(
@@ -140,25 +164,22 @@ class AdminList {
     } finally {
       this.loadingPending = false;
     }
-  }
+  };
 
   inviteAdmin = async (value) => {
     try {
-      this.buttonLoading = true
+      this.buttonLoading = true;
       const token = Cookies.get("token");
       const data = {
         data: {
-          email: value.email
-        }
-      }
-      const resp = await inviteAdmin(JSON.stringify(data), token)
+          email: value.email,
+        },
+      };
+      const resp = await inviteAdmin(JSON.stringify(data), token);
       if (resp.status === 200) {
-        this.formik.resetForm()
-        this.flashMessageContext.handleShow(
-          "ส่งสำเร็จ",
-          "ส่งคำเชิญสำเร็จ"
-        );
-        this.preparePendingList()
+        this.formik.resetForm();
+        this.flashMessageContext.handleShow("ส่งสำเร็จ", "ส่งคำเชิญสำเร็จ");
+        this.preparePendingList();
       }
     } catch (error) {
       this.modal.openModal(
@@ -169,23 +190,20 @@ class AdminList {
         "ตกลง"
       );
     } finally {
-      this.buttonLoading = false
+      this.buttonLoading = false;
     }
-  }
+  };
 
   deleteAdmin = async (id) => {
     try {
       const token = Cookies.get("token");
-      const resp = await deleteAdmin(id, token)
+      const resp = await deleteAdmin(id, token);
       if (resp.status === 200) {
-        this.modal.closeModal()
-        this.flashMessageContext.handleShow(
-          "ลบสำเร็จ",
-          "ลบผู้ดูแลระบบสำเร็จ"
-        );
-        this.loading = true
-        this.adminList = []
-        this.prepareAdminList()
+        this.modal.closeModal();
+        this.flashMessageContext.handleShow("ลบสำเร็จ", "ลบผู้ดูแลระบบสำเร็จ");
+        this.loading = true;
+        this.adminList = [];
+        this.prepareAdminList();
       }
     } catch (error) {
       this.modal.openModal(
@@ -196,21 +214,21 @@ class AdminList {
         "ตกลง"
       );
     }
-  }
+  };
 
   deletePending = async (email) => {
     try {
       const token = Cookies.get("token");
-      const resp = await deletePending(email, token)
+      const resp = await deletePending(email, token);
       if (resp.status === 200) {
-        this.modal.closeModal()
+        this.modal.closeModal();
         this.flashMessageContext.handleShow(
           "ยกเลิกสำเร็จ",
           "ยกเลิกคำเชิญผู้ดูแลระบบสำเร็จ"
         );
-        this.loadingPending = true
-        this.pendingList = []
-        this.preparePendingList()
+        this.loadingPending = true;
+        this.pendingList = [];
+        this.preparePendingList();
       }
     } catch (error) {
       this.modal.openModal(
@@ -221,6 +239,6 @@ class AdminList {
         "ตกลง"
       );
     }
-  }
+  };
 }
 export const AdminListContext = createContext(new AdminList());

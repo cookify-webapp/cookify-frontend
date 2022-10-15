@@ -4,27 +4,29 @@ import { getIngredientsList } from "@core/services/ingredients/get_ingredients";
 import { getRecipesList } from "@core/services/recipes/get_recipes";
 import { getSnapshotList } from "@core/services/snapshot/get_snapshot";
 import { snapshotPropType } from "core/types/core_components_type";
+import Cookies from "js-cookie";
+import { AxiosResponse } from "axios";
 
 class HomePage {
   recipes;
   snapshots: snapshotPropType[];
   ingredients;
   nutrition;
-  ingredient
+  ingredient;
   modalContext: any;
 
-  loading
+  loading;
   loadingRecipe: boolean;
-  loadingSnapshot: boolean
+  loadingSnapshot: boolean;
   //-------------------
   // CONSTUCTOR
   //-------------------
   constructor() {
-    this.loading = true
-    this.loadingRecipe = false
-    this.loadingSnapshot = false
-    this.recipes = []
-    this.snapshots = []
+    this.loading = true;
+    this.loadingRecipe = false;
+    this.loadingSnapshot = false;
+    this.recipes = [];
+    this.snapshots = [];
 
     makeAutoObservable(this);
   }
@@ -43,9 +45,11 @@ class HomePage {
         typeId: "",
         page: 1,
         perPage: 4,
-      })
+      });
       if (resp.status === 200) {
-        this.ingredients = resp.data?.ingredients
+        this.ingredients = resp.data?.ingredients;
+      } else if (resp.status === 204) {
+        this.ingredients = []
       }
     } catch (error) {
       this.modalContext.openModal(
@@ -56,24 +60,39 @@ class HomePage {
         "ตกลง"
       );
     } finally {
-      this.loading = false
+      this.loading = false;
     }
-  }
+  };
 
-  prepareRecipesList = async () => {
+  prepareRecipesList = async (isLogin) => {
     try {
-      this.loadingRecipe = true
-      const resp = await getRecipesList({
-        searchWord: '',
-        methodId: '',
-        ingredientId: "",
-        page: 1,
-        perPage: 6
-      })
+      this.loadingRecipe = true;
+      let resp: AxiosResponse<any>;
+      if (isLogin) {
+        const token = Cookies.get("token");
+        resp = await getRecipesList(
+          {
+            searchWord: "",
+            methodId: "",
+            ingredientId: "",
+            page: 1,
+            perPage: 6,
+          },
+          token
+        );
+      } else {
+        resp = await getRecipesList({
+          searchWord: "",
+          methodId: "",
+          ingredientId: "",
+          page: 1,
+          perPage: 6,
+        });
+      }
       if (resp.status === 200) {
-        this.recipes = resp.data?.recipes
+        this.recipes = resp.data?.recipes;
       } else if (resp.status === 204) {
-        this.recipes = []
+        this.recipes = [];
       }
     } catch (error) {
       this.modalContext.openModal(
@@ -84,21 +103,21 @@ class HomePage {
         "ตกลง"
       );
     } finally {
-      this.loadingRecipe = false
+      this.loadingRecipe = false;
     }
-  }
+  };
 
   prepareSnapshotList = async () => {
     try {
-      this.loadingSnapshot = true
+      this.loadingSnapshot = true;
       const resp = await getSnapshotList({
         page: 1,
-        perPage: 6
-      })
+        perPage: 6,
+      });
       if (resp.status === 200) {
-        this.snapshots = resp.data?.snapshots
+        this.snapshots = resp.data?.snapshots;
       } else if (resp.status === 204) {
-        this.snapshots = []
+        this.snapshots = [];
       }
     } catch (error) {
       this.modalContext.openModal(
@@ -109,8 +128,8 @@ class HomePage {
         "ตกลง"
       );
     } finally {
-      this.loadingSnapshot = false
+      this.loadingSnapshot = false;
     }
-  }
+  };
 }
 export const HomePageContext = createContext(new HomePage());

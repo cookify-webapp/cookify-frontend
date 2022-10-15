@@ -51,6 +51,7 @@ class UserProfile {
 
   activeTab;
   flashMessageContext: any;
+  router
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -132,13 +133,17 @@ class UserProfile {
         }
       }
     } catch (error) {
-      this.modal.openModal(
-        "มีปัญหาในการดึงข้อมูลผู้ใช้งาน",
-        error.message,
-        () => this.modal.closeModal(),
-        "ปิด",
-        "ตกลง"
-      );
+      if (error?.response?.status === 404) {
+        this.router.replace("/404");
+      } else {
+        this.modal.openModal(
+          "มีปัญหาในการดึงข้อมูลผู้ใช้งาน",
+          error.message,
+          () => this.modal.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     } finally {
       this.loading = false;
     }
