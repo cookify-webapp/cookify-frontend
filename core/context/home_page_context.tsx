@@ -48,6 +48,8 @@ class HomePage {
       });
       if (resp.status === 200) {
         this.ingredients = resp.data?.ingredients;
+      } else if (resp.status === 204) {
+        this.ingredients = []
       }
     } catch (error) {
       this.modalContext.openModal(
