@@ -325,7 +325,7 @@ export const SnapshotFormPage = () => {
                     <PrimaryButton
                       title={isEdit ? "บันทึก" : "เพิ่ม"}
                       onClick={() => formik.submitForm()}
-                      disabled={!formik.dirty || !formik.isValid}
+                      disabled={!formik.dirty || !formik.isValid || context.loadingAddEdit}
                       loading={context.loadingAddEdit}
                     />
                   </div>

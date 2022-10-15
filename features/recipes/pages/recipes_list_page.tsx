@@ -45,7 +45,7 @@ export const RecipesListPage = () => {
     context.setValue("searchWord", homeLayoutContext.searchWord);
     context.setValue("modal", modal);
     context.prepareCookingMethods();
-    context.prepareRecipesList(authContext.user?.username !== '');
+    context.prepareRecipesList(authContext.user?.username !== "");
 
     return () => {
       context.setValue("recipesList", []);
@@ -65,13 +65,13 @@ export const RecipesListPage = () => {
     setHasMore(true);
     context.setValue("recipesList", []);
     context.setValue("page", 1);
-    context.prepareRecipesList(authContext.user?.username !== '');
+    context.prepareRecipesList(authContext.user?.username !== "");
   };
 
   const preparation = async () => {
     setHasMore(true);
     context.setValue("page", context.page + 1);
-    context.prepareRecipesList(authContext.user?.username !== '');
+    context.prepareRecipesList(authContext.user?.username !== "");
     if (context.page === context.totalPages) {
       setHasMore(false);
     }
@@ -89,7 +89,7 @@ export const RecipesListPage = () => {
             context.setValue("searchWord", homeLayoutContext.searchWord);
             context.setValue("recipesList", []);
             context.setValue("page", 1);
-            context.prepareRecipesList(authContext.user?.username !== '');
+            context.prepareRecipesList(authContext.user?.username !== "");
           }}
         >
           <div className="mx-auto xl:max-w-6xl">
@@ -106,7 +106,7 @@ export const RecipesListPage = () => {
                   setHasMore(true);
                   context.setValue("recipesList", []);
                   context.setValue("page", 1);
-                  context.prepareRecipesList(authContext.user?.username !== '');
+                  context.prepareRecipesList(authContext.user?.username !== "");
                 }}
               />
             </div>
@@ -136,7 +136,9 @@ export const RecipesListPage = () => {
                       context.setValue("selectedCookingMethod", method.name);
                       context.setValue("recipesList", []);
                       context.setValue("page", 1);
-                      context.prepareRecipesList(authContext.user?.username !== '');
+                      context.prepareRecipesList(
+                        authContext.user?.username !== ""
+                      );
                     }}
                   >
                     <p className="headlineM">{method.name}</p>
@@ -169,7 +171,9 @@ export const RecipesListPage = () => {
                           );
                           context.setValue("recipesList", []);
                           context.setValue("page", 1);
-                          context.prepareRecipesList(authContext.user?.username !== '');
+                          context.prepareRecipesList(
+                            authContext.user?.username !== ""
+                          );
                         },
                         () => {
                           ingredientSelectionModalContext.setValue(
@@ -256,7 +260,7 @@ export const RecipesListPage = () => {
               )}
               {context.loading && (
                 <div className="py-10 flex items-center justify-center text-center text-gray-50">
-                  <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+                  <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin" />
                 </div>
               )}
               {!context.loading && _.size(context.recipesList) === 0 && (
@@ -264,7 +268,7 @@ export const RecipesListPage = () => {
                   <div>
                     <i className="fas fa-book text-[48px] w-12 h-12"></i>
                     <p className="titleM mt-4">ไม่มีรายการสูตรอาหาร</p>
-                    {
+                    {authContext.user?.username !== "" && (
                       <div className="mt-4 w-[150px] mx-auto">
                         <PrimaryButton
                           title="เพิ่มสูตรอาหาร"
@@ -273,7 +277,7 @@ export const RecipesListPage = () => {
                           }}
                         />
                       </div>
-                    }
+                    )}
                   </div>
                 </div>
               )}

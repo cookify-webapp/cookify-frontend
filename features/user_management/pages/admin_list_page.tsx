@@ -256,7 +256,7 @@ export const AdminListPage = () => {
                             onClick={() => {
                               formik.submitForm();
                             }}
-                            disabled={!formik.isValid}
+                            disabled={!formik.isValid || context.buttonLoading}
                             title="ส่งคำเชิญ"
                             loading={context.buttonLoading}
                           />

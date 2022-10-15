@@ -625,7 +625,7 @@ export const RecipeFormPage = () => {
                     title={isEdit ? "บันทึก" : "เพิ่ม"}
                     onClick={() => formik.submitForm()}
                     disabled={
-                      !formik.dirty || (!formik.isValid && checkArrayLength())
+                      !formik.dirty || (!formik.isValid && checkArrayLength()) || context.isAddEditRecipe
                     }
                     loading={context.isAddEditRecipe}
                   />

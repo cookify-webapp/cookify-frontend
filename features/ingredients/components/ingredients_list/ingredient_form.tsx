@@ -237,7 +237,7 @@ export const IngredientForm = ({
                 <PrimaryButton
                   onClick={() => formik.submitForm()}
                   title={isEdit ? "บันทึก":"เพิ่ม"}
-                  disabled={!formik.dirty || !formik.isValid}
+                  disabled={!formik.dirty || !formik.isValid || context.loadingAddEdit}
                   loading={context.loadingAddEdit}
                 />
               </div>

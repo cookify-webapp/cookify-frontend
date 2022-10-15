@@ -296,7 +296,7 @@ export const EditProfilePage = () => {
                   <PrimaryButton
                     title={'บันทึก'}
                     onClick={() => formik.submitForm()}
-                    disabled={!formik.dirty || !formik.isValid}
+                    disabled={!formik.dirty || !formik.isValid || context.editProfileLoading}
                     loading={context.editProfileLoading}
                   />
                 </div>
