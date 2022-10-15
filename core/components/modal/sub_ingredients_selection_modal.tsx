@@ -29,12 +29,12 @@ export const SubIngredientsSelectionModal = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modalContext", modalContext);
-    context.prepareIngredientTypes()
+    context.prepareIngredientTypes();
 
     return () => {
       context.setValue("searchWord", "");
       context.setValue("activeTab", "เนื้อสัตว์");
-      context.setValue("typeSelected", context.ingredientTypes[0].value)
+      context.setValue("typeSelected", context.ingredientTypes[0].value);
       context.setValue("selectedIngredients", []);
       context.setValue("ingredients", []);
       context.setValue("itemsToShow", []);
@@ -116,9 +116,9 @@ export const SubIngredientsSelectionModal = () => {
   const handleTypeSelected = () => {
     _.forEach(context.ingredientTypes, (type) => {
       if (context.activeTab === type.name) {
-        context.setValue('typeSelected', type.value)
+        context.setValue("typeSelected", type.value);
       }
-    })
+    });
   };
 
   //---------------------
@@ -137,7 +137,22 @@ export const SubIngredientsSelectionModal = () => {
           <div className="bg-white rounded-[12px] w-full md:w-[706px] xl:w-[1164px] card-shadow py-6 animate-fade-in">
             <div className="px-6">
               <h3 className="headlineM">เลือกวัตถุดิบ</h3>
-              <div className="mt-3 w-full xl:w-[575px]">
+              <div className="overflow-x-scroll scrollbar-hide mt-4 px-[6px]">
+                <TabFilter
+                  activeTab={context.activeTab}
+                  tabs={tabs}
+                  onClick={(value) => {
+                    setHasMore(true);
+                    context.setValue("activeTab", value);
+                    context.setValue("itemsToShow", []);
+                    context.setValue("page", 1);
+                    handleTypeSelected();
+                    context.prepareIngredient();
+                  }}
+                />
+              </div>
+              <div className="border-t-[1px] border-gray-30" />
+              <div className="my-4 w-full xl:w-[575px]">
                 <SearchBox
                   placeholder="ค้นหาชื่อวัตถุดิบ"
                   value={context.searchWord}
@@ -151,22 +166,10 @@ export const SubIngredientsSelectionModal = () => {
                   isBorder
                 />
               </div>
-              <div className="overflow-x-scroll scrollbar-hide mt-4 px-[6px]">
-                <TabFilter
-                  activeTab={context.activeTab}
-                  tabs={tabs}
-                  onClick={(value) => {
-                    setHasMore(true)
-                    context.setValue("activeTab", value);
-                    context.setValue("itemsToShow", [])
-                    context.setValue("page", 1)
-                    handleTypeSelected()
-                    context.prepareIngredient();
-                  }}
-                />
-              </div>
-              <div className="border-t-[1px] border-gray-30 pb-4" />
-              <div id="scrollableDiv" className="h-[250px] max-h-[250px] overflow-y-auto scrollbar-hide lg:scrollbar-default">
+              <div
+                id="scrollableDiv"
+                className="h-[250px] max-h-[250px] overflow-y-auto scrollbar-hide lg:scrollbar-default"
+              >
                 <InfiniteScroll
                   dataLength={context.itemsToShow.length}
                   next={preparation}
@@ -207,19 +210,17 @@ export const SubIngredientsSelectionModal = () => {
                         ))}
                       </>
                     )}
-                    {(_.size(context.itemsToShow) === 0 && !context.loading) && (
+                    {_.size(context.itemsToShow) === 0 && !context.loading && (
                       <div className="text-gray-50">
                         <i className="fas fa-egg text-[48px] w-12 h-12"></i>
                         <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>
                       </div>
                     )}
-                    {
-                      context.loading && (
-                        <div className="flex justify-center">
-                          <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin text-gray-50"></i>
-                        </div>
-                      )
-                    }
+                    {context.loading && (
+                      <div className="flex justify-center">
+                        <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin text-gray-50"></i>
+                      </div>
+                    )}
                   </div>
                 </InfiniteScroll>
               </div>
