@@ -33,7 +33,7 @@ export const UserProfilePage = () => {
   const context = useContext(UserProfileContext);
   const modal = useContext(ModalContext);
   const auth = useContext(AuthContext);
-  const flashMessageContext = useContext(FlashMessageContext)
+  const flashMessageContext = useContext(FlashMessageContext);
 
   const router = useRouter();
   const { userId } = router.query;
@@ -44,9 +44,9 @@ export const UserProfilePage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
-    context.setValue('router', router)
+    context.setValue("router", router);
     context.setValue("modal", modal);
-    context.setValue('flashMessageContext', flashMessageContext)
+    context.setValue("flashMessageContext", flashMessageContext);
     if (isMe) {
       context.prepareMyDetail();
     } else {
@@ -61,7 +61,7 @@ export const UserProfilePage = () => {
       context.setValue("pageRecipe", 1);
       context.setValue("pageSnapshot", 1);
       context.setValue("recipesList", []);
-      context.setValue('snapshotsList', [])
+      context.setValue("snapshotsList", []);
     };
   }, [userId]);
 
@@ -161,9 +161,9 @@ export const UserProfilePage = () => {
                         <div
                           className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75 ml-3"
                           onClick={() => {
-                            context.setFollowing(userId)
-                            context.setValue('recipesList', [])
-                            context.setValue('snapshotsList', [])
+                            context.setFollowing(userId);
+                            context.setValue("recipesList", []);
+                            context.setValue("snapshotsList", []);
                           }}
                         >
                           <i
@@ -258,7 +258,9 @@ export const UserProfilePage = () => {
                               context.setValue("pageSnapshot", 1);
                               context.setValue("snapshotsList", []);
                             } else {
-                              context.prepareUserSnapshot(context.userDetail?.username);
+                              context.prepareUserSnapshot(
+                                context.userDetail?.username
+                              );
                               context.setValue("pageRecipe", 1);
                               context.setValue("recipesList", []);
                             }

@@ -143,9 +143,7 @@ export const EditProfilePage = () => {
                       <img
                         id="profileImage"
                         src={
-                          imgSrc || 
-                          cover?.file ||
-                          formik.values?.imageFileName
+                          imgSrc || cover?.file || formik.values?.imageFileName
                         }
                         className="w-full h-full object-cover"
                         onError={onError}
@@ -212,6 +210,9 @@ export const EditProfilePage = () => {
               <div className="bg-white rounded-[12px] py-6 grid grid-cols-12 gap-x-4 mt-4 md:mt-6">
                 <div className="px-6 col-span-12 md:col-span-5 xl:col-span-4">
                   <p className="titleM">เลือกวัตถุดิบที่แพ้</p>
+                  <p className="text-gray-50">
+                    ข้อมูลนี้จะถูกนำไปใช้ในการกรองผลลัพธ์การค้นหาสูตรอาหาร
+                  </p>
                   <div className="w-full mt-6">
                     <PrimaryButton
                       title="เลือกวัตถุดิบ"
@@ -242,20 +243,17 @@ export const EditProfilePage = () => {
                   <div className="md:pl-6 flex flex-wrap space-x-2 mr-2">
                     {_.size(formik.values?.allergy) > 0 && (
                       <>
-                        {_.map(
-                          formik.values?.allergy,
-                          (ingredient, index) => (
-                            <div
-                              key={`${ingredient.name}_${index}`}
-                              className="w-auto"
-                            >
-                              <Tag
-                                label={ingredient.name}
-                                onDeleteTag={() => handleRemoveTag(ingredient)}
-                              />
-                            </div>
-                          )
-                        )}
+                        {_.map(formik.values?.allergy, (ingredient, index) => (
+                          <div
+                            key={`${ingredient.name}_${index}`}
+                            className="w-auto"
+                          >
+                            <Tag
+                              label={ingredient.name}
+                              onDeleteTag={() => handleRemoveTag(ingredient)}
+                            />
+                          </div>
+                        ))}
                       </>
                     )}
                     {_.size(formik.values?.allergy) === 0 && (
@@ -273,36 +271,40 @@ export const EditProfilePage = () => {
                     onClick={() => {
                       if (formik.dirty) {
                         modal.openModal(
-                          'ต้องการยกเลิกใช่ไหม ?',
-                          'หากยกเลิก ระบบจะไม่บันทึกข้อมูลที่ได้ทำการเปลี่ยนแปลง',
+                          "ต้องการยกเลิกใช่ไหม ?",
+                          "หากยกเลิก ระบบจะไม่บันทึกข้อมูลที่ได้ทำการเปลี่ยนแปลง",
                           () => {
-                            modal.closeModal()
-                            router.push('/me')
-                            formik.resetForm()
+                            modal.closeModal();
+                            router.push("/me");
+                            formik.resetForm();
                             setCover({
                               file: null,
                               original_filename: "",
-                            })
+                            });
                           },
-                          'ไม่',
-                          'ต้องการยกเลิก'
-                        )
+                          "ไม่",
+                          "ต้องการยกเลิก"
+                        );
                       } else {
-                        router.push('/me')
-                        formik.resetForm()
+                        router.push("/me");
+                        formik.resetForm();
                         setCover({
                           file: null,
                           original_filename: "",
-                        })
+                        });
                       }
                     }}
                   />
                 </div>
                 <div className="w-full md:w-[150px]">
                   <PrimaryButton
-                    title={'บันทึก'}
+                    title={"บันทึก"}
                     onClick={() => formik.submitForm()}
-                    disabled={!formik.dirty || !formik.isValid || context.editProfileLoading}
+                    disabled={
+                      !formik.dirty ||
+                      !formik.isValid ||
+                      context.editProfileLoading
+                    }
                     loading={context.editProfileLoading}
                   />
                 </div>
