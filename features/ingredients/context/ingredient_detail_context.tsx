@@ -71,13 +71,17 @@ class IngredientDetail {
         this.sampleIngredients = resp.data?.ingredients;
       }
     } catch (error) {
-      this.modalContext.openModal(
-        "มีปัญหาในการดึงรายการวัตถุดิบ",
-        error.message,
-        () => this.modalContext.closeModal(),
-        "ปิด",
-        "ตกลง"
-      );
+      if (error?.response?.status === 404) {
+        console.log(error);
+      } else {
+        this.modalContext.openModal(
+          "มีปัญหาในการดึงรายการวัตถุดิบ",
+          error.message,
+          () => this.modalContext.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     } finally {
       this.loadingSample = false;
     }
