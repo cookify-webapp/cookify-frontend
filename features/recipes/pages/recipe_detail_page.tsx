@@ -205,7 +205,7 @@ export const RecipeDetailPage = () => {
                                 onClick={() => context.setBookmark(recipeId)}
                               >
                                 {context.recipeDetail?.bookmarked ? (
-                                  <i className=" text-[16px] leading-[16px] fas fa-bookmark text-white"></i>
+                                  <i className=" text-[16px] leading-[16px] fas fa-bookmark text-yellow"></i>
                                 ) : (
                                   <i className=" text-[16px] leading-[16px] far fa-bookmark text-white"></i>
                                 )}

@@ -170,7 +170,20 @@ export const ComplaintBox = (props: ComplaintBoxPropsType) => {
                 </div>
                 {props.complaint?.status === "filed" && (
                   <div className="w-full md:w-[150px]">
-                    <SecondaryButton title="ปฏิเสธ" onClick={() => null} />
+                    <SecondaryButton title="ปฏิเสธ" onClick={() => {
+                      modal.openModal(
+                        "ปฏิเสธการรับเรื่องหรือไม่",
+                        "เมื่อทำการปฏิเสธแล้ว เรื่องร้องเรียนนี้จะถูกเปลี่ยนสถานะเป็นปฏิเสธทันที และจะไม่สามารถย้อนกลับมารับเรื่องซ้ำได้อีก",
+                        () =>
+                          context.editComplaintStatus(
+                            props.complaint?._id,
+                            "rejected",
+                            props.setHasMore
+                          ),
+                        "ยกเลิก",
+                        "ปฏิเสธ"
+                      );
+                    }} />
                   </div>
                 )}
                 {["examining", "in progress", "verifying"].includes(
