@@ -137,20 +137,6 @@ export const IngredientsSelectionModal = () => {
           <div className="bg-white rounded-[12px] w-full md:w-[706px] xl:w-[1164px] card-shadow py-6 animate-fade-in">
             <div className="px-6">
               <h3 className="headlineM">เลือกวัตถุดิบ</h3>
-              <div className="mt-3 w-full xl:w-[575px]">
-                <SearchBox
-                  placeholder="ค้นหาชื่อวัตถุดิบ"
-                  value={context.searchWord}
-                  onChange={(value) => {
-                    context.setValue("searchWord", value);
-                    context.setValue("isShowClearValue", true);
-                    handlerSearchAuto();
-                  }}
-                  height="h-[48px]"
-                  isShowClearValue={context.isShowClearValue}
-                  isBorder
-                />
-              </div>
               <div className="overflow-x-scroll scrollbar-hide mt-4 px-[6px]">
                 <TabFilter
                   activeTab={context.activeTab}
@@ -165,8 +151,22 @@ export const IngredientsSelectionModal = () => {
                   }}
                 />
               </div>
-              <div className="border-t-[1px] border-gray-30 pb-4" />
-              <div id="scrollableDiv" className="h-[250px] max-h-[250px] overflow-y-auto">
+              <div className="border-t-[1px] border-gray-30" />
+              <div className="my-4 w-full xl:w-[575px]">
+                <SearchBox
+                  placeholder="ค้นหาชื่อวัตถุดิบ"
+                  value={context.searchWord}
+                  onChange={(value) => {
+                    context.setValue("searchWord", value);
+                    context.setValue("isShowClearValue", true);
+                    handlerSearchAuto();
+                  }}
+                  height="h-[48px]"
+                  isShowClearValue={context.isShowClearValue}
+                  isBorder
+                />
+              </div>
+              <div id="scrollableDiv" className="h-[250px] max-h-[250px] overflow-y-auto scrollbar-hide lg:scrollbar-default">
                 <InfiniteScroll
                   dataLength={context.itemsToShow.length}
                   next={preparation}

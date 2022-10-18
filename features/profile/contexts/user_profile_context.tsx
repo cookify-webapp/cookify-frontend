@@ -51,6 +51,7 @@ class UserProfile {
 
   activeTab;
   flashMessageContext: any;
+  router
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -132,13 +133,17 @@ class UserProfile {
         }
       }
     } catch (error) {
-      this.modal.openModal(
-        "มีปัญหาในการดึงข้อมูลผู้ใช้งาน",
-        error.message,
-        () => this.modal.closeModal(),
-        "ปิด",
-        "ตกลง"
-      );
+      if (error?.response?.status === 404) {
+        this.router.replace("/404");
+      } else {
+        this.modal.openModal(
+          "มีปัญหาในการดึงข้อมูลผู้ใช้งาน",
+          error.message,
+          () => this.modal.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
     } finally {
       this.loading = false;
     }
@@ -289,19 +294,18 @@ class UserProfile {
       const token = Cookies.get("token");
       const resp = await setFollowing(userId, token);
       if (resp.status === 200) {
-        if (this.userDetail?.isFollowing) {
+        if (this.isFollowing) {
           this.flashMessageContext.handleShow(
             "ยกเลิกติดตามสำเร็จ",
             "ยกเลิกติดตามผู้ใช้งานสำเร็จ"
           );
-          this.prepareUserDetail(userId);
         } else {
           this.flashMessageContext.handleShow(
             "ติดตามสำเร็จ",
             "ติดตามผู้ใช้งานสำเร็จ"
           );
-          this.prepareUserDetail(userId);
         }
+        this.prepareUserDetail(userId);
       }
     } catch (error) {
       this.modal.openModal(

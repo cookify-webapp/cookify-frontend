@@ -34,8 +34,8 @@ export default function HomePage() {
   useEffect(() => {
     context.setValue("modalContext", modalContext);
     context.prepareIngredient();
-    context.prepareRecipesList();
-    context.prepareSnapshotList()
+    context.prepareRecipesList(authContext.user?.username !== "");
+    context.prepareSnapshotList();
   }, []);
 
   //---------------------
@@ -74,8 +74,8 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            {!context.loadingRecipe && (
-              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+            {!context.loadingRecipe && _.size(context.recipes) > 0 && (
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 scrollbar-hide">
                 {_.map(context.recipes, (recipe) => (
                   <div
                     className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
@@ -91,6 +91,19 @@ export default function HomePage() {
                     />
                   </div>
                 ))}
+              </div>
+            )}
+            {context.loadingRecipe && (
+              <div className="pt-6 flex items-center justify-center text-center text-gray-50">
+                <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+              </div>
+            )}
+            {!context.loadingRecipe && _.size(context.recipes) === 0 && (
+              <div className="pt-6 flex items-center text-center text-gray-50">
+                <div>
+                  <i className="fas fa-book text-[48px] w-12 h-12"></i>
+                  <p className="titleM mt-4">ไม่มีรายการสูตรอาหาร</p>
+                </div>
               </div>
             )}
             <div className="mt-8 px-5 2xl:px-0">
@@ -129,8 +142,8 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            {!context.loadingSnapshot && (
-              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6">
+            {!context.loadingSnapshot && _.size(context.snapshots) > 0 && (
+              <div className="px-5 2xl:px-0 flex space-x-[16px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 scrollbar-hide">
                 {_.map(context.snapshots, (snapshot) => (
                   <div
                     className="w-[300px] shrink-0 xl:shrink xl:w-full xl:col-span-4"
@@ -148,7 +161,19 @@ export default function HomePage() {
                 ))}
               </div>
             )}
-
+            {context.loadingSnapshot && (
+              <div className="pt-6 flex items-center justify-center text-center text-gray-50">
+                <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+              </div>
+            )}
+            {!context.loadingSnapshot && _.size(context.snapshots) === 0 && (
+              <div className="pt-6 flex items-center text-center text-gray-50">
+                <div>
+                  <i className="fas fa-camera text-[48px] w-12 h-12"></i>
+                  <p className="titleM mt-4">ไม่มีรายการ Snapshot</p>
+                </div>
+              </div>
+            )}
             <h2 className="px-5 2xl:px-0 headlineM sm:headlineL mt-8">
               วัตถุดิบใหม่ล่าสุด
               <Link href="/ingredients" passHref>
@@ -157,8 +182,8 @@ export default function HomePage() {
                 </a>
               </Link>
             </h2>
-            {!context.loading && (
-              <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 mb-8">
+            {!context.loading && _.size(context.ingredients) > 0 && (
+              <div className="px-5 2xl:px-0 flex space-x-[24px] xl:space-x-0 overflow-x-auto xl:grid xl:grid-cols-12 xl:gap-4 mt-6 mb-8 scrollbar-hide">
                 {_.map(context.ingredients, (ingredient, index) => (
                   <div
                     className="w-[250px] shrink-0 xl:shrink xl:w-full xl:col-span-3"
@@ -171,6 +196,19 @@ export default function HomePage() {
                     </Link>
                   </div>
                 ))}
+              </div>
+            )}
+            {context.loading && (
+              <div className="pt-6 flex items-center justify-center text-center text-gray-50">
+                <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin"></i>
+              </div>
+            )}
+            {!context.loading && _.size(context.ingredients) === 0 && (
+              <div className="pt-6 flex items-center text-center text-gray-50">
+                <div>
+                  <i className="fas fa-egg text-[48px] w-12 h-12"></i>
+                  <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>
+                </div>
               </div>
             )}
           </div>

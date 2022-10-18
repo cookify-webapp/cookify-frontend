@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { UserProfileContext } from "../contexts/user_profile_context";
 import { ImageWithFallback } from "@core/components/image_with_fallback";
-import getConfig from "next/config";
 import classNames from "classnames";
 import { FollowModal } from "../components/follow_modal";
 import { ModalContext } from "core/context/modal_context";
@@ -18,7 +17,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Recipe } from "@core/components/recipe";
 import { Snapshot } from "@core/components/snapshot";
 import { FlashMessageContext } from "core/context/flash_message_context";
-const { publicRuntimeConfig } = getConfig();
 
 export const UserProfilePage = () => {
   //---------------------
@@ -35,7 +33,7 @@ export const UserProfilePage = () => {
   const context = useContext(UserProfileContext);
   const modal = useContext(ModalContext);
   const auth = useContext(AuthContext);
-  const flashMessageContext = useContext(FlashMessageContext)
+  const flashMessageContext = useContext(FlashMessageContext);
 
   const router = useRouter();
   const { userId } = router.query;
@@ -46,8 +44,9 @@ export const UserProfilePage = () => {
   // EFFECT
   //---------------------
   useEffect(() => {
+    context.setValue("router", router);
     context.setValue("modal", modal);
-    context.setValue('flashMessageContext', flashMessageContext)
+    context.setValue("flashMessageContext", flashMessageContext);
     if (isMe) {
       context.prepareMyDetail();
     } else {
@@ -62,7 +61,7 @@ export const UserProfilePage = () => {
       context.setValue("pageRecipe", 1);
       context.setValue("pageSnapshot", 1);
       context.setValue("recipesList", []);
-      context.setValue('snapshotsList', [])
+      context.setValue("snapshotsList", []);
     };
   }, [userId]);
 
@@ -141,7 +140,7 @@ export const UserProfilePage = () => {
                           <ImageWithFallback
                             alt="profile cover"
                             className="w-full h-full object-cover"
-                            src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${context.userDetail?.image}`}
+                            src={context.userDetail?.image}
                           />
                         </div>
                         <div>
@@ -162,9 +161,9 @@ export const UserProfilePage = () => {
                         <div
                           className="cursor-pointer w-[36px] h-[36px] flex items-center justify-center text-center rounded-full shrink-0 bg-black opacity-75 ml-3"
                           onClick={() => {
-                            context.setFollowing(userId)
-                            context.setValue('recipesList', [])
-                            context.setValue('snapshotsList', [])
+                            context.setFollowing(userId);
+                            context.setValue("recipesList", []);
+                            context.setValue("snapshotsList", []);
                           }}
                         >
                           <i
@@ -259,7 +258,9 @@ export const UserProfilePage = () => {
                               context.setValue("pageSnapshot", 1);
                               context.setValue("snapshotsList", []);
                             } else {
-                              context.prepareUserSnapshot(context.userDetail?.username);
+                              context.prepareUserSnapshot(
+                                context.userDetail?.username
+                              );
                               context.setValue("pageRecipe", 1);
                               context.setValue("recipesList", []);
                             }

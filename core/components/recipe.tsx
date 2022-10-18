@@ -6,10 +6,7 @@ import { recipePropType } from "core/types/core_components_type";
 import _ from "lodash";
 import Link from "next/link";
 
-import getConfig from "next/config";
 import classNames from "classnames";
-
-const { publicRuntimeConfig } = getConfig();
 
 export const Recipe = ({
   id,
@@ -32,7 +29,7 @@ export const Recipe = ({
               <div className={classNames("rounded-[12px] bg-white w-full flex justify-center pr-4 space-x-4 h-[120px]", {'ring-1 ring-gray-30 my-[1px]': isBorder})}>
                 <div className="w-[120px] h-[120px] rounded-l-[12px] border-r border-gray-30 shrink-0">
                   <ImageWithFallback
-                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/recipes/${image}`}
+                    src={image}
                     alt="recipe image cover"
                     className="w-full h-full object-cover rounded-l-[12px]"
                   />

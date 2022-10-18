@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { Observer } from "mobx-react-lite";
 import { HomeLayout } from "@core/components/layouts/home_layout";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import { SearchBox } from "@core/components/input/search_box";
 import { HomeLayoutContext } from "core/context/home_layout_context";
 import { AdminListContext } from "../contexts/admin_list_context";
@@ -41,10 +41,16 @@ export const AdminListPage = () => {
   const flashMessageContext = useContext(FlashMessageContext)
 
   //---------------------
+  // ROUTER
+  //---------------------
+  const router = useRouter()
+
+  //---------------------
   // EFFECT
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue('router', router)
     context.setValue('flashMessageContext', flashMessageContext)
     context.setValue('formik', formik)
     context.prepareAdminList();
@@ -250,7 +256,7 @@ export const AdminListPage = () => {
                             onClick={() => {
                               formik.submitForm();
                             }}
-                            disabled={!formik.isValid}
+                            disabled={!formik.isValid || context.buttonLoading}
                             title="ส่งคำเชิญ"
                             loading={context.buttonLoading}
                           />

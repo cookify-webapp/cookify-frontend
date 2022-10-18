@@ -83,8 +83,7 @@ class IngredientsList {
         perPage: this.perPage,
       })
       if (resp.status === 200) {
-        this.ingredientsList = resp.data?.ingredients
-        this.itemsToShow = [...this.itemsToShow, ...this.ingredientsList]
+        this.ingredientsList = [...this.ingredientsList, ...resp.data?.ingredients]
         this.page = resp.data?.page
         this.totalCount = resp.data?.totalCount
         this.totalPages = resp.data?.totalPages

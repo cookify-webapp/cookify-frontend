@@ -6,6 +6,7 @@ import { userDetailType } from "../types/user_profile_type";
 import { ingredientType } from "@features/recipes/types/recipes";
 import { createProfileFormData } from "../forms/edit_profile_form";
 import { editProfile } from "@core/services/profile/put_profile";
+import { Router } from "next/router";
 
 class EditProfile {
   userDetail: userDetailType
@@ -73,7 +74,8 @@ class EditProfile {
       const resp = await editProfile(formData, token);
       if (resp.status === 200) {
         this.formik?.resetForm()
-        this.router.push(`/me`);
+        await this.router.replace(`/me`);
+        this.router.reload()
         this.flashMessageContext.handleShow(
           "แก้ไขสำเร็จ",
           "แก้ไขข้อมูลผู้ใช้งานสำเร็จ"

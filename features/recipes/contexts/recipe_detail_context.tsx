@@ -5,6 +5,7 @@ import { getRecipeDetail } from "@core/services/recipes/get_recipes";
 import Cookies from "js-cookie";
 import { deleteRecipe } from "@core/services/recipes/delete_recipes";
 import { setBookmark } from "@core/services/bookmark/put_bookmark"
+import { AxiosResponse } from "axios";
 
 class RecipeDetail {
   recipeDetail: recipeDetailType;
@@ -32,26 +33,28 @@ class RecipeDetail {
   prepareRecipeDetail = async (id, isLogin) => {
     try {
       this.loading = true;
+      let resp: AxiosResponse<any>
       if (isLogin) {
         const token = Cookies.get("token");
-        const resp = await getRecipeDetail(id, token);
-        if (resp.status === 200) {
-          this.recipeDetail = resp.data?.recipe;
-        }
+        resp = await getRecipeDetail(id, token);
       } else {
-        const resp = await getRecipeDetail(id);
-        if (resp.status === 200) {
-          this.recipeDetail = resp.data?.recipe;
-        }
+        resp = await getRecipeDetail(id);
+      }
+      if (resp.status === 200) {
+        this.recipeDetail = resp.data?.recipe;
       }
     } catch (error) {
-      this.modal.openModal(
+      if (error?.response?.status === 404) {
+        this.router.replace('/404')
+      } else {
+        this.modal.openModal(
         "มีปัญหาในการดึงข้อมูลสูตรอาหาร",
         error.message,
         () => this.modal.closeModal(),
         "ปิด",
         "ตกลง"
       );
+      }
     } finally {
       this.loading = false;
     }

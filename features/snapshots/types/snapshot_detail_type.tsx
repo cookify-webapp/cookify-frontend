@@ -13,6 +13,8 @@ export type snapshotDetailType = {
   }
   createdAt: string
   isMe: boolean
+  isHidden?: boolean
+  remark?: string
 }
 
 export type commentListType = {

@@ -58,7 +58,7 @@ export const AdminBlock = ({
               <div className="flex space-x-3 items-center">
                 <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
                   <ImageWithFallback
-                    src={`${publicRuntimeConfig.CKF_IMAGE_API}/accounts/${image}`}
+                    src={image}
                     alt="recipe image cover"
                     className="w-full h-full object-cover"
                   />
