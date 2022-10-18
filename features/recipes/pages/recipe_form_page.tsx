@@ -63,7 +63,10 @@ export const RecipeFormPage = () => {
           modal.openModal(
             "ยืนยันการแก้ไขเรื่องร้องเรียนหรือไม่",
             "ผู้ดูแลจะทำการตรวจสอบการแก้ไขของคุณตามเงื่อนไขข้อร้องเรียนที่ได้รับ คุณยืนยันการแก้ไขหรือไม่",
-            () => context.editRecipe(recipeId, value),
+            () => {
+              modal.closeModal()
+              context.editRecipe(recipeId, value)
+            },
             "ยกเลิก",
             "ยืนยัน"
           );
