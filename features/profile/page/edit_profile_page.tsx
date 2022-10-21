@@ -61,6 +61,7 @@ export const EditProfilePage = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modal", modal);
+    context.setValue("ingredientSelectionModal", ingredientSelectedModal)
     context.setValue("formik", formik);
     context.setValue("router", router);
     context.setValue("flashMessageContext", flashMessageContext);
@@ -239,14 +240,14 @@ export const EditProfilePage = () => {
                   </div>
                 </div>
                 <div className="md:border-l md:border-gray-30 col-span-12 md:col-span-7 xl:col-span-8 pr-6 pl-6 md:pl-0 pt-6 md:pt-0">
-                  <p className="bodyM pb-4 md:pl-6">วัตถุดิบที่เลือก</p>
-                  <div className="md:pl-6 flex flex-wrap space-x-2 mr-2">
+                  <p className="bodyM pb-2 md:pl-6">วัตถุดิบที่เลือก</p>
+                  <div className="md:pl-6 flex flex-wrap">
                     {_.size(formik.values?.allergy) > 0 && (
                       <>
                         {_.map(formik.values?.allergy, (ingredient, index) => (
                           <div
                             key={`${ingredient.name}_${index}`}
-                            className="w-auto"
+                            className="w-auto mr-2 mt-2"
                           >
                             <Tag
                               label={ingredient.name}

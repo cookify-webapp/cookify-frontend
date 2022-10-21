@@ -48,6 +48,10 @@ export const HomeLayout = ({ children, onClickSearch } : HomeLayoutProps) => {
     updateDimensions();
   }, []);
 
+  useEffect(() => {
+    context.setValue('isShowSidebar', false)
+  }, [router.pathname])
+
   //---------------------
   // RENDER
   //---------------------

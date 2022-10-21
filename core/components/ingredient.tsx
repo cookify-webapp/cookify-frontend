@@ -28,7 +28,7 @@ export const Ingredient = ({
           <div className="flex items-center">
             <ImageWithFallback
               alt="ingredient cover image"
-              className="w-[52px] h-[52px] border border-gray-30 rounded-[12px]"
+              className="w-[52px] h-[52px] border border-gray-30 rounded-[12px] flex-shrink-0"
               src={ingredient.image}
             />
             <div className="w-auto mx-4 ">

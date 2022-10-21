@@ -59,7 +59,12 @@ export const AdminListPage = () => {
       context.setValue("searchWord", "");
       context.setValue("page", 1);
       context.setValue("adminList", []);
+      context.setValue("pendingList", []);
       context.setValue("isShowClearValue", false);
+      context.setValue('initValue', {
+        email: ''
+      })
+      formik.resetForm()
     };
   }, []);
 

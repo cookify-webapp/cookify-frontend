@@ -217,12 +217,12 @@ export const UserProfilePage = () => {
                         <div className="bg-white rounded-[12px] p-4 md:py-6">
                           <h3 className="headlineM">ข้อมูลการแพ้วัตถุดิบ</h3>
                           {_.size(context.userDetail?.allergy) > 0 && (
-                            <div className="flex flex-wrap space-x-4 space-y-4 mt-4">
+                            <div className="flex flex-wrap mt-2">
                               {_.map(
                                 context.userDetail?.allergy,
                                 (item, index) => (
                                   <div
-                                    className="rounded-full bg-beige-20 px-3 py-1 w-auto text-brown-10 text-center bodyM"
+                                    className="rounded-full bg-beige-20 px-3 py-1 w-auto text-brown-10 text-center bodyM mr-2 mt-2"
                                     key={`allergy_${index}`}
                                   >
                                     {item.name}

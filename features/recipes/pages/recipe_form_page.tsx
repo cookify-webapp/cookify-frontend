@@ -398,6 +398,7 @@ export const RecipeFormPage = () => {
                                           }}
                                           type="number"
                                           value={formik.values?.quantity[index]}
+                                          non_negative
                                         />
                                       </div>
                                       <p className="bodyM">

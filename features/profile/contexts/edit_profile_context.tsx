@@ -22,6 +22,8 @@ class EditProfile {
   router
   flashMessageContext
   editProfileLoading
+
+  ingredientSelectionModal
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -51,6 +53,7 @@ class EditProfile {
           imageFileName: this.userDetail?.image,
           profileImage: null
         }
+        this.ingredientSelectionModal.setValue("selectedIngredients", this.userDetail?.allergy);
         this.formik.setValues(this.initValue);
       }
     } catch (error) {

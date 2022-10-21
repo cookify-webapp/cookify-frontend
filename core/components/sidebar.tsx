@@ -47,6 +47,16 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
       icon: "fas fa-egg",
       link: ["/ingredients", "/ingredients/[ingredientId]"],
     },
+    {
+      title: "รายงานข้อผิดพลาด",
+      icon: "fas fa-bug",
+      link: ["https://forms.gle/8ugWA2GvXKRrr2rHA"],
+    },
+    {
+      title: "สำรวจความคิดเห็น",
+      icon: "fas fa-list",
+      link: ["https://forms.gle/1aEYAQmuNRGHqxzc8"],
+    },
   ];
 
   const userMenu = [
@@ -119,6 +129,7 @@ export const SideBar = ({ role, notiCount }: sidebarType) => {
                     onClick={() => {
                       homeLayoutContext.setValue("isShowSidebar", false);
                     }}
+                    target={['รายงานข้อผิดพลาด', 'สำรวจความคิดเห็น'].includes(menu.title) ? '_blank' : '_self'}
                   >
                     <i className={`${menu.icon} mr-4 w-4 h-4`}></i>
                     <p className="titleS">{menu.title}</p>
