@@ -393,11 +393,12 @@ export const RecipeFormPage = () => {
                                             formik.setFieldTouched("quantity");
                                             formik.setFieldValue(
                                               `quantity[${index}]`,
-                                              parseInt(e.target.value)
+                                              parseFloat(e.target.value)
                                             );
                                           }}
                                           type="number"
                                           value={formik.values?.quantity[index]}
+                                          non_negative
                                         />
                                       </div>
                                       <p className="bodyM">

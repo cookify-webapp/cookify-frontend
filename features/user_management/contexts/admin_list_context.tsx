@@ -46,7 +46,7 @@ class AdminList {
     email: string;
   };
 
-  router
+  router;
   //-------------------
   // CONSTUCTOR
   //-------------------
@@ -182,6 +182,18 @@ class AdminList {
         this.preparePendingList();
       }
     } catch (error) {
+      if (
+        error?.response?.data?.errors?.email?.message ===
+        "Expected email to be unique"
+      ) {
+        this.modal.openModal(
+          "ไม่สามารถส่งอีเมลคำเชิญได้",
+          "เนื่องจากอีเมลซ้ำกับที่มีอยู่แล้วในระบบ",
+          () => this.modal.closeModal(),
+          "ปิด",
+          "ตกลง"
+        );
+      }
       this.modal.openModal(
         "มีปัญหาในการส่งอีเมลคำเชิญ",
         error.message,

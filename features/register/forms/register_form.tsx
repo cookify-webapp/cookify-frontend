@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const RegisterValidateSchema = Yup.object().shape({
-  username: Yup.string().required("กรุณากรอกชื่อผู้ใช้งาน"),
+  username: Yup.string().required("กรุณากรอกชื่อผู้ใช้งาน").min(6, 'ชื่อผู้ใช้งานต้องมีความยาวตั้งแต่ 6 ตัวอักษรขึ้นไป'),
   email: Yup.string().email('กรุณากรอกอีเมลให้ถูกต้อง').required("กรุณากรอกอีเมล"),
   password: Yup.string()
     .required('กรุณากรอกรหัสผ่าน').min(8, 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร').max(32, 'รหัสผ่านต้องมีความยาวไม่เกิน 32 ตัวอักษร')

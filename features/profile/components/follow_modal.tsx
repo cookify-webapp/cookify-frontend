@@ -91,7 +91,7 @@ export const FollowModal = ({
               !context.followLoading && (
                 <div
                   id="scrollableDiv"
-                  className="h-[260px] max-h-[360px] overflow-y-auto scrollbar-hide lg:scrollbar-default mt-6"
+                  className="h-[335px] max-h-[360px] overflow-y-auto scrollbar-hide lg:scrollbar-default mt-6"
                 >
                   <InfiniteScroll
                     dataLength={

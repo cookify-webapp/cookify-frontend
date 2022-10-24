@@ -13,6 +13,7 @@ import { snapshotPropType } from "core/types/core_components_type";
 import { Snapshot } from "@core/components/snapshot";
 import { TertiaryButton } from "@core/components/button/tertiary_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
+import { Banners } from "@core/components/banners";
 
 export const SnapshotListPage = () => {
   //---------------------
@@ -76,7 +77,7 @@ export const SnapshotListPage = () => {
                 }}
               />
             </div>
-            <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl">
+            <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
               <h1 className="pt-8 lg:pt-2 headlineL">Snapshot</h1>
               <div className="mt-6 grid grid-cols-12 gap-4">
                 <div className="col-span-12 lg:col-span-8">
@@ -145,59 +146,12 @@ export const SnapshotListPage = () => {
                     </div>
                   )}
                 </div>
-                <div className="hidden lg:block col-span-4">
-                  <div
-                    className="flex items-center h-[200px] rounded-[12px]"
-                    style={{
-                      background: `url(/images/snapshots/recipe_banner.svg) no-repeat center`,
-                      backgroundSize: "cover",
-                    }}
-                  >
-                    <div>
-                      <p className="headlineM text-white text-center">
-                        ค้นหาเมนูใหม่ ๆ
-                        <br />
-                        ที่ใช่กับตัวคุณ
-                      </p>
-                      <div className="w-[180px] mt-4 mx-auto">
-                        <TertiaryButton
-                          borderColor="border-white"
-                          hoverBgColor="hover:bg-white"
-                          textColor="text-white"
-                          textHoverColor="hover:text-black"
-                          title="ไปหน้ารวมสูตรอาหาร"
-                          onClick={() => router.push("/recipes")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="flex items-center h-[200px] rounded-[12px] mt-4"
-                    style={{
-                      background:
-                        "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('https://i.pinimg.com/736x/bd/30/44/bd3044c89507f5890d5aba5a6201e704.jpg') no-repeat center",
-                      backgroundSize: "cover",
-                    }}
-                  >
-                    <div>
-                      <p className="headlineM text-white text-center">
-                        ไม่รู้จะทำเมนูอะไรดีใช่ไหม ?
-                        <br />
-                        ไปลองสุ่มเมนูเลยตอนนี้!
-                      </p>
-                      <div className="w-[180px] mt-4 mx-auto">
-                        <TertiaryButton
-                          borderColor="border-white"
-                          hoverBgColor="hover:bg-white"
-                          textColor="text-white"
-                          textHoverColor="hover:text-black"
-                          title="ไปสุ่มสูตรอาหาร"
-                          onClick={() => router.push("/random")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Banners 
+                  className="col-span-4"
+                  buttonWidth="w-[180px]"
+                  isShowRecipeBanner
+                  isShowRandomBanner
+                />
               </div>
             </div>
           </div>

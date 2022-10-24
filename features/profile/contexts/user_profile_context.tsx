@@ -219,7 +219,7 @@ class UserProfile {
 
   prepareUserRecipe = async (username) => {
     try {
-      if (this.page === 1) {
+      if (this.pageRecipe === 1) {
         this.recipeLoading = true;
       }
       const token = Cookies.get("token");
@@ -255,7 +255,7 @@ class UserProfile {
 
   prepareUserSnapshot = async (username) => {
     try {
-      if (this.page === 1) {
+      if (this.pageSnapshot === 1) {
         this.snapshotLoading = true;
       }
       const token = Cookies.get("token");

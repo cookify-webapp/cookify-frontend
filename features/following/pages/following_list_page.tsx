@@ -15,6 +15,7 @@ import { useOnClickOutside } from "core/utils/useOnClickOutside";
 import Link from "next/link";
 import dayjs from "dayjs";
 import "dayjs/locale/th";
+import { Banners } from "@core/components/banners";
 
 export const FollowingListPage = () => {
   //---------------------
@@ -208,84 +209,13 @@ export const FollowingListPage = () => {
                     </div>
                   )}
                 </div>
-                <div className="hidden lg:block lg:col-start-8 lg:col-span-5">
-                  <div
-                    className="flex items-center h-[200px] rounded-[12px]"
-                    style={{
-                      background: `url(/images/snapshots/recipe_banner.svg) no-repeat center`,
-                      backgroundSize: "cover",
-                    }}
-                  >
-                    <div>
-                      <p className="headlineM text-white text-center">
-                        ค้นหาเมนูใหม่ ๆ
-                        <br />
-                        ที่ใช่กับตัวคุณ
-                      </p>
-                      <div className="w-[180px] mt-4 mx-auto">
-                        <TertiaryButton
-                          borderColor="border-white"
-                          hoverBgColor="hover:bg-white"
-                          textColor="text-white"
-                          textHoverColor="hover:text-black"
-                          title="ไปหน้ารวมสูตรอาหาร"
-                          onClick={() => router.push("/recipes")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="flex items-center h-[200px] rounded-[12px] mt-4 w-full"
-                    style={{
-                      background: `url('https://i.ibb.co/Nj6Nmcd/high-angle-person-taking-photo-food-plate-with-smartphone-4.png') no-repeat center`,
-                      backgroundSize: "cover",
-                    }}
-                  >
-                    <div>
-                      <p className="headlineM text-white text-center">
-                        อยากดูผลงานใหม่ ๆ
-                        <br />
-                        ของเพื่อน ๆ ไหม ?
-                      </p>
-                      <div className="w-[180px] mt-4 mx-auto">
-                        <TertiaryButton
-                          borderColor="border-white"
-                          hoverBgColor="hover:bg-white"
-                          textColor="text-white"
-                          textHoverColor="hover:text-black"
-                          title="ไปหน้า Snapshot"
-                          onClick={() => router.push("/snapshots")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="flex items-center h-[200px] rounded-[12px] mt-4"
-                    style={{
-                      background:
-                        "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('https://i.pinimg.com/736x/bd/30/44/bd3044c89507f5890d5aba5a6201e704.jpg') no-repeat center",
-                      backgroundSize: "cover",
-                    }}
-                  >
-                    <div>
-                      <p className="headlineM text-white text-center">
-                        ไม่รู้จะทำเมนูอะไรดีใช่ไหม ?
-                        <br />
-                        ไปลองสุ่มเมนูเลยตอนนี้!
-                      </p>
-                      <div className="w-[180px] mt-4 mx-auto">
-                        <TertiaryButton
-                          borderColor="border-white"
-                          hoverBgColor="hover:bg-white"
-                          textColor="text-white"
-                          textHoverColor="hover:text-black"
-                          title="ไปสุ่มสูตรอาหาร"
-                          onClick={() => router.push("/random")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Banners 
+                  className="lg:col-start-8 lg:col-span-5"
+                  buttonWidth="w-[180px]"
+                  isShowRecipeBanner
+                  isShowSnapshotBanner
+                  isShowRandomBanner
+                />
               </div>
             </div>
           </div>
