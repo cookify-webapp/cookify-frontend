@@ -85,7 +85,7 @@ export const RandomRecipePage = () => {
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
               <h1 className="pt-8 lg:pt-2 headlineL w-auto">สุ่มสูตรอาหาร</h1>
               <div className="grid grid-cols-12 gap-4 mt-6">
-                <div className="rounded-[12px] col-span-12 lg:col-span-8 p-5 flex justify-center items-center bg-white md:h-[calc(100vh-298px)] lg:h-[calc(100vh-210px)]">
+                <div className="rounded-[12px] col-span-12 lg:col-span-8 p-5 flex justify-center items-center lg:items-baseline bg-white md:h-[calc(100vh-298px)] lg:h-auto">
                   <div>
                     <p className="text-center bodyL md:headlineL font-semibold md:font-normal">
                       {onRenderText()}
