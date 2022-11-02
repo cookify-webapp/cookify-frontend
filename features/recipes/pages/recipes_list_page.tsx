@@ -274,7 +274,7 @@ export const RecipesListPage = () => {
                   <div>
                     <i className="fas fa-book text-[48px] w-12 h-12"></i>
                     <p className="titleM mt-4">ไม่มีรายการสูตรอาหาร</p>
-                    {authContext.user?.username !== "" && (
+                    {authContext.isLogIn && (
                       <div className="mt-4 w-[150px] mx-auto">
                         <PrimaryButton
                           title="เพิ่มสูตรอาหาร"
