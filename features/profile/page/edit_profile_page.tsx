@@ -135,7 +135,7 @@ export const EditProfilePage = () => {
             </div>
           </div>
           {!context.loading && (
-            <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl mb-8 mt-6">
+            <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl mb-8 mt-8 xl:mt-2">
               <h1 className="headlineL">แก้ไขข้อมูลบัญชีผู้ใช้</h1>
               <div className="bg-white mt-6 rounded-[12px] flex justify-center p-6">
                 <div>

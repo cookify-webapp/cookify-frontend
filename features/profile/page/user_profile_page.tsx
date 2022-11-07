@@ -117,7 +117,7 @@ export const UserProfilePage = () => {
                 />
               </div>
               {!context.loading && (
-                <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl mb-8 mt-6">
+                <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl mb-8 mt-8 xl:mt-2">
                   <div className="flex items-center justify-between">
                     <h1 className="headlineL">{`ข้อมูล${
                       isMe

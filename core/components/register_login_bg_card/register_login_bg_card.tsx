@@ -36,9 +36,9 @@ export const RegisterLoginBgCard = (props) => {
               </a>
             </Link>
             <div className="flex items-center justify-center z-10 h-[calc(100vh-57.84px)] md:h-[calc(100vh-80.76px)]">
-              <div className="bg-white rounded-[12px] card-shadow w-full md:w-[500px] xl:w-[1164px] md:py-[82px] md:px-[60px] lg:px-[82px] lg:py-[50px] flex md:flex-col lg:flex-row items-center max-h-[578px] md:max-h-min h-auto">
+              <div className="bg-white rounded-[12px] card-shadow w-full md:w-[500px] lg:w-[1164px] md:py-[82px] md:px-[60px] lg:px-[82px] lg:py-[50px] flex md:flex-col lg:flex-row items-center max-h-[578px] md:max-h-min h-auto">
                 <img src="/images/core/Cooking.gif" alt="cooking animation" className="w-[188.57px] lg:w-[500px] hidden md:block" />
-                <div className="md:mt-[24.57px] lg:mt-0 lg:ml-12 lg:border-l p-6 md:p-0  border-gray-30 lg:pl-[80px] max-h-[578px] h-auto overflow-y-auto scrollbar-hide">
+                <div className="md:mt-[24.57px] lg:mt-0 lg:ml-12 lg:border-l p-6 md:p-0  border-gray-30 lg:pl-[80px] max-h-[578px] h-auto overflow-y-auto scrollbar-hide lg:scrollbar-default">
                   <div className="flex items-center">
                     {props.children}
                   </div>

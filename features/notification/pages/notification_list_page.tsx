@@ -61,7 +61,7 @@ export const NotificationListPage = () => {
               />
             </div>
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
-              <div className="flex justify-between pt-8 lg:pt-2 items-center">
+              <div className="flex justify-between pt-8 xl:pt-2 items-center">
                 <h1 className="headlineL w-auto">การแจ้งเตือน</h1>
                 {_.size(context.notificationList) > 0 && (
                   <p
