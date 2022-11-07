@@ -174,7 +174,7 @@ export const SnapshotFormPage = () => {
             </div>
             {!context.loading && (
               <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
-                <h1 className="pt-8 lg:pt-2 headlineL">{`${
+                <h1 className="pt-8 xl:pt-2 headlineL">{`${
                   isEdit ? "แก้ไข" : "เพิ่ม"
                 } Snapshot`}</h1>
 

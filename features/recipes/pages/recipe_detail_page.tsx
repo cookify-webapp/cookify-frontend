@@ -135,7 +135,7 @@ export const RecipeDetailPage = () => {
                     }}
                   />
                 </div>
-                <div className="px-5 2xl:px-0 pt-8 lg:pt-2">
+                <div className="px-5 2xl:px-0 pt-8 xl:pt-2">
                   <Breadcrumb
                     routes={[
                       {

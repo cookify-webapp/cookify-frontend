@@ -76,7 +76,7 @@ export const BookmarkListPage = () => {
               />
             </div>
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl">
-              <h1 className="pt-8 lg:pt-2 headlineL">สูตรอาหารที่บันทึก</h1>
+              <h1 className="pt-8 xl:pt-2 headlineL">สูตรอาหารที่บันทึก</h1>
               <div className="mt-6 grid grid-cols-12 gap-4">
                 <div className="col-span-12 lg:col-span-8">
                   {_.size(context.bookmarkList) > 0 && !context.loading && (

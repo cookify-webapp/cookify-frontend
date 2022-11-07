@@ -148,6 +148,8 @@ export const IngredientsSelectionModal = () => {
                     context.setValue("page", 1)
                     handleTypeSelected()
                     context.prepareIngredient();
+                    const div = document.getElementById('scrollableDiv')
+                    div.scrollTop = 0
                   }}
                 />
               </div>

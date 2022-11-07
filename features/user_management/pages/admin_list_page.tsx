@@ -150,7 +150,7 @@ export const AdminListPage = () => {
               />
             </div>
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl mb-8">
-              <h1 className="pt-8 lg:pt-2 headlineL">จัดการบัญชีผู้ใช้</h1>
+              <h1 className="pt-8 xl:pt-2 headlineL">จัดการบัญชีผู้ใช้</h1>
               <div className="rounded-[12px] bg-white p-6 mt-6">
                 <h3 className="headlineM">{`ผู้ดูแลระบบ (${
                   context.totalCount || "0"

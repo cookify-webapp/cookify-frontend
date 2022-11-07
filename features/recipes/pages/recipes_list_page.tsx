@@ -117,7 +117,7 @@ export const RecipesListPage = () => {
               />
             </div>
             <div className="mx-auto xl:max-w-6xl">
-              <h1 className="px-5 2xl:px-0 pt-8 lg:pt-2 headlineL">
+              <h1 className="px-5 2xl:px-0 pt-8 xl:pt-2 headlineL">
                 ประเภทอาหาร
               </h1>
             </div>

@@ -11,7 +11,6 @@ import { AuthContext } from "core/context/auth_context";
 import _ from "lodash";
 import { snapshotPropType } from "core/types/core_components_type";
 import { Snapshot } from "@core/components/snapshot";
-import { TertiaryButton } from "@core/components/button/tertiary_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { Banners } from "@core/components/banners";
 
@@ -78,7 +77,7 @@ export const SnapshotListPage = () => {
               />
             </div>
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
-              <h1 className="pt-8 lg:pt-2 headlineL">Snapshot</h1>
+              <h1 className="pt-8 xl:pt-2 headlineL">Snapshot</h1>
               <div className="mt-6 grid grid-cols-12 gap-4">
                 <div className="col-span-12 lg:col-span-8">
                   {_.size(context.snapshotsList) > 0 && !context.loading && (

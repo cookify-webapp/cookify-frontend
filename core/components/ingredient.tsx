@@ -24,6 +24,7 @@ export const Ingredient = ({
             "w-full bg-white flex items-center justify-between rounded-[12px] px-4 h-[84px]",
             { "border border-gray-30": isBorder }
           )}
+          title={ingredient?.name}
         >
           <div className="flex items-center">
             <ImageWithFallback

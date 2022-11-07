@@ -129,7 +129,7 @@ export const ComplaintListPage = () => {
               />
             </div>
             <div className="px-5 2xl:px-0 mx-auto xl:max-w-6xl pb-8">
-              <h1 className="pt-8 lg:pt-2 headlineL">จัดการเรื่องร้องเรียน</h1>
+              <h1 className="pt-8 xl:pt-2 headlineL">จัดการเรื่องร้องเรียน</h1>
               <div className="mt-6 overflow-x-auto scrollbar-hide">
                 <TabFilter
                   activeTab={convertTabValueToName(context.tabType)}
