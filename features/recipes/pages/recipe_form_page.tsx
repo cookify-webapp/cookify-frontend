@@ -31,6 +31,7 @@ import { ingredientType } from "../types/recipes";
 import { SecondaryMiniButton } from "@core/components/button/secondary_mini_button";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { FlashMessageContext } from "core/context/flash_message_context";
+import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
 
 export const RecipeFormPage = () => {
   //---------------------
@@ -203,6 +204,8 @@ export const RecipeFormPage = () => {
     <Observer>
       {() => (
         <HomeLayout>
+          <IngredientsSelectionModal />
+          <IngredientsSelectionModal isSubIngredient/>
           <div className="mx-auto xl:max-w-6xl pb-8">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
@@ -462,6 +465,7 @@ export const RecipeFormPage = () => {
                                   "selectedIngredients",
                                   tempSelectedIngredients
                                 );
+                                mainIngredientSelectedModal.setValue('ingredients', [])
                               }
                             );
                           }}

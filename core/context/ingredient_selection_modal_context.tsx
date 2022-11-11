@@ -45,12 +45,12 @@ class ingredientSelectionModal {
   //-------------------
   // ACTION
   //-------------------
-  openModal = (onSubmit, onCancel) => {
+  openModal = async (onSubmit, onCancel) => {
+    await this.prepareIngredient();
     this.isOpen = true;
     this.onSubmit = onSubmit
     this.onCancel = onCancel
     this.prepareIngredientTypes()
-    this.prepareIngredient();
   };
 
   closeModal = () => {
@@ -61,6 +61,7 @@ class ingredientSelectionModal {
     this.itemsToShow = []
     this.ingredients = []
     this.page = 1
+    this.prepareIngredient()
   }
 
   setValue(key: string, value: any) {

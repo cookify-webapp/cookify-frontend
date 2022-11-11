@@ -1,6 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Observer } from "mobx-react-lite";
-import { IngredientSelectionModalContext } from "core/context/ingredient_selection_modal_context";
+import {
+  IngredientSelectionModalContext,
+  SubIngredientSelectionModalContext,
+} from "core/context/ingredient_selection_modal_context";
 import classNames from "classnames";
 import { SearchBox } from "../input/search_box";
 import _ from "lodash";
@@ -12,7 +15,13 @@ import { PrimaryButton } from "../button/primary_button";
 import { ModalContext } from "core/context/modal_context";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const IngredientsSelectionModal = () => {
+interface ingredientsSelectionModalPropsType {
+  isSubIngredient?: boolean;
+}
+
+export const IngredientsSelectionModal = ({
+  isSubIngredient,
+}: ingredientsSelectionModalPropsType) => {
   //---------------------
   // STATE
   //---------------------
@@ -21,7 +30,11 @@ export const IngredientsSelectionModal = () => {
   //---------------------
   // CONTEXT
   //---------------------
-  const context = useContext(IngredientSelectionModalContext);
+  const context = useContext(
+    isSubIngredient
+      ? SubIngredientSelectionModalContext
+      : IngredientSelectionModalContext
+  );
   const modalContext = useContext(ModalContext);
 
   //---------------------
@@ -29,12 +42,12 @@ export const IngredientsSelectionModal = () => {
   //---------------------
   useEffect(() => {
     context.setValue("modalContext", modalContext);
-    context.prepareIngredientTypes()
+    context.prepareIngredientTypes();
 
     return () => {
       context.setValue("searchWord", "");
       context.setValue("activeTab", "เนื้อสัตว์");
-      context.setValue("typeSelected", context.ingredientTypes[0].value)
+      context.setValue("typeSelected", context.ingredientTypes[0].value);
       context.setValue("selectedIngredients", []);
       context.setValue("ingredients", []);
       context.setValue("itemsToShow", []);
@@ -116,9 +129,9 @@ export const IngredientsSelectionModal = () => {
   const handleTypeSelected = () => {
     _.forEach(context.ingredientTypes, (type) => {
       if (context.activeTab === type.name) {
-        context.setValue('typeSelected', type.value)
+        context.setValue("typeSelected", type.value);
       }
-    })
+    });
   };
 
   //---------------------
@@ -142,14 +155,19 @@ export const IngredientsSelectionModal = () => {
                   activeTab={context.activeTab}
                   tabs={tabs}
                   onClick={(value) => {
-                    setHasMore(true)
+                    setHasMore(true);
                     context.setValue("activeTab", value);
-                    context.setValue("itemsToShow", [])
-                    context.setValue("page", 1)
-                    handleTypeSelected()
+                    context.setValue("itemsToShow", []);
+                    context.setValue("page", 1);
+                    handleTypeSelected();
                     context.prepareIngredient();
-                    const div = document.getElementById('scrollableDiv')
-                    div.scrollTop = 0
+                    const div =
+                      document.getElementsByClassName("ingredient-list");
+                    if (isSubIngredient) {
+                      div[1].scrollTop = 0;
+                    } else {
+                      div[0].scrollTop = 0;
+                    }
                   }}
                 />
               </div>
@@ -168,7 +186,10 @@ export const IngredientsSelectionModal = () => {
                   isBorder
                 />
               </div>
-              <div id="scrollableDiv" className="h-[250px] max-h-[250px] overflow-y-auto scrollbar-hide lg:scrollbar-default">
+              <div
+                id="scrollableDiv"
+                className="ingredient-list h-[250px] max-h-[250px] overflow-y-auto scrollbar-hide lg:scrollbar-default"
+              >
                 <InfiniteScroll
                   dataLength={context.itemsToShow.length}
                   next={preparation}
@@ -209,19 +230,17 @@ export const IngredientsSelectionModal = () => {
                         ))}
                       </>
                     )}
-                    {(_.size(context.itemsToShow) === 0 && !context.loading) && (
+                    {_.size(context.itemsToShow) === 0 && !context.loading && (
                       <div className="text-gray-50">
                         <i className="fas fa-egg text-[48px] w-12 h-12"></i>
                         <p className="titleM mt-4">ไม่มีรายการวัตถุดิบ</p>
                       </div>
                     )}
-                    {
-                      context.loading && (
-                        <div className="flex justify-center">
-                          <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin text-gray-50"></i>
-                        </div>
-                      )
-                    }
+                    {context.loading && (
+                      <div className="flex justify-center">
+                        <i className="w-9 h-9 text-[36px] leading-9 fas fa-circle-notch fa-spin text-gray-50"></i>
+                      </div>
+                    )}
                   </div>
                 </InfiniteScroll>
               </div>
@@ -256,6 +275,13 @@ export const IngredientsSelectionModal = () => {
                     onClick={() => {
                       context.onCancel();
                       context.closeModal();
+                      const div =
+                        document.getElementsByClassName("ingredient-list");
+                      if (isSubIngredient) {
+                        div[1].scrollTop = 0;
+                      } else {
+                        div[0].scrollTop = 0;
+                      }
                     }}
                   />
                 </div>
@@ -265,6 +291,13 @@ export const IngredientsSelectionModal = () => {
                     onClick={() => {
                       context.onSubmit();
                       context.closeModal();
+                      const div =
+                        document.getElementsByClassName("ingredient-list");
+                      if (isSubIngredient) {
+                        div[1].scrollTop = 0;
+                      } else {
+                        div[0].scrollTop = 0;
+                      }
                     }}
                   />
                 </div>

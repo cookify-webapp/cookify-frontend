@@ -1,6 +1,7 @@
 import React from "react";
 import { Observer } from "mobx-react-lite";
 import Link from "next/link";
+import { IngredientsSelectionModal } from "../modal/ingredients_selection_modal";
 
 export const RegisterLoginBgCard = (props) => {
   //---------------------
@@ -10,6 +11,7 @@ export const RegisterLoginBgCard = (props) => {
     <Observer>
       {() => (
         <div className="bg-gray-10 h-screen max-h-screen relative overflow-hidden">
+          <IngredientsSelectionModal />
           <img
             src="/images/register_login/bg_register_login_mobile.png"
             alt="background image"
