@@ -16,6 +16,7 @@ import { SecondaryButton } from "@core/components/button/secondary_button";
 import { TextBox } from "@core/components/input/text_box";
 import { PrimaryButton } from "@core/components/button/primary_button";
 import { Tag } from "@core/components/tag";
+import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
 
 export const EditProfilePage = () => {
   //---------------------
@@ -118,6 +119,7 @@ export const EditProfilePage = () => {
     <Observer>
       {() => (
         <HomeLayout>
+          <IngredientsSelectionModal />
           <div className="mx-auto xl:max-w-6xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
