@@ -15,6 +15,7 @@ import { Recipe } from "@core/components/recipe";
 import { recipesListType } from "@features/ingredients/types/recipes";
 import { AuthContext } from "core/context/auth_context";
 import { useRouter } from "next/router";
+import { IngredientsSelectionModal } from "@core/components/modal/ingredients_selection_modal";
 
 export const RecipesListPage = () => {
   //---------------------
@@ -98,6 +99,7 @@ export const RecipesListPage = () => {
             context.prepareRecipesList(authContext.user?.username !== "");
           }}
         >
+          <IngredientsSelectionModal />
           <div className="mx-auto xl:max-w-6xl">
             <div className="px-5 w-full block xl:hidden mt-2">
               <SearchBox
